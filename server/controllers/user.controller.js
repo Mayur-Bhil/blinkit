@@ -161,3 +161,15 @@ export async function userLoginController(req,res){
         })
     }
 }
+
+export async function logOutController(req,res){
+    try {
+        
+    } catch (error) {
+        return res.status(500).josn({
+            error:error,
+            success:false,
+            error:true
+        })
+    }
+}
