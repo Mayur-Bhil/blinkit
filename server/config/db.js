@@ -1,5 +1,5 @@
-import mongoose, { mongo } from "mongoose";
-import dotenv from "dotenv";
+import mongoose from "mongoose";
+import dotenv from "dotenv"
 dotenv.config()
 
 if(!process.env.DB_URI){
