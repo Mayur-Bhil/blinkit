@@ -197,12 +197,15 @@ export async function logOutController(req,res){
 //upload user image
 export async function uploadAvtar(req,res) {
         try {
+
             const userId = req.userId // auth MiddleWare
             const image = req.file; // multer Middlware
 
             const upload = await uploadImageCloudinary(image);
+            console.log(upload);
+            
 
-            const updateUser = User.findByIdAndUpdate(userId,{
+            const updateUser = await User.findByIdAndUpdate(userId,{
                 avatar:upload.url
             })
             return res.status(200).json({
@@ -219,4 +222,37 @@ export async function uploadAvtar(req,res) {
                 success:true 
             })
         }
+}
+
+export async function UpdateUserprofileInformation(req,res){
+    try {
+        const userId = req.userId; // auth middleware
+        const { name,email,mobile,password } = req.body;
+        console.log(name,email,password,mobile);
+        
+
+        let hasedPassword = "";
+        if(password){
+            const salt = await bcrypt.genSalt(10);
+            hasedPassword = await bcrypt.hash(password,salt);
+        }
+        const updateuser = await User.updateOne({_id:userId},{
+                ...(name && {name:name}),
+                ...(email && {email:email}),
+                ...(mobile && {moblie:mobile}),
+                ...(password && {password:hasedPassword})
+            })  
+           
+         return res.json({
+            message :"Updated User profile successFully",
+            data : updateuser
+         })
+            
+    } catch (error) {
+         return res.json({
+            message:error.message || error,
+            error:true,
+            success:false
+         })
+    }
 }
