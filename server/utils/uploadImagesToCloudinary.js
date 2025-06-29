@@ -17,3 +17,6 @@ const uploadImageCloudinary = async(image) =>{
     })
     return upladImage;  
 }
+
+
+export default uploadImageCloudinary;

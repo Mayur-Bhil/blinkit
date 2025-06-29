@@ -4,6 +4,9 @@ import bcrypt from "bcryptjs"
 import verificatioEmailTemplate from "../utils/verifyEmailTEmplate.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefressToken.js";
+import uploadImageCloudinary from "../utils/uploadImagesToCloudinary.js";
+
+
 
 export default async function registerUserController(req,res) {
     try {
@@ -161,7 +164,7 @@ export async function userLoginController(req,res){
         })
     }
 }
-
+//logout Controller
 export async function logOutController(req,res){
     try {
         const userId = req.userId;
@@ -189,4 +192,31 @@ export async function logOutController(req,res){
             error:true
         })
     }
+}
+
+//upload user image
+export async function uploadAvtar(req,res) {
+        try {
+            const userId = req.userId // auth MiddleWare
+            const image = req.file; // multer Middlware
+
+            const upload = await uploadImageCloudinary(image);
+
+            const updateUser = User.findByIdAndUpdate(userId,{
+                avatar:upload.url
+            })
+            return res.status(200).json({
+                message:"Upload Profile",
+                data :{
+                    _id : userId ,
+                    avatar : upload.url
+                }
+            })
+        } catch (error) {
+            return res.status(500).json({
+                message:error.message || error,
+                error:error,
+                success:true 
+            })
+        }
 }
