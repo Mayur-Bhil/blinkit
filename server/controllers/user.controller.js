@@ -164,7 +164,24 @@ export async function userLoginController(req,res){
 
 export async function logOutController(req,res){
     try {
-        
+        const userId = req.userId;
+         const cookieOptions = {
+            httponly:true,  
+            secure:true,
+            sameSite:"None"
+        }
+        res.clearCookie("accessToken",cookieOptions);
+        res.clearCookie("refreshToken",cookieOptions);
+
+        const removeRefreshToken = await User.findByIdAndUpdate(userId,{
+            refresh_token : ""
+        })
+
+        return res.status(200).json({
+            message:"Logout SuccessFully",
+            error:"false",
+            success:true
+        })
     } catch (error) {
         return res.status(500).josn({
             error:error,
