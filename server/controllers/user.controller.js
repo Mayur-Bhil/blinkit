@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs"
 import verificatioEmailTemplate from "../utils/verifyEmailTEmplate.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
-import generateRefreshToken from "../utils/generateRefressToken.js";
+import generaterefreshToken from "../utils/generateRefressToken.js";
 import uploadImageCloudinary from "../utils/uploadImagesToCloudinary.js";
 import generateOtp from "../utils/generateOtp.js";
 import forgotpasswordTemplate from "../utils/forgotpasswordtemplate.js";
@@ -142,14 +142,14 @@ export async function userLoginController(req,res){
             })
         }
         const accessToken = await generateAccessToken(user._id);
-        const refreshToken = await generateRefreshToken(user._id);
+        const refreshToken = await generaterefreshToken(user._id);
         const cookieOptions = {
             httponly:true,  
             secure:true,
             sameSite:"None"
         }
         res.cookie('accessToken',accessToken,cookieOptions);
-        res.cookie('refressToken',refreshToken,cookieOptions);
+        res.cookie('refreshToken',refreshToken,cookieOptions);
         return res.send({
             message :"Login SuccessFully",
             error:false,
@@ -179,7 +179,7 @@ export async function logOutController(req,res){
         res.clearCookie("accessToken",cookieOptions);
         res.clearCookie("refreshToken",cookieOptions);
 
-        const removeRefreshToken = await User.findByIdAndUpdate(userId,{
+        const removerefreshToken = await User.findByIdAndUpdate(userId,{
             refresh_token : ""
         })
 
@@ -406,24 +406,26 @@ export async function resetPassword(req,res){
 
 export async function refreshToken(req,res){
     try {
-        const refreshToken = req.cookies.refreshToken || req?.header?.authorization?.split(" ")[1];
+        const refreshToken = req?.cookies?.refreshToken || req?.header?.authorization?.split(" ")[1];
 
         if(!refreshToken){
-            return res.status(403).json({
+            return res.status(401).json({
                 message:"Invalid Token",
                 error:true,
                 succes:false
 
             })
         }
-        const verifyToken = jwt.verify(refreshToken,process.env.SECRET_KEY_REFRESH_TOKEN)
-        if(verifyToken){
+        const verifyToken = await jwt.verify(refreshToken,process.env.SECRET_KEY_REFRESH_TOKEN);
+        if(!verifyToken){
             return res.status(401).json({
-                message:"Token Expired",
+                message:"Token is Expired",
                 error:true,
         succes:false            
     })
 }   
+        console.log("veryfyToken",verifyToken._id);
+        
         const userId = verifyToken?._id;
         const newAccessToken = await generateAccessToken(userId);
         
