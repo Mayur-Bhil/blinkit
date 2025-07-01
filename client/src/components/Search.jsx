@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { FaSearch } from 'react-icons/fa'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { FaArrowLeft, FaSearch } from 'react-icons/fa'
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { TypeAnimation } from 'react-type-animation';
+import useMobile from '../hooks/useMobile';
 
 const Search = () => {
-
+    const [isMobile] = useMobile();
     const navigate = useNavigate();
     const location = useLocation();
     const [isSearchPage,setisSearchPage] = useState(false);
@@ -12,18 +13,27 @@ const Search = () => {
     useEffect(()=>{
         const page = location.pathname === "/search"
         setisSearchPage(page)
-    },[location])
+    },[location])   
 
     const redirectedToSearchPage = ()=>{
         navigate("/search")
     }
 
   return (
-    <div className='search w-full border flex items-center p-1 overflow-hidden min-w-[300px] lg:min-w-[420px] h-12 rounded-lg text-neutral-500' >
-        <button className='flex cursor-pointer justify-center items-center h-full p-3 text-neutral-600 bg-slate-50'>
-            <FaSearch  size={20}  />
-        </button>
-        <div className='w-full'>
+    <div className='search w-full flex items-center p-1 overflow-hidden min-w-[300px] lg:min-w-[420px] h-11 lg:h-12 rounded-lg text-neutral-500 border-2 group-focus-visible:border-amber-300' >
+       <div>
+                
+                { (isMobile && isSearchPage) ? ( <Link  to={"/"} className="flex cursor-pointer justify-center items-center h-full p-3 text-neutral-600 bg-slate-50 group-focus-within:text-amber-500" >
+                    <FaArrowLeft />
+                </Link>
+            ):( 
+                <button className='flex cursor-pointer justify-center items-center h-full p-3 text-neutral-600 bg-slate-50 group-focus-within:text-amber-500'>
+                        <FaSearch  size={20}  />
+                </button> 
+            )}
+        
+        </div>   
+        <div className='w-full'>    
                 {
                     !isSearchPage? (
                             <div onClick={redirectedToSearchPage}>
@@ -34,8 +44,14 @@ const Search = () => {
                 'Search "bread"', // Deletes 'One' and types 'Two'
                 1000, // Waits 2s
                 'Search "sugar"',
+                2000,
+                'Search "paneer"',
+                2000,
+                'Search "tea"',
                 3000,
-                'Search "paneer"', // Types 'Three' without deleting 'Two'
+                'Search "icecream"',
+                3000,
+                'Search "fanta "', // Types 'Three' without deleting 'Two'
                 () => {
                 console.log('Sequence completed');
                 },
@@ -48,7 +64,7 @@ const Search = () => {
                     ):(
                         // i ws on search page
                         <div className='w-full h-full'>
-                            <input className='bg-transparent w-full h-full outline-none' autoFocus type="text" placeholder='search for atta dal and more' />
+                            <input className='bg-transparent w-full h-full outline-none' autoFocus type="text" placeholder='search for groceries' />
                         </div>
                     )
                 }

@@ -8,7 +8,7 @@ function App() {
   return (
     <>
     <Header/>
-    <main className='min-h-[80vh]'>
+    <main className='min-h-[80vh] py-[0.1px] bg-sky-100'>
         <Outlet/>
     </main>
     <Footer/>
