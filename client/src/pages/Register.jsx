@@ -26,18 +26,22 @@ const Register = () => {
     }
     const validateData = Object.values(data).every(el => el)
     
+    const handelSubmit = (e)=>{
+        e.preventDefault();
+    }
+    
   return (
     <section className="w-full container flex justify-center mx-auto px-2 ">
             <div className='bg-white my-4 w-full max-w-lg mx-auto rounded p-4'>
-                    <p>Welcome to Blinkit</p>
-                    <form action="" className='grid gap-2 mt-5'>
+                    <p className='text-2xl'>Welcome to Blinkit</p>
+                    <form action="" onSubmit={handelSubmit} className='grid gap-2 mt-5'>
                         <div className='grid gap-1' >
-                            <label htmlFor="name">Name :</label>
+                            <label htmlFor="name" className='font-semibold '>Name :</label>
                             <input 
                             id='name'
                             type="text"
                             autoFocus
-                            className='bg-blue-50 p-1 border-2 outline-none rounded-sm focus:border-amber-300 font-semibold '
+                            className='bg-blue-50 p-1 border-2 outline-none rounded-sm focus:border-amber-300 '
                             value={data.name}
                             onChange={handelChange}
                             name='name'
@@ -46,11 +50,11 @@ const Register = () => {
 
                         </div>
                         <div className='grid gap-1' >
-                            <label htmlFor="email">Email :</label>
+                            <label htmlFor="email" className='font-semibold '>Email :</label>
                             <input 
                             id='email'
                             type="email"
-                            className='bg-blue-50 p-1 outline-none border-2 rounded-sm focus:border-amber-300 font-semibold'
+                            className='bg-blue-50 p-1 outline-none border-2 rounded-sm focus:border-amber-300 '
                             value={data.email}
                             onChange={handelChange}
                             name='email'
@@ -58,8 +62,8 @@ const Register = () => {
                             />
                         </div>
                         <div className='grid gap-1' >
-                            <label htmlFor="password">password :</label>
-                            <div className='bg-blue-50 p-1 border-2 rounded-sm flex items-center justify-between focus-within:border-amber-300 font-semibold'>
+                            <label htmlFor="password" className='font-semibold '>password :</label>
+                            <div className='bg-blue-50 p-1 border-2 rounded-sm flex items-center justify-between focus-within:border-amber-300 '>
                                 <input 
                             id='password'
                             type={showPassword ? "text" : "password"}
@@ -83,7 +87,7 @@ const Register = () => {
 
                         </div>
                          <div className='grid gap-1' >
-                            <label htmlFor="confirmpassword">Confirm Your password :</label>
+                            <label htmlFor="confirmpassword" className='font-semibold '>Confirm Your password :</label>
                             <div className='bg-blue-50 p-1 border-2 rounded-sm flex items-center justify-between focus-within:border-amber-300 '>
                                 <input 
                             id='confirmpassword'
@@ -107,7 +111,7 @@ const Register = () => {
                             </div>
 
                         </div>
-                        <button className={`${validateData?"bg-green-400":"bg-gray-500"} text-white tracking-wide py-2 rounded-lg font-semibold`}>Register</button>
+                        <button className={`${validateData?"bg-green-800 hover:bg-green-700":"bg-gray-500"} cursor-pointer mt-5 text-white tracking-wide py-2 rounded-lg font-semibold`}>Register</button>
                     </form>
             </div>
     </section>
