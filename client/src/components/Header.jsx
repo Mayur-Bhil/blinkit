@@ -46,7 +46,7 @@ const Header = () => {
             <button className="text-neutral-800 lg:hidden">
               <FaRegUserCircle size={35} />
             </button>
-            {/* DeskTop  */}
+            {/* DeskTop  vsersion */}
                 <div className="hidden lg:flex lg:items-center lg:gap-2">
                     <button onClick={redireactToLoginpage}className="cursor-pointer">Login</button>
                     <button className="bg-green-500 flex items-center gap-2 px-2 py-3 rounded-lg ml-2 text-white hover:bg-green-800">
