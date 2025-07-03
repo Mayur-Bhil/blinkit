@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { data } from 'react-router-dom';
 import { IoEyeOff ,IoEye} from "react-icons/io5";
+import toast from 'react-hot-toast';
+import Axios from '../utils/useAxios';
+import summeryApis from '../common/summuryApi';
+import AxiosToastError from '../utils/AxiosToastError';
 
 const Register = () => {
 
@@ -26,9 +30,47 @@ const Register = () => {
     }
     const validateData = Object.values(data).every(el => el)
     
-    const handelSubmit = (e)=>{
-        e.preventDefault();
+    const handelSubmit = async(e) => {
+    e.preventDefault();
+
+    if(data.password !== data.confirmpassword){
+        toast.error("password and confirm password must be same")
+        return;
     }
+
+    try {
+        const response = await Axios({
+            ...summeryApis.register,
+            data: {
+                name: data.name,
+                email: data.email,
+                password: data.password
+            }
+        })
+        
+        if(response.data.error){
+            toast.error(response.data.message)
+        }
+        if(response.data.success){
+            toast.error(response.data.message)
+        }
+        console.log(response);
+        
+        if(response.data.success){
+            toast.success(response.data.message)
+            // Reset form
+            setData({
+                name: "",
+                email: "",
+                password: "",
+                confirmpassword: ""
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        AxiosToastError(error)
+    }      
+}
     
   return (
     <section className="w-full container flex justify-center mx-auto px-2 ">
@@ -111,7 +153,7 @@ const Register = () => {
                             </div>
 
                         </div>
-                        <button className={`${validateData?"bg-green-800 hover:bg-green-700":"bg-gray-500"} cursor-pointer mt-5 text-white tracking-wide py-2 rounded-lg font-semibold`}>Register</button>
+                        <button disabled={!validateData } className={`${validateData?"bg-green-800 hover:bg-green-700":"bg-gray-500"} cursor-pointer mt-5 text-white tracking-wide py-2 rounded-lg font-semibold`}>Register</button>
                     </form>
             </div>
     </section>

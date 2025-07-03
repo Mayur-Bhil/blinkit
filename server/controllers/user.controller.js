@@ -13,12 +13,14 @@ import jwt from "jsonwebtoken";
 
 export default async function registerUserController(req,res) {
     try {
-        const {name,email,password} = req.body;
+        const name = req.body.name;
+        const email = req.body.email;
+        const password = req.body.password;
 
         if(!name || !email || !password){
-            res.status(400).josn({
+            return res.status(400).json({
                 message:"provide email,name,password",
-                error:true,
+                error:true, 
                 success:false
             })
         }
@@ -57,7 +59,7 @@ export default async function registerUserController(req,res) {
         })
       
 
-        return res.json({
+        return res.json({   
             message:"User registerd successFully",
             error:false,
             success:true,
@@ -110,7 +112,7 @@ export async function userLoginController(req,res){
     try {
         const {email,password} = req.body;
         if(!email || !password){
-            res.status(400).josn({
+            return res.status(400).json({
                 message:"please provide email and password",
                 error:true, 
                 success:false
@@ -119,7 +121,7 @@ export async function userLoginController(req,res){
         const user = await User.findOne({email:email});
 
         if(!user){
-            res.status(400).json({
+           return res.status(400).json({
                 message: "user not registered",
                 error:true,
                 success:false
@@ -135,7 +137,7 @@ export async function userLoginController(req,res){
 
         const checkPassword = await bcrypt.compare(password,user.password);
         if(!checkPassword){
-            return res.status(400).josn({
+            return res.status(400).json({
                 message:"check your password",
                 error:true,
                 success:false
@@ -189,7 +191,7 @@ export async function logOutController(req,res){
             success:true
         })
     } catch (error) {
-        return res.status(500).josn({
+        return res.status(500).json({
             error:error,
             success:false,
             error:true
@@ -266,7 +268,7 @@ export async function forgotPassword(req,res){
         const {email} = req.body;
         const user = await User.findOne({email});
         if(!user){
-            res.status(400).json({
+          return res.status(400).json({
                 message:"Email not available",
                 error:true,
                 success:false

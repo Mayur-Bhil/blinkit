@@ -10,10 +10,11 @@ import userRouter from "./routes/user.route.js"
 const app =  express();
 
 app.use(cors({
-    credentials:true,
-    origin:process.env.BASE_URL
+    origin:process.env.BASE_URL,
+    credentials:true
 }))
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(morgan())
 app.use(helmet({
