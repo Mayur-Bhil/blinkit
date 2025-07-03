@@ -6,10 +6,10 @@ import Axios from '../utils/useAxios';
 import summeryApis from '../common/summuryApi';
 import AxiosToastError from '../utils/AxiosToastError';
 
-const Login = () => {
+const ForgotPassword = () => {
 
     const [data,setData] = useState({
-        email :"",
+        email:""
     });
 
     const navigate = useNavigate();
@@ -45,11 +45,15 @@ const Login = () => {
         
         if(response.data.success){
             toast.success(response.data.message)
+            navigate("/verify-otp",{
+                state: data
+        
+            })
             // Reset form
             setData({
                 email: "",
             })
-            navigate("/verify-otp")
+            
         }
     } catch (error) {
         console.log(error);
@@ -60,7 +64,7 @@ const Login = () => {
   return (
     <section className="w-full container flex justify-center mx-auto px-2 ">
             <div className='bg-white my-4 w-full max-w-lg mx-auto rounded-lg shadow-gray-800 p-4'>
-                    <p className='text-2xl font-semibold'>Login to procceed</p>
+                    <p className='text-2xl font-semibold'>Forgot password</p>
                     <form action="/login" onSubmit={handelSubmit} className='grid gap-2 mt-5'>
                        
                         <div className='grid gap-1' >
@@ -76,14 +80,14 @@ const Login = () => {
                             placeholder='Enter Email'
                             />
                         </div>                    
-                        <button disabled={!validateData } className={`${validateData?"bg-green-800 hover:bg-green-700":"bg-gray-500"} cursor-pointer mt-5 text-white tracking-wide py-2 rounded-lg font-semibold`}>login</button>
+                        <button disabled={!validateData } className={`${validateData?"bg-green-800 hover:bg-green-700":"bg-gray-500"} cursor-pointer mt-5 text-white tracking-wide py-2 rounded-lg font-semibold`}>Send OTP</button>
                     </form>
                     <p>
-                        Don't have an Account?<Link to={"/register"} className='text-green-600 font font-semibold hover:text-green-800'>register</Link>
+                        Already have an Account?<Link to={"/login"} className='text-green-600 font font-semibold hover:text-green-800'>register</Link>
                     </p>
             </div>
     </section>
   )
 }
 
-export default Login 
+export default ForgotPassword 

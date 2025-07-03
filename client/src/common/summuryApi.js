@@ -11,6 +11,10 @@ const summeryApis = {
     forgot_password:{
         url:'/api/user/forgot-password',
         method:"POST"
+    },
+    verify_Otp:{
+        url:'/api/user/verify-otp',
+        method:"PUT"
     }
 }
 
