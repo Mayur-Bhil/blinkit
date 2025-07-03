@@ -10,10 +10,8 @@ const Login = () => {
 
     const [data,setData] = useState({
         email :"",
-        password:"",
     });
 
-    const [showPassword,setShowpassword] = useState(false);
     const navigate = useNavigate();
 
     const handelChange = (e) =>{
@@ -33,10 +31,9 @@ const Login = () => {
 
     try {
         const response = await Axios({
-            ...summeryApis.login,
+            ...summeryApis.forgot_password,
             data: {
                 email: data.email,
-                password: data.password
             }
         })
         
@@ -50,11 +47,9 @@ const Login = () => {
             toast.success(response.data.message)
             // Reset form
             setData({
-                name: "",
                 email: "",
-                password: "",
             })
-            navigate("/")
+            navigate("/verify-otp")
         }
     } catch (error) {
         console.log(error);
@@ -80,32 +75,7 @@ const Login = () => {
                             autoFocus
                             placeholder='Enter Email'
                             />
-                        </div>
-                        <div className='grid gap-1' >
-                            <label htmlFor="password" className='font-semibold '>password :</label>
-                            <div className='bg-blue-50 p-1 border-2 rounded-sm flex items-center justify-between focus-within:border-amber-300 '>
-                                <input 
-                            id='password'
-                            type={showPassword ? "text" : "password"}
-                            className='w-full outline-none'
-                            value={data.password}
-                            onChange={handelChange}
-                            name='password'
-                            placeholder='******'
-                            />
-                            <div className='cursor-pointer mx-2' onClick={()=>setShowpassword(prev=> !prev)}>
-                                {
-                                    showPassword ?(
-                                        <IoEye />
-                                    ):(
-                                        <IoEyeOff />
-                                    )
-                                }
-                            </div>
-                            </div>
-                                <Link to={"/forgot-password"} className='block ml-auto text-green-400 hover:text-amber-400'>Forgot passwpord ?</Link>
-                        </div>
-                        
+                        </div>                    
                         <button disabled={!validateData } className={`${validateData?"bg-green-800 hover:bg-green-700":"bg-gray-500"} cursor-pointer mt-5 text-white tracking-wide py-2 rounded-lg font-semibold`}>login</button>
                     </form>
                     <p>
