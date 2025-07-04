@@ -83,7 +83,7 @@ const ForgotPassword = () => {
                         <button disabled={!validateData } className={`${validateData?"bg-green-800 hover:bg-green-700":"bg-gray-500"} cursor-pointer mt-5 text-white tracking-wide py-2 rounded-lg font-semibold`}>Send OTP</button>
                     </form>
                     <p>
-                        Already have an Account?<Link to={"/login"} className='text-green-600 font font-semibold hover:text-green-800'>register</Link>
+                        Don't have an Account?<Link to={"/register"} className='text-green-600 font font-semibold hover:text-green-800'>register</Link>
                     </p>
             </div>
     </section>

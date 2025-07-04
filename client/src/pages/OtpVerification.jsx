@@ -19,14 +19,14 @@ const OtpVerification = () => {
 
     useEffect(()=>{
         if(!location?.state?.email){
-            navigate("/forgot-password");
+            navigate("/reset-password");
         }
     },[]);
     
     const handleKeyDown = (e, index) => {
     if (e.key === 'Backspace' && !data[index] && index > 0) {
         inputRef.current[index - 1]?.focus();
-    }
+        }
     }
     
 const handelSubmit = async(e) => {
@@ -53,13 +53,13 @@ const handelSubmit = async(e) => {
         if(isSuccess) {
             toast.success(response.data.message)
             // alert("Otp verified successfully")
-            setData(["","","","","",""])
             navigate("/reset-password", { 
                 state: { 
+                    data: response.data,
                     email: location?.state?.email,
-                    data: response.data
                 } 
             })
+
         } else {
             toast.error(response.data.message || "Verification failed")
         }
@@ -91,7 +91,7 @@ const handelSubmit = async(e) => {
                                                 className='bg-blue-50 text-center font-semibold  w-full max-w-20 gap-2 p-1 outline-none border-2 rounded-sm focus:border-amber-300 '
                                                 onChange={(e)=>{
                                                     const value = e.target.value
-                                                    // console.log(value);
+                                                    // console.log(value);  
                                                     const newData = [...data]
                                                     newData[index] = value
                                                     setData(newData)
