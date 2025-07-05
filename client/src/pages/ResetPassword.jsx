@@ -10,7 +10,7 @@ const ResetPassword = () => {
      const outletContext = useOutletContext();      
     const navigate = useNavigate();
     const success = location.state?.data?.success
-    console.log("success: ", success);
+    // console.log("success: ", success);
     const email = location.state?.email || "";
     
     // Redirect if accessed directly

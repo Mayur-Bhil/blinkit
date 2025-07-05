@@ -20,6 +20,10 @@ const summeryApis = {
         url:'/api/user/reset-password',
         method:"PUT"
         
+    },
+    referesh_Token:{
+        url:"/api/user/refresh-token",
+        method:"POST"
     }
 }
 

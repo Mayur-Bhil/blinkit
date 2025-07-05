@@ -277,7 +277,7 @@ export async function forgotPassword(req,res){
 
         const otp = generateOtp();
         const expireTime = new Date() + 60 * 60 * 1000; //for 1h
-
+        
         const update = await User.findByIdAndUpdate(user._id,{
             forgot_password_otp:otp,
             forgot_password_expiry: new Date(expireTime).toString()

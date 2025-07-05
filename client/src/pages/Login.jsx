@@ -48,6 +48,8 @@ const Login = () => {
         
         if(response.data.success){
             toast.success(response.data.message)
+            localStorage.setItem("accessToken",response.data.data.accessToken)
+            localStorage.setItem("refreshToken",response.data.data.refreshToken)
             // Reset form
             setData({
                 name: "",
