@@ -38,6 +38,20 @@ export const UserSclice = createSlice({
 
 
         },
+        logoutUser:(state,action)=>{
+            state._id = ""      
+            state.name = ""
+            state.email = ""
+            state.avatar = ""
+            state.mobile = ""
+            state.verify_email = ""
+            state.last_login_date =""
+            state.status = ""
+            state.address_details = []
+            state.shopping_cart = []
+            state.role = ""
+            state.order_history = []
+        }
         
     }
     
@@ -46,5 +60,5 @@ export const UserSclice = createSlice({
 
 
 
-export const {setUserDetails} = UserSclice.actions;
+export const {setUserDetails,logoutUser } = UserSclice.actions;
 export default UserSclice.reducer;

@@ -21,7 +21,12 @@ const Header = () => {
   const redireactToLoginpage = () =>{
         navigate("/login")
   }
-
+const handleMobileClick = ()=>{
+  if(!user._id){
+        navigate("/login")
+    return;
+  }
+}
   return (
     <header className="h-24 lg:h-20 lg:shadow-md top-0 flex justify-center sticky flex-col gap-1 bg-white ">
       {!(isSearchPage && isMobile) && (
@@ -49,8 +54,8 @@ const Header = () => {
           </div>
           <div className="">
             {/* Mobile version */}
-            <button className="text-neutral-800 lg:hidden">
-              <FaRegUserCircle size={35} />
+            <button className="text-neutral-800 lg:hidden" onClick={handleMobileClick}>
+                <img className='h-14 w-14 rounded-full' src={user.avatar || "user's Image"} alt="" />
             </button>
             {/* DeskTop  vsersion */}
                 <div className="hidden lg:flex lg:items-center lg:gap-2">

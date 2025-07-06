@@ -5,6 +5,9 @@ import toast from 'react-hot-toast';
 import Axios from '../utils/useAxios';
 import summeryApis from '../common/summuryApi';
 import AxiosToastError from '../utils/AxiosToastError';
+import getUserDetails from '../utils/getUserDatails';
+import { useDispatch } from 'react-redux';
+import { setUserDetails } from '../store/userSclice';
 
 const Login = () => {
 
@@ -15,6 +18,7 @@ const Login = () => {
 
     const [showPassword,setShowpassword] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handelChange = (e) =>{
         const {name,value} = e.target;
@@ -50,10 +54,13 @@ const Login = () => {
             toast.success(response.data.message)
             localStorage.setItem("accessToken",response.data.data.accessToken)
             localStorage.setItem("refreshToken",response.data.data.refreshToken)
+            
+            const UserDetails = await getUserDetails();
+            dispatch(setUserDetails(UserDetails.data.data))
             // Reset form
             setData({
                 name: "",
-                email: "",
+                email: "",  
                 password: "",
             })
             navigate("/")
@@ -65,7 +72,7 @@ const Login = () => {
 }
     
   return (
-    <section className="w-full container flex justify-center mx-auto px-2 ">
+    <section className="w-full select-none container flex justify-center mx-auto px-2 ">
             <div className='bg-white my-4 w-full max-w-lg mx-auto rounded-lg shadow-gray-800 p-4'>
                     <p className='text-2xl font-semibold'>Login to procceed</p>
                     <form action="/login" onSubmit={handelSubmit} className='grid gap-2 mt-5'>
