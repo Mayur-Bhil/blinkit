@@ -6,12 +6,15 @@ import { FaRegUserCircle } from "react-icons/fa";
 import useMobile from "../hooks/useMobile";
 import { BsCart4 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 const Header = () => {
 
   const [isMobile] = useMobile();
   const location = useLocation();
   const isSearchPage = location.pathname === "/search";
   const navigate = useNavigate();
+  const user = useSelector((store)=>store?.user)
   const redireactToLoginpage = () =>{
         navigate("/login")
   }

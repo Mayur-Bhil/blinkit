@@ -51,7 +51,7 @@ const ResetPassword = () => {
                 toast.error(response.data.message);
             } else {
                 toast.success("Password reset successfully! You can now log in.");
-                navigate("/");
+                navigate("/login");
 
                 if (outletContext?.setIsLoginOpen) {
                     outletContext.setIsLoginOpen(true);

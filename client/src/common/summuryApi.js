@@ -24,6 +24,10 @@ const summeryApis = {
     referesh_Token:{
         url:"/api/user/refresh-token",
         method:"POST"
+    },
+    userDetails:{
+        url:"/api/user/user-details",
+        method:"GET"
     }
 }
 

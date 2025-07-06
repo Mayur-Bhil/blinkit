@@ -145,6 +145,10 @@ export async function userLoginController(req,res){
         }
         const accessToken = await generateAccessToken(user._id);
         const refreshToken = await generaterefreshToken(user._id);
+
+        const updateUserDetails = await User.findByIdAndUpdate(user?._id,{
+            last_login_date:new Date()
+        })
         const cookieOptions = {
             httponly:true,  
             secure:true,
@@ -343,6 +347,10 @@ export async function verifyForgotPassword(req,res){
         //if OTP is not Expires 
         // also 
         // OTP === user.forgot_password_otp
+        const updateUser = await User.findByIdAndUpdate(user?._id,{
+            forgot_password_otp:"",
+            forgot_password_expiry:""
+        })
         return res.status(200).json({
             message:"verify OTP successFully",
             error:false,
@@ -453,5 +461,27 @@ export async function refreshToken(req,res){
             error:true,
             succes:false
         })
+    }
+}
+
+//get Login user details
+
+export async function LoginUserDetails(req,res) {
+    try {
+        const userId = req.userId;
+        console.log("UserID",userId );        
+        const user = await User.findById(userId).select('-password -refresh_token');
+        return res.status(200).json({
+            message:"User Details",
+            data:user,
+            error:false,
+            success:true
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error:error,
+            message:"Somthing gone Wrong"
+        })
+        
     }
 }
