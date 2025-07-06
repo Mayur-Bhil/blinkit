@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logo1 from "../assets/logo1.png";
 import Search from "./Search";
 import { Link, useLocation } from "react-router-dom";
-import { FaRegUserCircle } from "react-icons/fa";
+import { FaCircleUser } from "react-icons/fa6";
 import useMobile from "../hooks/useMobile";
 import { BsCart4 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -25,13 +25,15 @@ const handleMobileClick = ()=>{
   if(!user._id){
         navigate("/login")
     return;
+  }else{
+    navigate("/user")
   }
 }
   return (
-    <header className="h-24 lg:h-20 lg:shadow-md top-0 flex justify-center sticky flex-col gap-1 bg-white ">
+    <header className="h-24 mt-1 select-none lg:h-20 lg:shadow-md top-0 flex justify-center sticky flex-col gap-1 bg-white lg:select-none ">
       {!(isSearchPage && isMobile) && (
         <div className="container mx-auto flex items-center px-2 justify-between">
-          <div classname="h-full">
+          <div className="h-full">
             <Link to={"/"} className="h-full flex justify-center items-center">
               <img
                 src={logo1}
@@ -55,7 +57,7 @@ const handleMobileClick = ()=>{
           <div className="">
             {/* Mobile version */}
             <button className="text-neutral-800 lg:hidden" onClick={handleMobileClick}>
-                <img className='h-14 w-14 rounded-full' src={user.avatar || "user's Image"} alt="" />
+                  <FaCircleUser size={34}/>
             </button>
             {/* DeskTop  vsersion */}
                 <div className="hidden lg:flex lg:items-center lg:gap-2">

@@ -37,7 +37,7 @@ const Usermenu = () => {
               <div className='sm grid gap-2'>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={""}>My orders</Link>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={""}>Save address</Link>
-                    <button to={"/logout"} onClick={handelLogout} className='bg-red-400 text-lg hover:scale-90 rounded-xl text-center'>Logout    </button>
+                    <button onClick={handelLogout} className='bg-red-400 text-lg hover:scale-90 rounded-xl text-center'>Logout    </button>
               </div>
         </div>
     );
