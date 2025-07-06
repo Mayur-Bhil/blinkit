@@ -7,6 +7,7 @@ import summeryApis from '../common/summuryApi';
 import { logoutUser } from '../store/userSclice';
 import toast from 'react-hot-toast';
 import AxiosToastError from '../utils/AxiosToastError';
+import { LuLink } from "react-icons/lu";
 
 const Usermenu = () => {
     const user = useSelector((store)=>store.user);
@@ -30,7 +31,12 @@ const Usermenu = () => {
         <div>
             <h2 className='font-semibold'>My Account</h2>
               <div className='flex justify-center items-center '>
-                <div className='text-neutral-700 text-sm'>{user.name || user.mobile}</div>
+                <div className='text-neutral-700 text-sm '>
+                    <span>{user.name || user.mobile}</span>
+                    <Link to={'/dashboard/profile'} className='hover:text-amber-300'>
+                        <LuLink size={12} />
+                    </Link>
+                    </div>
                 <img className='h-14 w-14 rounded-full' src={user.avatar || "user's Image"} alt="" />
               </div>
               <Devider/>
