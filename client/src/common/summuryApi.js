@@ -32,6 +32,10 @@ const summeryApis = {
     logout:{
         url:"/api/user/logout",
         method:"GET"
+    },
+    UploadAvatar:{
+        url:"/api/user/upload-avatar",
+        method:"PUT"
     }
 }
 

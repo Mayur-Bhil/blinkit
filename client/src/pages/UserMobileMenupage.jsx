@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { logoutUser } from '../store/userSclice';
 import summeryApis from '../common/summuryApi';
 import { IoCloseSharp } from 'react-icons/io5';
+import { LuLink } from 'react-icons/lu';
 
 const UserMobileMenupage = () => {
     const user = useSelector((store)=>store.user);
@@ -38,7 +39,10 @@ const UserMobileMenupage = () => {
             <div className='container mx-auto p-3 h-full w-full py-12'>
                 <h2 className='font-semibold'>My Account</h2>
                               <div className='flex items-center '>
-                                <div className='text-neutral-700 mx-2 text-sm'>{user.name || user.mobile}</div>
+                                <span>{user.name || user.mobile}</span>
+                                                    <Link to={'/dashboard/profile'} className='hover:text-amber-300'>
+                                                        <LuLink size={12} />
+                                                    </Link>
                               </div>
                               <Devider/>
                               <div className='sm grid gap-2'>

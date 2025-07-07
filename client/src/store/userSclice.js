@@ -51,6 +51,9 @@ export const UserSclice = createSlice({
             state.shopping_cart = []
             state.role = ""
             state.order_history = []
+        },
+        setUserAvatar:(state,action)=>{
+            state.avatar = action.payload
         }
         
     }
@@ -60,5 +63,5 @@ export const UserSclice = createSlice({
 
 
 
-export const {setUserDetails,logoutUser } = UserSclice.actions;
+export const {setUserDetails,logoutUser,setUserAvatar } = UserSclice.actions;
 export default UserSclice.reducer;
