@@ -40,6 +40,14 @@ const summeryApis = {
     updateUser:{
         url:"/api/user/update-user",
         method:"PUT"
+    },
+    addCategory:{
+        url:"/api/category/add-category",
+        method:"POST"
+    },
+    uploadImage:{
+        url:"/api/file/upload",
+        method:"POST"
     }
 }
 

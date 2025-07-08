@@ -31,16 +31,16 @@ const Usermenu = () => {
         <div>
             <h2 className='font-semibold'>My Account</h2>
               <div className='flex justify-center items-center '>
-                <div className='text-neutral-700 text-sm'>
+                <div className='text-neutral-700 text-sm flex'>
                     <span>{user.name || user.mobile}</span>
-                    <Link to={'/dashboard/profile'} className='hover:text-amber-300'>
+                    <Link to={'/dashboard/profile'} className='hover:text-amber-300 m-2 '>
                         <LuLink size={12} />
                     </Link>
                     </div>
                 <img className='h-14 w-14 rounded-full ml-2' src={user.avatar || "user's Image"} alt={user.name} />
               </div>
               <Devider/>
-              <div className='sm grid gap-2'>
+              <div className='sm grid gap-2 transition-colors'>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/category"}>Category </Link>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/sub-category"}>sub Category </Link>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/upload-products"}>upload Product</Link>
@@ -48,7 +48,7 @@ const Usermenu = () => {
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/upload-products"}>Product</Link>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/myorders"}>My orders</Link>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/address"}>Save address</Link>
-                    <button onClick={handelLogout} className='bg-red-400 text-lg transition-all hover:scale-90 rounded-xl text-center'>Logout    </button>
+                    <button onClick={handelLogout} className='bg-red-400 cursor-pointer  text-lg transition-all hover:scale-90 rounded-xl text-center'>Logout    </button>
               </div>
         </div>
     );

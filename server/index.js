@@ -7,6 +7,8 @@ import morgan from "morgan"
 import helmet from "helmet"
 import { connectDB } from "./config/db.js"
 import userRouter from "./routes/user.route.js"
+import CategoryRouter from "./routes/Category.route.js"
+import uploadRouter from "./routes/upload.Route.js"
 const app =  express();
 
 app.use(cors({
@@ -29,6 +31,8 @@ app.get("/",(req,res)=>{
     })
 })
 app.use("/api/user",userRouter);
+app.use("/api/category",CategoryRouter);
+app.use("/api/file",uploadRouter)
 
 connectDB().then(()=>{
 

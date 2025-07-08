@@ -63,7 +63,7 @@ const UserProfileAvatarUpload = ({close}) => {
     }
     
     return (
-        <section className='fixed top-0 bottom-0 left-0 right-0 bg-neutral-900 opacity-60 p-4 flex items-center justify-center'>
+        <section className='fixed top-0 bottom-0 left-0 right-0 bg-neutral-950 opacity-60 p-4 flex items-center justify-center'>
             <div className='bg-white max-w-sm w-full p-4 flex flex-col items-center justify-center'>
                 <button onClick={close} className='cursor-pointer w-fit block ml-auto'>
                             <IoClose size={20}/>
