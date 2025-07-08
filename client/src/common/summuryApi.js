@@ -36,6 +36,10 @@ const summeryApis = {
     UploadAvatar:{
         url:"/api/user/upload-avatar",
         method:"PUT"
+    },
+    updateUser:{
+        url:"/api/user/update-user",
+        method:"PUT"
     }
 }
 

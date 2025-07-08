@@ -54,6 +54,11 @@ export const UserSclice = createSlice({
         },
         setUserAvatar:(state,action)=>{
             state.avatar = action.payload
+        },
+        setUserData:(state,action)=>{
+             state.name = action.payload?.name
+            state.email = action.payload?.email
+            state.mobile = action.payload?.mobile
         }
         
     }

@@ -256,8 +256,10 @@ export async function UpdateUserprofileInformation(req,res){
            
          return res.json({
             message :"Updated User profile successFully",
-            data : updateuser
-         })
+            data : updateuser,
+            error:false,
+            success:true
+         }) 
 
     } catch (error) {
          return res.json({

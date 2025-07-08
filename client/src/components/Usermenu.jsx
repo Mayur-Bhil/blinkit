@@ -41,9 +41,14 @@ const Usermenu = () => {
               </div>
               <Devider/>
               <div className='sm grid gap-2'>
+                    <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/category"}>Category </Link>
+                    <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/sub-category"}>sub Category </Link>
+                    <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/upload-products"}>upload Product</Link>
+
+                    <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/upload-products"}>Product</Link>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/myorders"}>My orders</Link>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/address"}>Save address</Link>
-                    <button onClick={handelLogout} className='bg-red-400 text-lg hover:scale-90 rounded-xl text-center'>Logout    </button>
+                    <button onClick={handelLogout} className='bg-red-400 text-lg transition-all hover:scale-90 rounded-xl text-center'>Logout    </button>
               </div>
         </div>
     );
