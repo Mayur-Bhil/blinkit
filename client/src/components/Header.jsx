@@ -30,7 +30,7 @@ const handleMobileClick = ()=>{
   }
 }
   return (
-    <header className="h-24 mt-1 select-none lg:h-20 lg:shadow-md top-0 flex justify-center sticky flex-col gap-1 bg-white lg:select-none ">
+    <header className="h-24 z-50 select-none lg:h-20 lg:shadow-md top-0 flex justify-center sticky flex-col gap-1 bg-white lg:select-none ">
       {!(isSearchPage && isMobile) && (
         <div className="container mx-auto flex items-center px-2 justify-between">
           <div className="h-full">
@@ -88,7 +88,12 @@ const handleMobileClick = ()=>{
                         <div></div>
                     )
                   }
-                    <button onClick={redireactToLoginpage}className="cursor-pointer font-semibold">Login</button>
+                    <button onClick={redireactToLoginpage}className="cursor-pointer font-semibold">
+
+                      {
+                        user._id ? "logout" : "login"
+                      }
+                    </button>
                     <button className="bg-green-500 flex items-center gap-2 px-2 py-3 rounded-lg ml-2 text-white hover:bg-green-800">
                         {/* add to cart */}
                         <div className="animate-bounce">

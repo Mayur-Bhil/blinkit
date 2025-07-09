@@ -17,6 +17,7 @@ export const UploadCategoryController = async(req,res)=>{
             image
         })
         const saveCategory = await AddTocategory.save();
+        
 
         if(!saveCategory){
             return res.status(400).json({
@@ -38,5 +39,24 @@ export const UploadCategoryController = async(req,res)=>{
             error:true,
             success:false
        })
+    }
+}
+
+
+export const getCategoryController = async (req,res)=>{
+    try {
+        const data = await Category.find();
+
+        return res.json({
+            data: data,
+            error: false,
+            success: true
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message:error.message || error,
+            error:true,
+            success:false
+        })
     }
 }

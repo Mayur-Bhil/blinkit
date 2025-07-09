@@ -7,6 +7,7 @@ const uploadImageController = async(req,res) =>{
         return res.json({
             message:"Image uploded successfully",
             success:true,
+            data:uploadImage,
             error:false
         })
         

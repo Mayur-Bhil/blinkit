@@ -40,7 +40,7 @@ const Usermenu = () => {
                 <img className='h-14 w-14 rounded-full ml-2' src={user.avatar || "user's Image"} alt={user.name} />
               </div>
               <Devider/>
-              <div className='sm grid gap-2 transition-colors'>
+              <div className='sm grid gap-2 transition'>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/category"}>Category </Link>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/sub-category"}>sub Category </Link>
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/upload-products"}>upload Product</Link>
