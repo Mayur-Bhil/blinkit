@@ -52,6 +52,10 @@ const summeryApis = {
     getCategory:{
         url:"/api/category/get",
         method:"GET"
+    },
+    UpdateCategory:{
+        url:"/api/categoty/update",
+        method:"PUT"
     }
 }
 
