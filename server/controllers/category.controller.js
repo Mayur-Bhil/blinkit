@@ -63,26 +63,35 @@ export const getCategoryController = async (req,res)=>{
 
 export const updateCategoryController = async (req,res)=>{
     try {
-        const { categoryId,name,image } = req.body;
+        const { _id,name,image } = req.body;
         const update = await Category.updateOne({
-            _id:categoryId,
+            _id:_id,
         },{
             name,
             image
         })
-        return res.json({
+        if(update.matchedCount === 0) {
+            return res.status(404).json({
+                message: "Category not found",
+                error: true,
+                success: false
+            });
+        }
+        
+        // Make sure you're returning status 200 (success)
+        return res.status(200).json({  // Add explicit 200 status
             message: "Updated category",
             data: update,
             error: false,
             success: true
-        })
+        });
+        
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            error: error,
             message: "Something went wrong",
-            error:true,
-            success:false
-        })
+            error: true,
+            success: false
+        });
     }
 }

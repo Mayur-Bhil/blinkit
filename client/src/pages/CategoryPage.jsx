@@ -10,7 +10,11 @@ const CategoryPage = () => {
     const [openUploadCategory, setOpenUploadCategory] = useState(false); // Fixed variable name
     const [loading, setLoading] = useState(false);
     const [categoryData, setCategoryData] = useState([]);
-    const [editModelOpen,setEditModel] = useState(true);
+    const [editModelOpen,setEditModel] = useState(false);
+    const [editData,setEditData] = useState({
+        name:"",
+        image:""
+    })
 
     const fetchCategory = async() => {
         try {
@@ -58,20 +62,28 @@ const CategoryPage = () => {
                 {
                 categoryData.map((category,index)=>{
                     return (
-                        <div className='w-40 h-48  lg:w-50 rounded-xl group lg:h-58 object-scale-down overflow-hidden shadow-lg'>
+                        <div key={index} className='w-40 h-48  lg:w-50 rounded-xl group lg:h-58 object-scale-down overflow-hidden shadow-lg'>
+
                                 <img
                                 alt={category.name}
                                 src={category.image}
                                 className='w-36 h-40 lg:w-48 lg:h-50 object-scale-down rounded-xl'
+                                key={index}
                                 />
                                 <div className='hidden group-hover:flex items-center gap-2'>
                                     <button
+                                    onClick={
+                                        () => {
+                                            setEditModel(true)
+                                            setEditData(category)
+                                        }   
+                                    }
                                     
-                                    className='flex-1 bg-green-200 text-green-600 font-medium rounded-lg py-1'>Edit</button>
+                                    className='flex-1 cursor-pointer bg-green-400 text-black hover:bg-green-300 font-medium rounded-lg py-1'>Edit</button>
                                     <button 
                                     
-                                    className='flex-1 bg-red-200 text-red-600 font-medium rounded-lg py-1'>Delete</button>
-                                </div>
+                                    className='flex-1 cursor-pointer bg-red-400 text-white hover:bg-red-300 font-medium rounded-lg py-1'>Delete</button>
+                                </div>  
                         </div>
                     )
                 })
@@ -91,7 +103,7 @@ const CategoryPage = () => {
 
             {
                 editModelOpen && (
-                    <EditCategory close={()=>{setEditModel(false)}}/>
+                    <EditCategory close={()=>{setEditModel(false)}} fetchdata={fetchCategory} data={editData}/>
                 )
             }
         </section>

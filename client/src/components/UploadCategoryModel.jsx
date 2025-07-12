@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import AxiosToastError from '../utils/AxiosToastError';
 import Axios from '../utils/useAxios';
 import summeryApis from '../common/summuryApi';
+import Loading from './Loading';
 
 const UploadCategoryModel = ({close,fetchData}) => {
     const [loading,setLoading] = useState(false);
@@ -35,7 +36,7 @@ const UploadCategoryModel = ({close,fetchData}) => {
             const {data:responseData} = response;
             
             if(responseData.success){
-                toast.success(responseData.message);
+               toast.success(responseData.message);
                 close()
                 fetchData()
             }
@@ -48,6 +49,7 @@ const UploadCategoryModel = ({close,fetchData}) => {
     }
     const HandleUploadCategory = async(e)=>{
         try {
+            setLoading(true)
             const file = e.target.files[0]
 
             if(!file){
@@ -55,13 +57,14 @@ const UploadCategoryModel = ({close,fetchData}) => {
             }
             const response = await uploadImages(file)
             const {data : ImageResponse} = response;
-        
+            
             setData((prev)=>{
                 return {
                     ...prev,
                     image:ImageResponse.data.url
                 }
             })
+            setLoading(false)
             
         } catch (error) {
            AxiosToastError(error)
@@ -100,7 +103,7 @@ const UploadCategoryModel = ({close,fetchData}) => {
                                         Data.image ? (
                                             <img className='h-full w-full object-scale-down' src={Data.image} alt={"category"} />
                                         ):(
-                                             <p className='text-sm'>No photo</p>
+                                             <p className='text-sm'>{loading ?  <Loading/> : "no Photo" }</p>
 
                                         )
                                     }
@@ -112,7 +115,11 @@ const UploadCategoryModel = ({close,fetchData}) => {
                                     ${!Data.name ? "border-2":"bg-amber-300"}
                                         p-4 py-2 rounded-xl cursor-pointer
                                         border-amber-300 hover:bg-amber-300 
-                                `}>Upload Image</div>
+                                `}>
+                                    { 
+                                    loading ? "lodding...": "Upload image"
+                                    
+                                    }</div>
                                 <input disabled={!Data.name} onChange={HandleUploadCategory } type="file" id='uploadCategoryimage' className='hidden' />
                             </label>
                             
@@ -121,12 +128,12 @@ const UploadCategoryModel = ({close,fetchData}) => {
                         <button
                         className={
                             `
-                            ${Data.name && Data.image ? "bg-amber-300 hover:bg-amber-900 cursor-pointer" : "bg-slate-300"} py-2 font-semibold rounded-lg 
+                            ${Data.name && Data.image ? "bg-amber-300 hover:bg-amber-300 cursor-pointer" : "bg-slate-300"} py-2 font-semibold rounded-lg 
                             `
                         }
                         >
                         {
-                            loading ? "Loading..." : "Add Category"
+                            loading ? <Loading/> : "Add Category"
                         }
                         </button>
                     </form>

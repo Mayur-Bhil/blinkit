@@ -21,8 +21,11 @@ const Header = () => {
   const redireactToLoginpage = () =>{
         navigate("/login")
   }
+
+  const token = localStorage.getItem("accessToken")
+  
 const handleMobileClick = ()=>{
-  if(!user._id){
+  if(!user._id || !token){
         navigate("/login")
     return;
   }else{
