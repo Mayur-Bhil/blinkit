@@ -29,9 +29,9 @@ const Usermenu = () => {
             }
     }
     return (
-        <div>
+        <div className='backdrop-blur-[8px] p-2 bg-gradient-to-br from-white/10 to-white/5  border-white/20 shadow-xl rounded-2xl'>
             <h2 className='font-semibold'>My Account</h2>
-              <div className='flex justify-center items-center '>
+              <div className='flex justify-center items-center'>
                 <div className='text-neutral-700 text-sm flex items-center'>
                     <span>{user.name || user.mobile}</span>
                     <Link to={'/dashboard/profile'} className='hover:text-blue-800 m-2'>

@@ -124,7 +124,7 @@ const UploadCategoryModel = ({close,fetchData}) => {
                             </label>
                             
                             </div>
-                        </div>
+                        </div>  
                         <button
                         className={
                             `

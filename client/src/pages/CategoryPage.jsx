@@ -74,7 +74,7 @@ const CategoryPage = () => {
         >
           Add category
         </button>
-      </div>
+      </div>      
 
       {/* Fixed: use lowercase 'loading' variable */}
       {!categoryData[0] && !loading && <NoData />}
