@@ -4,133 +4,224 @@ import uploadImages from '../utils/uploadImages';
 import Loading from './Loading';
 import AxiosToastError from '../utils/AxiosToastError';
 import summeryApis from '../common/summuryApi';
+import toast from 'react-hot-toast';
+import Axios from 'axios';
+import { useSelector } from 'react-redux';
 
-const UploadSubCategory = ({close}) => {
-    const [subCategoryData,setsubCategotyData] = useState({
-        name:"",
-        image:"",
-        category:[]
+const UploadSubCategory = ({close, fetchData}) => {
+    const [subCategoryData, setsubCategotyData] = useState({
+        name: "",
+        image: "",
+        category: []
     });
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [imageLoading, setImageLoading] = useState(false);
 
-   const HandleOnChange = (e)=>{
-            const { name ,value } = e.target;
-            setsubCategotyData((prev)=>{
-                return {
-                    ...prev,
-                    [name]:value
-                }
-            })
-   }
-    const HandelSubmit = async(e) =>{
+    const HandleOnChange = (e) => {
+        const { name, value } = e.target;
+        setsubCategotyData((prev) => {
+            return {
+                ...prev,
+                [name]: value
+            }
+        })
+    }
+
+    const fetchCategory = async () => {
+        try {
+            setLoading(true);
+            const response = await Axios({
+                ...summeryApis.getCategory,
+            });
+            const { data: responseData } = response;
+
+            if (responseData.success) {
+                setsubCategotyData(responseData.data);
+            }
+            console.log(responseData);
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const HandelSubmit = async (e) => {
         e.preventDefault();
         try {
             setLoading(true);
             const response = await Axios({
                 ...summeryApis.addCategory,
-                data:Data
+                data: subCategoryData // Fixed: was "Data" but should be "subCategoryData"
             })
-            const {data:responseData} = response;
+            const {data: responseData} = response;
             
-            if(responseData.success){
-               toast.success(responseData.message);
+            if (responseData.success) {
+                toast.success(responseData.message);
                 close()
-                fetchData()
+                if (fetchData) fetchData(); // Use fetchData prop instead of fetchCategory
             }
         } catch (error) {
-                AxiosToastError(error)
-        }finally{
+            AxiosToastError(error)
+        } finally {
             setLoading(false)
         }
-
     }
 
-   const HandleUploadSubCategory = async(e)=>{
-            try {
-                
-                const file = e.target.files[0];
-            if(!file){
+    const HandleUploadSubCategory = async (e) => {
+        try {
+            setImageLoading(true);
+            const file = e.target.files[0];
+            if (!file) {
+                setImageLoading(false);
                 return;
             }
-           const response = await uploadImages(file);
 
-           setsubCategotyData((prev)=>{
-                return {
-                    ...prev,
-                    image:subCategoryData.data.url
+            const response = await uploadImages(file);
+            console.log('Upload response:', response);
+            
+            // Handle different response structures
+            let imageUrl = '';
+            if (response.data && response.data.data && response.data.data.url) {
+                imageUrl = response.data.data.url;
+            } else if (response.data && response.data.url) {
+                imageUrl = response.data.url;
+            } else if (response.url) {
+                imageUrl = response.url;
+            } else if (response.data && response.data.secure_url) {
+                imageUrl = response.data.secure_url;
+            }
+
+            if (imageUrl) {
+                setsubCategotyData((prev) => {
+                    return {
+                        ...prev,
+                        image: imageUrl
                     }
-                })
-            } catch (error) {
-                AxiosToastError(error)
-            }   
+                });
+                console.log('Image URL set:', imageUrl);
+            } else {
+                console.error('No image URL found in response:', response);
+                toast.error('Failed to get image URL');
+            }
+            
+        } catch (error) {
+            AxiosToastError(error);
+            console.error('Upload error:', error);
+        } finally {
+            setImageLoading(false);
+        }
+    }
 
-   }
+    const allCategory = useSelector(store => store.product.allcategory);
+
+    console.log(subCategoryData);
+    
     return (
-<section className='fixed top-0 bottom-0 left-0 right-0 bg-neutral-800 opacity-80 flex items-center justify-center'>
-                <div className='bg-white max-w-4xl p-4 w-full rounded '>
-                    <div className='flex items-center justify-between font-semibold'>
-                        <h1>Categoty</h1>
-                        <button onClick={close} className='w-fit cursor-pointer block ml-auto'> 
+        <section className='fixed top-0 bottom-0 left-0 right-0 bg-neutral-800 opacity-95 flex items-center justify-center z-50'>
+            <div className='bg-white max-w-4xl p-4 w-full rounded'>
+                <div className='flex items-center justify-between font-semibold'>
+                    <h1>Category</h1> {/* Fixed typo */}
+                    <button onClick={close} className='w-fit cursor-pointer block ml-auto'> 
                         <IoClose size={20}/>
                     </button>
-            </div>
-                    <form action="" className='m-3 grid gap-2' onSubmit={HandelSubmit}>
-                        <div className='grid gap-1'>
-                            <label htmlFor="CategotyName">Name</label>
-                            <input 
+                </div>
+                <form className='m-3 grid gap-2' onSubmit={HandelSubmit}>
+                    <div className='grid gap-1'>
+                        <label htmlFor="CategoryName">Name</label>
+                        <input 
                             type="text" 
-                            id='CategotyName'
+                            id='CategoryName'
                             name='name'
                             placeholder='Enter Sub Category Name'
                             className='p-2 border-2 border-blue-500 focus-within:border-amber-300 outline-none rounded-sm'
                             value={subCategoryData.name}
                             onChange={HandleOnChange}
-             
-                            />
-                        </div>
-                        <div className='grid gap-1'>
-                            <p>Photo</p>
-                            <div className='flex gap-4 flex-col lg:flex-row items-center'>
-                                <div className='border bg-blue-50 h-36 rounded-sm w-36 flex justify-center items-center '>
-                                    {
-                                        subCategoryData.image ? (
-                                            <img className='h-full w-full object-scale-down' src={subCategoryData.image} alt={"sub-category"} />
-                                        ):(
-                                             <p className='text-sm'>{loading ?  <Loading/> : "no Photo" }</p>
-
-                                        )
-                                    }
+                        />
+                    </div>
+                    <div className='grid gap-1'>
+                        <p>Photo</p>
+                        <div className='flex gap-4 flex-col lg:flex-row items-center'>
+                            <div className='border bg-blue-50 h-36 rounded-sm w-36 flex justify-center items-center overflow-hidden'>
+                                {
+                                    subCategoryData.image ? (
+                                        <img 
+                                            className='max-h-full max-w-full object-scale-down mt-10' 
+                                            src={subCategoryData.image} 
+                                            alt="sub-category"
+                                            onLoad={() => console.log('Image loaded successfully')}
+                                            onError={(e) => {
+                                                console.error('Image failed to load:', e);
+                                                console.error('Image URL:', subCategoryData.image);
+                                            }}
+                                        />
+                                    ) : (
+                                        <p className='text-sm'>
+                                            {imageLoading ? <Loading/> : "No Photo"}
+                                        </p>
+                                    )
+                                }
                             </div>
                             <label htmlFor="uploadSubCategoryimage">
-                        <div 
-                            
-                            className={`
-                                    ${!subCategoryData.name ? "border-2":"bg-amber-300"}
+                                <div 
+                                    className={`
+                                        ${!subCategoryData.name ? "border-2" : "bg-amber-300"}
                                         p-4 py-2 rounded-xl cursor-pointer
                                         border-amber-300 hover:bg-amber-300 
-                                `}>
-                                    { 
-                                    loading ? "lodding...": "Upload image"
-                                    
-                                    }</div>
-                                <input disabled={!subCategoryData.name} onChange={HandleUploadSubCategory } type="file" id='uploadSubCategoryimage' className='hidden' />
+                                    `}>
+                                    {imageLoading ? "Uploading..." : "Upload image"}
+                                </div>
+                                <input 
+                                    disabled={!subCategoryData.name || imageLoading} 
+                                    onChange={HandleUploadSubCategory} 
+                                    type="file" 
+                                    id='uploadSubCategoryimage' 
+                                    className='hidden' 
+                                    accept="image/*"
+                                />
                             </label>
-                            
-                            </div>
-                        </div>  
-                        <button
-                        className={
-                            `
-                            ${subCategoryData.name && subCategoryData.image ? "bg-amber-300 hover:bg-amber-300 cursor-pointer" : "bg-slate-300"} py-2 font-semibold rounded-lg 
-                            `
-                        }
-                        >
-                        {
-                            loading ? <Loading/> : "Add Category"
-                        }
-                        </button>
-                    </form>
+                        </div>
                     </div>  
+                    <button
+                        type="submit"
+                        disabled={!subCategoryData.name || !subCategoryData.image || loading}
+                        className={`
+                            ${subCategoryData.name && subCategoryData.image && !loading 
+                                ? "bg-amber-300 hover:bg-amber-400 cursor-pointer" 
+                                : "bg-slate-300 cursor-not-allowed"} 
+                            py-2 font-semibold rounded-lg transition-colors
+                        `}
+                    >
+                        {loading ? <Loading/> : "Add Category"}
+                    </button>
+                    <div className='grid'>
+                        <label htmlFor="">Select Categoty</label>
+                        <select onChange={(e)=>{
+                            const value = e.target.value;
+                            const CategoryDetails = allCategory.find(cat =>cat._id == value)
+                            setsubCategotyData((prev)=>{
+                                return {
+                                    ...prev,
+                                    category:[...prev.category,CategoryDetails]
+                                }
+                            })
+                        }} name="" id=""
+                        className='bg-blue-50 border p-3'>
+                            <option value={""}>select Category</option>
+                               {
+                                    allCategory.map((category,index)=>{
+                                        return <option
+                                        key={category._id+"sun Category"}
+                                        value={category?._id}>
+                                                        {category?.name}
+                                                </option>
+                                    })
+                                
+                                }
+                        </select>
+                    </div>
+                </form>
+            </div>  
         </section>
     );
 };

@@ -8,14 +8,15 @@ import EditCategory from "../components/EditCategory";
 import ConfirmBox from "../components/ConfirmBox";
 import toast from "react-hot-toast";
 import AxiosToastError from "../utils/AxiosToastError";
+import { useSelector } from "react-redux";
 
-const CategoryPage = () => {
+const CategoryPage = ({fetchCategory}) => {
   const [openUploadCategory, setOpenUploadCategory] = useState(false); // Fixed variable name
   const [loading, setLoading] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const [editModelOpen, setEditModel] = useState(false);
   const [openConfirmBoxDelete, setOpenConfirmboxDelete] = useState(false);
-  const [deleteCategory, setDeleteCategory] = useState({
+  const [deleteCategory, setDeleteCategory] = useState({  
     _id: "",
   });
   const [editData, setEditData] = useState({
@@ -23,28 +24,33 @@ const CategoryPage = () => {
     image: "",
   });
 
-  const fetchCategory = async () => {
-    try {
-      setLoading(true);
-      const response = await Axios({
-        ...summeryApis.getCategory,
-      });
-      const { data: responseData } = response;
+const allCategory = useSelector((store)=>store.product.allcategory);
+console.log(allCategory);
+useEffect(()=>{
+  setCategoryData(allCategory)
+},[])
+  // const fetchCategory = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await Axios({
+  //       ...summeryApis.getCategory,
+  //     });
+  //     const { data: responseData } = response;
 
-      if (responseData.success) {
-        setCategoryData(responseData.data);
-      }
-      console.log(responseData);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     if (responseData.success) {
+  //       setCategoryData(responseData.data);
+  //     }
+  //     console.log(responseData);
+  //   } catch (error) {
+  //     console.error("Error fetching categories:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchCategory();
-  }, []);
+  // useEffect(() => {
+  //   fetchCategory();
+  // }, []);
 
   const HandelDelete = async()=>{
          try {
