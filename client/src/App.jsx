@@ -50,7 +50,7 @@ function App() {
     <>
     <Header/>
     <main className='min-h-[80vh] py-[0.1px] bg-sky-100'>
-        <Outlet fetchCategory={fetchCategory}/>
+        <Outlet/>
     </main>
     <Footer/>
     <Toaster/>

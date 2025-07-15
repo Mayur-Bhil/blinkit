@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import AxiosToastError from "../utils/AxiosToastError";
 import { useSelector } from "react-redux";
 
-const CategoryPage = ({fetchCategory}) => {
+const CategoryPage = () => {
   const [openUploadCategory, setOpenUploadCategory] = useState(false); // Fixed variable name
   const [loading, setLoading] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
@@ -26,27 +26,30 @@ const CategoryPage = ({fetchCategory}) => {
 
 const allCategory = useSelector((store)=>store.product.allcategory);
 console.log(allCategory);
+
 useEffect(()=>{
   setCategoryData(allCategory)
+  fetchCategory()
 },[])
-  // const fetchCategory = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await Axios({
-  //       ...summeryApis.getCategory,
-  //     });
-  //     const { data: responseData } = response;
 
-  //     if (responseData.success) {
-  //       setCategoryData(responseData.data);
-  //     }
-  //     console.log(responseData);
-  //   } catch (error) {
-  //     console.error("Error fetching categories:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchCategory = async () => {
+    try {
+      setLoading(true);
+      const response = await Axios({
+        ...summeryApis.getCategory,
+      });
+      const { data: responseData } = response;
+
+      if (responseData.success) {
+        setCategoryData(responseData.data);
+      }
+      console.log(responseData);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // useEffect(() => {
   //   fetchCategory();

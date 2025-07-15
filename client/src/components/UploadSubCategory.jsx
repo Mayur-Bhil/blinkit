@@ -112,6 +112,15 @@ const UploadSubCategory = ({close, fetchData}) => {
             setImageLoading(false);
         }
     }
+    const handelSelectedCategory = (CategoryId)=>{
+        const index = subCategoryData.category.find(el => el._id === CategoryId);
+        subCategoryData.category.splice(index,1)
+        setsubCategotyData((prev)=>{
+                return {
+                    ...prev
+                }
+        })
+    }
 
     const allCategory = useSelector(store => store.product.allcategory);
 
@@ -196,6 +205,21 @@ const UploadSubCategory = ({close, fetchData}) => {
                     </button>
                     <div className='grid'>
                         <label htmlFor="">Select Categoty</label>
+                        <div className='flex flex-wrap gap-2 '>
+                            {
+                            subCategoryData.category.map((cat,index)=>{
+                                return <div className='flex'>
+                                    <p
+                                    className='bg-white shadow-md px-1 m-1 border'
+                                        key={cat._id+"selectedValue"}
+                                    >
+                                    {cat.name}
+                                    <span onClick={()=>handelSelectedCategory(cat._id)} className='p-4 font-bold cursor-pointer text-red-500'>X</span>
+                                    </p>
+                                </div>
+                            })
+                        }
+                        </div>
                         <select onChange={(e)=>{
                             const value = e.target.value;
                             const CategoryDetails = allCategory.find(cat =>cat._id == value)
@@ -206,7 +230,7 @@ const UploadSubCategory = ({close, fetchData}) => {
                                 }
                             })
                         }} name="" id=""
-                        className='bg-blue-50 border p-3'>
+                        className='bg-blue-50  p-3 outline-none border'>
                             <option value={""}>select Category</option>
                                {
                                     allCategory.map((category,index)=>{
