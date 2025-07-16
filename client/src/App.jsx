@@ -7,9 +7,13 @@ import { useEffect } from 'react'
 import getUserDetails from './utils/getUserDatails'
 import { setUserDetails } from './store/userSclice'
 import { useDispatch } from 'react-redux'
+import { setAllCategory } from './store/ProductSclice'
+import Axios from './utils/useAxios'
+import summeryApis from './common/summuryApi'
 function App() {
 
   const dispatch = useDispatch();
+   
 
   const fetchUser = async() =>{
       const Userdata = await getUserDetails();
@@ -17,9 +21,29 @@ function App() {
       dispatch(setUserDetails(Userdata.data.data))
             
   }
+    const fetchCategory = async () => {
+      try {
+        
+        const response = await Axios({
+          ...summeryApis.getCategory,
+        });
+        const { data: responseData } = response;
+  
+        if (responseData.success) {
+            dispatch(setAllCategory(responseData.data))
+        }
+       
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+      
+      }
+    };
 
-  useEffect(()=>{
+    
+    useEffect(()=>{
       fetchUser()
+      fetchCategory();
   },[])
 
   return (

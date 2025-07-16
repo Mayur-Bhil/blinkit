@@ -6,7 +6,7 @@ const innitalValue = {
     email:"",
     avatar:"",
     mobile:"",
-    verify_email:Boolean,
+    verify_email:false,
     status:"",
     address_details: [],
     shopping_cart:[],
@@ -26,7 +26,7 @@ export const UserSclice = createSlice({
             state.email = action.payload?.email
             state.avatar = action.payload?.avatar
             state.mobile = action.payload?.mobile
-            state.verify_email = action.payload?.verify_email
+            state.verify_email = Boolean(action.payload?.verify_email)  
             state.last_login_date = action.payload?.last_login_date
             state.status = action.payload?.status
             state.address_details = action.payload?.address_details

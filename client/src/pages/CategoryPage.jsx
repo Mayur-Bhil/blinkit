@@ -8,6 +8,7 @@ import EditCategory from "../components/EditCategory";
 import ConfirmBox from "../components/ConfirmBox";
 import toast from "react-hot-toast";
 import AxiosToastError from "../utils/AxiosToastError";
+import { useSelector } from "react-redux";
 
 const CategoryPage = () => {
   const [openUploadCategory, setOpenUploadCategory] = useState(false); // Fixed variable name
@@ -15,13 +16,21 @@ const CategoryPage = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [editModelOpen, setEditModel] = useState(false);
   const [openConfirmBoxDelete, setOpenConfirmboxDelete] = useState(false);
-  const [deleteCategory, setDeleteCategory] = useState({
+  const [deleteCategory, setDeleteCategory] = useState({  
     _id: "",
   });
   const [editData, setEditData] = useState({
     name: "",
     image: "",
   });
+
+const allCategory = useSelector((store)=>store.product.allcategory);
+console.log(allCategory);
+
+useEffect(()=>{
+  setCategoryData(allCategory)
+  fetchCategory()
+},[])
 
   const fetchCategory = async () => {
     try {
@@ -42,9 +51,9 @@ const CategoryPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCategory();
-  }, []);
+  // useEffect(() => {
+  //   fetchCategory();
+  // }, []);
 
   const HandelDelete = async()=>{
          try {

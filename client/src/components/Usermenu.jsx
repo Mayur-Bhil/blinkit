@@ -29,7 +29,7 @@ const Usermenu = () => {
             }
     }
     return (
-        <div className='backdrop-blur-[8px] p-2 bg-gradient-to-br from-white/10 to-white/5  border-white/20 shadow-xl rounded-2xl'>
+        <div className=''>
             <h2 className='font-semibold'>My Account</h2>
               <div className='flex justify-center items-center'>
                 <div className='text-neutral-700 text-sm flex items-center'>
@@ -50,7 +50,7 @@ const Usermenu = () => {
                             <>
                             <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/category"}>Category </Link>
                             <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/upload-products"}>upload Product</Link>
-                            <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/sub-category"}>sub Category </Link>
+                            <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/subcategory"}>sub Category </Link>
                             <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/upload-products"}>Product</Link>
 
                                 
