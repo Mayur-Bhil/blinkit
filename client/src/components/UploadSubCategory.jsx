@@ -5,7 +5,7 @@ import Loading from './Loading';
 import AxiosToastError from '../utils/AxiosToastError';
 import summeryApis from '../common/summuryApi';
 import toast from 'react-hot-toast';
-import Axios from 'axios';
+import Axios from '../utils/useAxios';
 import { useSelector } from 'react-redux';
 
 const UploadSubCategory = ({close, fetchData}) => {
@@ -27,46 +27,38 @@ const UploadSubCategory = ({close, fetchData}) => {
         })
     }
 
-    const fetchCategory = async () => {
-        try {
-            setLoading(true);
-            const response = await Axios({
-                ...summeryApis.getCategory,
-            });
-            const { data: responseData } = response;
 
-            if (responseData.success) {
-                setsubCategotyData(responseData.data);
-            }
-            console.log(responseData);
-        } catch (error) {
-            console.error("Error fetching categories:", error);
-        } finally {
-            setLoading(false);
+const HandelSubmitSubCategory = async (e) => {
+    e.preventDefault();
+    
+    try {
+        setLoading(true);
+        
+        // ✅ Optional: Client-side validation
+        if (!subCategoryData.name || !subCategoryData.image || !subCategoryData.category || subCategoryData.category.length === 0) {
+            toast.error("Please fill all required fields");
+            return;
         }
-    }
 
-    const HandelSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            setLoading(true);
-            const response = await Axios({
-                ...summeryApis.addCategory,
-                data: subCategoryData // Fixed: was "Data" but should be "subCategoryData"
-            })
-            const {data: responseData} = response;
-            
-            if (responseData.success) {
-                toast.success(responseData.message);
-                close()
-                if (fetchData) fetchData(); // Use fetchData prop instead of fetchCategory
-            }
-        } catch (error) {
-            AxiosToastError(error)
-        } finally {
-            setLoading(false)
+        const response = await Axios({
+            ...summeryApis.createSubcategory,
+            data: subCategoryData
+        });
+
+        const { data: responseData } = response;
+
+        if (responseData.success) {
+            toast.success(responseData.message);
+            close();
+            if (fetchData) fetchData();
         }
+        
+    } catch (error) {
+        AxiosToastError(error);
+    } finally {
+        setLoading(false);
     }
+}
 
     const HandleUploadSubCategory = async (e) => {
         try {
@@ -78,7 +70,6 @@ const UploadSubCategory = ({close, fetchData}) => {
             }
 
             const response = await uploadImages(file);
-            console.log('Upload response:', response);
             
             // Handle different response structures
             let imageUrl = '';
@@ -99,7 +90,6 @@ const UploadSubCategory = ({close, fetchData}) => {
                         image: imageUrl
                     }
                 });
-                console.log('Image URL set:', imageUrl);
             } else {
                 console.error('No image URL found in response:', response);
                 toast.error('Failed to get image URL');
@@ -130,12 +120,12 @@ const UploadSubCategory = ({close, fetchData}) => {
         <section className='fixed top-0 bottom-0 left-0 right-0 bg-neutral-800 opacity-95 flex items-center justify-center z-50'>
             <div className='bg-white max-w-4xl p-4 w-full rounded'>
                 <div className='flex items-center justify-between font-semibold'>
-                    <h1>Category</h1> {/* Fixed typo */}
+                    <h1>Category</h1> 
                     <button onClick={close} className='w-fit cursor-pointer block ml-auto'> 
                         <IoClose size={20}/>
                     </button>
                 </div>
-                <form className='m-3 grid gap-2' onSubmit={HandelSubmit}>
+                <form className='m-3 grid gap-2' onSubmit={HandelSubmitSubCategory}>
                     <div className='grid gap-1'>
                         <label htmlFor="CategoryName">Name</label>
                         <input 
@@ -191,7 +181,7 @@ const UploadSubCategory = ({close, fetchData}) => {
                             </label>
                         </div>
                     </div>  
-                    <button
+                    <button 
                         type="submit"
                         disabled={!subCategoryData.name || !subCategoryData.image || loading}
                         className={`
@@ -203,12 +193,12 @@ const UploadSubCategory = ({close, fetchData}) => {
                     >
                         {loading ? <Loading/> : "Add Category"}
                     </button>
-                    <div className='grid'>
+                    <div className='grid gap-1'>
                         <label htmlFor="">Select Categoty</label>
                         <div className='flex flex-wrap gap-2 '>
                             {
                             subCategoryData.category.map((cat,index)=>{
-                                return <div className='flex'>
+                                return <div key={index} className='flex'>
                                     <p
                                     className='bg-white shadow-md px-1 m-1 border'
                                         key={cat._id+"selectedValue"}
@@ -233,7 +223,7 @@ const UploadSubCategory = ({close, fetchData}) => {
                         className='bg-blue-50  p-3 outline-none border'>
                             <option value={""}>select Category</option>
                                {
-                                    allCategory.map((category,index)=>{
+                                    allCategory.map((category)=>{
                                         return <option
                                         key={category._id+"sun Category"}
                                         value={category?._id}>
@@ -244,6 +234,7 @@ const UploadSubCategory = ({close, fetchData}) => {
                                 }
                         </select>
                     </div>
+
                 </form>
             </div>  
         </section>

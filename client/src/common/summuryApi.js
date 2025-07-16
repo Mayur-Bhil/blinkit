@@ -60,6 +60,10 @@ const summeryApis = {
     deleteCcategory:{
         url:"/api/category/delete",
         method:"DELETE"
+    },
+    createSubcategory:{
+        url: "/api/subcategory/create",
+        method: "POST",
     }
 }
 
