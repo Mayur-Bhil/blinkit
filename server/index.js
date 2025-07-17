@@ -34,7 +34,7 @@ app.get("/",(req,res)=>{
 app.use("/api/user",userRouter);
 app.use("/api/category",CategoryRouter);
 app.use("/api/file",uploadRouter);
-app.use("/api/subcategory",subCategoryRouter);
+app.use("/api/sub-category",subCategoryRouter);
 
 connectDB().then(()=>{
 
