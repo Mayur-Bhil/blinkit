@@ -201,13 +201,13 @@ const HandelSubmitSubCategory = async (e) => {
                             {
                             subCategoryData.category.map((cat,index)=>{
                                 return <div key={index} className='flex'>
-                                    <p
+                                    <h1
                                     className='bg-white shadow-md px-1 m-1 border'
                                         key={cat._id+"selectedValue"}
                                     >
                                     {cat.name}
-                                    <span onClick={()=>handelSelectedCategory(cat._id)} className='p-4 font-bold cursor-pointer text-red-500'>X</span>
-                                    </p>
+                                    <span onClick={()=>handelSelectedCategory(cat._id)} className='p-4 font-bold cursor-pointer block text-red-500'>X</span>
+                                    </h1>
                                 </div>
                             })
                         }

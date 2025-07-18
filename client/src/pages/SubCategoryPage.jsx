@@ -9,6 +9,8 @@ import { TiPen } from "react-icons/ti";
 import { MdDelete } from "react-icons/md";
 import EditSubCategoryModel from '../components/EditSubCategoryModel';
 import AxiosToastError from '../utils/AxiosToastError';
+import ConfirmBox from '../components/ConfirmBox';
+import toast from 'react-hot-toast';
 const SubCategoryPage = () => {
     const [openSubcategory,setOpenSubcategory] = useState(false); 
     const [data,setData] = useState([]);
@@ -19,6 +21,12 @@ const SubCategoryPage = () => {
     const [editData,setEditData] = useState({
         _id:""
     })
+
+    const [deleteSubcategoryData,setDeleteSubCategory] = useState({
+        _id:""
+    });
+
+    const [openDeleteCOnfirmBox,setOpenDeleteConfirmBox] = useState(false)
 
     const fetchSubCategory = async () => {
         try {  
@@ -94,13 +102,36 @@ const SubCategoryPage = () => {
                             setOpenEdit(true)
                             setEditData(row.original)
                         }} className='p-2 bg-green-200 rounded-full hover:text-green-700 cursor-pointer'><TiPen  size={20}/></button>
-                        <button className='p-2 bg-red-200 rounded-full hover:text-red-500 cursor-pointer'><MdDelete size={20}/></button>
+                        <button onClick={()=>{
+                            setOpenDeleteConfirmBox(true)
+                            setDeleteSubCategory(row.original)
+                        }} className='p-2 bg-red-200 rounded-full hover:text-red-500 cursor-pointer'><MdDelete size={20}/></button>
                 </div>
             }
         })
     ]
+
+    const  handelDeleteSubCategory = async()=>{
+        try {
+            const res = await Axios({
+                ...summeryApis.deleteSubCategory,
+                data:deleteSubcategoryData
+            })
+            const {data : responseData} = res;
+            if(responseData.success){
+                toast.success(responseData.message);
+                fetchSubCategory()
+                setOpenDeleteConfirmBox(false)
+                setDeleteSubCategory({
+                    _id:""
+                })
+            }
+        } catch (error) {
+            AxiosToastError(error)
+        }
+    }
     return (
-        <section>
+        <section className=''>
      <div className="p-2 bg-white shadow-xl flex items-center justify-between rounded-sm">
             <h2 className="font-semibold">Sub Category</h2>
             <button
@@ -111,7 +142,7 @@ const SubCategoryPage = () => {
             Add Sub Category
             </button>
         </div>
-        <div>
+        <div className='overflow-auto w-full max-w-[95vw]'>
             {
                 <DisplayTable
                      data={data}
@@ -121,7 +152,7 @@ const SubCategoryPage = () => {
         </div>
         {
             openSubcategory && (
-                <UploadSubCategory close={()=>setOpenSubcategory(false)}/>
+                <UploadSubCategory close={()=>setOpenSubcategory(false)} fetchData={fetchSubCategory}/>
             )
         }
         {   
@@ -131,6 +162,10 @@ const SubCategoryPage = () => {
 
         {
            openEdit &&     <EditSubCategoryModel data={editData } fetchData={fetchSubCategory} close={()=>setOpenEdit(false)}  />
+        }
+
+        {
+            openDeleteCOnfirmBox && <ConfirmBox cancel={()=>setOpenDeleteConfirmBox(false)} confirm={handelDeleteSubCategory} close={()=>setOpenDeleteConfirmBox(false)}/>
         }
  </section>
       

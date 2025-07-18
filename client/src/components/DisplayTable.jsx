@@ -13,14 +13,14 @@ const DisplayTable = ({data,column}) => {
         getCoreRowModel:getCoreRowModel(),   
     })
     return (
-        <div className="p-2">
-      <table className='w-full py-0 px-0 border-collapse'>
+        <div className="lg:p-2">
+      <table className='lg:w-full py-0 px-0 border-collapse'>
         <thead className='bg-black text-white'>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
                 <th>Sr. No</th>
               {headerGroup.headers.map(header => (
-                <th className='border' key={header.id}>
+                <th className='border whitespace-nowrap' key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -37,7 +37,7 @@ const DisplayTable = ({data,column}) => {
             <tr className='' key={row.id}>
                 <td className='border px-2 py-1'>{index+1}</td>
               {row.getVisibleCells().map(cell => (
-                <td className='border px-2 py-1' key={cell.id}>
+                <td className='border px-2 py-1 whitespace-nowrap' key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}

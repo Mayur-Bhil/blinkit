@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import Axios from '../utils/useAxios';
 import { useSelector } from 'react-redux';
 
-const UploadSubCategory = ({close}) => {
+const UploadSubCategory = ({close,fetchData}) => {
     const [subCategoryData, setsubCategotyData] = useState({
         name: "",
         image: "",
@@ -155,9 +155,9 @@ const HandelSubmitSubCategory = async (e) => {
                                             }}
                                         />
                                     ) : (
-                                        <p className='text-sm'>
+                                        <div className='text-sm'>
                                             {imageLoading ? <Loading/> : "No Photo"}
-                                        </p>
+                                        </div>
                                     )
                                 }
                             </div>

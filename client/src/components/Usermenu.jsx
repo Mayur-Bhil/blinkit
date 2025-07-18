@@ -50,7 +50,7 @@ const Usermenu = () => {
                             <>
                             <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/category"}>Category </Link>
                             <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/upload-products"}>upload Product</Link>
-                            <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/subcategory"}>sub Category </Link>
+                            <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/sub-category"}>sub Category </Link>
                             <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/upload-products"}>Product</Link>
 
                                 

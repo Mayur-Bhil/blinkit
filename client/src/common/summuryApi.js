@@ -72,6 +72,10 @@ const summeryApis = {
     updateSubCategory:{
         url:"/api/sub-category/update",
         method:"PUT"
+    },
+    deleteSubCategory:{
+        url:"/api/sub-category/delete",
+        method:"DELETE"
     }
 }
 

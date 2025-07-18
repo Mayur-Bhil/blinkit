@@ -101,7 +101,7 @@ export const updateCategoryController = async (req,res)=>{
 
 export const deleteCategoryController = async(req,res)=>{
     try {
-        const {_id} = req.body;
+        const { _id } = req.body;
         const checkSUbCategory = await subCategory.find({
             category:{
                 "$in" : [ _id ]
