@@ -76,6 +76,10 @@ const summeryApis = {
     deleteSubCategory:{
         url:"/api/sub-category/delete",
         method:"DELETE"
+    },
+    createNewProduct:{
+        url:"/api/product/create",
+        method:"POST"
     }
 }
 

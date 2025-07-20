@@ -10,6 +10,7 @@ import userRouter from "./routes/user.route.js"
 import CategoryRouter from "./routes/Category.route.js"
 import uploadRouter from "./routes/upload.Route.js"
 import subCategoryRouter from "./routes/subCategory.route.js"
+import ProductRouter from "./routes/Product.route.js"
 const app =  express();
 
 app.use(cors({
@@ -35,6 +36,7 @@ app.use("/api/user",userRouter);
 app.use("/api/category",CategoryRouter);
 app.use("/api/file",uploadRouter);
 app.use("/api/sub-category",subCategoryRouter);
+app.use("/api/product",ProductRouter);
 
 connectDB().then(()=>{
 
