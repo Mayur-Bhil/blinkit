@@ -2,36 +2,40 @@ import Product from "../models/product.model.js"
 
 export const CreateProductController = async(req,res)=>{
     try {
+        console.log(req.body)
         const {
         name,
-        image,
+        Image,
         category,
-        subcategory,
+        sub_category,
         unit,
         stock,
         price,
         discount,
-        description,
+        desecription,
         more_details} = req.body;
+        
+        console.log("Images:", Image); // Debug Images
+        console.log("Subcategories:", sub_category);
 
-        if(!name || !image[0] || !category[0] || !subcategory[0] || !unit || !price || !description){
-            return res.status(400).json({
-                message: "Enter Required Fields",
-                error: true,
-                success: false
-            })
-        }
+        if(!name || !Image?.length || !category?.length || !sub_category?.length || !unit || !price || !desecription){
+        return res.status(400).json({
+            message: "Enter Required Fields",
+            error: true,
+            success: false
+        })
+    }
 
         const product = new Product({
             name,
-            image,
+            Image,
             category,
-            subcategory,
+            sub_category,
             unit,
             stock,
             price,
             discount,
-            description,
+            desecription,
             more_details
         })
 

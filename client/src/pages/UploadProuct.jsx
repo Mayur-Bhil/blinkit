@@ -16,14 +16,14 @@ import successAlert from '../utils/successAlert';
 const UploadProduct = () => {
     const [data,setData] = useState({
         name:"",
-        image:[],
+        Image:[],
         category:[],
-        subcategory:[],
-        unit:[],
+        sub_category:[],
+        unit:"",
         stock:"",
         price:"",
         discount:"",
-        description:"",
+        desecription:"",
         more_details:{},
     });
     const [SelectCategory,setSelectCategory] = useState("");
@@ -57,12 +57,12 @@ const UploadProduct = () => {
             setLoading(true)
             const response = await uploadImages(file)
             const { data : ImageResponse } = response;
-            const imageUrl = ImageResponse.data.url
+            const ImageUrl = ImageResponse.data.url
             
             setData((prev)=>{
                 return {
                     ...prev,
-                    image:[...prev.image,imageUrl]
+                    Image:[...prev.Image,ImageUrl]
                 }
             })
             setLoading(false)
@@ -73,15 +73,16 @@ const UploadProduct = () => {
         
     } 
 
-    const HandelDeleteImage = async(index)=>{
-        data.image.splice(index,1);
-        setData((prev)=>{
-            return {
-                ...prev,
-                
-            }
-        })
-    }
+ const HandelDeleteImage = async(index)=>{
+    setData((prev)=>{
+        const newImages = [...prev.Image];
+        newImages.splice(index,1);
+        return {
+            ...prev,
+            Image: newImages
+        }
+    })
+}
 
     const removeProductCategory = async(index)=>{
         data.category.splice(index,1);
@@ -93,7 +94,7 @@ const UploadProduct = () => {
     }
 
     const removeProductsubCategory = async(index) =>{
-        data.subcategory.splice(index,1);
+        data.sub_category.splice(index,1);
             setData((prev)=>{
             return {
                 ...prev
@@ -116,12 +117,13 @@ const UploadProduct = () => {
     }
 
     const HandleSubmit = async(e)=>{
-        e.preventDefault();
-       try {
-            const response = await Axios({
-                ...summeryApis.createNewProduct,
-                data:data
-            })
+    e.preventDefault();
+    console.log("Data being sent:", data); // Add this line
+   try {
+        const response = await Axios({
+            ...summeryApis.createNewProduct,
+            data:data
+        })
 
             const {data:ResponseData} = response;
             if(ResponseData.success){
@@ -131,6 +133,7 @@ const UploadProduct = () => {
             AxiosToastError(error)
        }
     }
+
     return (
         <section>
             <div className='p-2 bg-white shadow-md flex items-center justify-between'>
@@ -151,16 +154,16 @@ const UploadProduct = () => {
                         
                         />
 
-                         <label className='font-medium'  htmlFor="description">Description</label>
+                         <label className='font-medium'  htmlFor="desecription">Description</label>
                         <textarea type="text"
                                placeholder='Product description'
-                               value={data.description}
+                               value={data.desecription}
                                onChange={handleChange}
-                               name='description'
+                               name='desecription'
                                required
                                multiple
                                rows={3}
-                               id='description'
+                               id='desecription'
                                 className='bg-blue-200 p-2 outline-none border-2 rounded-md focus-within:border-amber-300 resize-none'
                         
                         />
@@ -172,7 +175,7 @@ const UploadProduct = () => {
                                     { loading ? <Loading/> : <FaCloudUploadAlt size={29}/> }
                                     
 
-                                    { loading ? "Uploading Image" : "Uplode image"}
+                                    { loading ? "Uploading Image" : "Uplode Image"}
                                 </div>
                                 <input
                                 id='FileUpload'
@@ -185,14 +188,14 @@ const UploadProduct = () => {
                         </label>
                             <div className='mt-2 flex gap-3'>
                                 {
-                                    data.image.map((image,index)=>{
+                                    data.Image.map((Image,index)=>{
 
-                                        return <div key={image*index+"productIndex"}
+                                        return <div key={`product-Image-${index}`}
                                         className='h-20 min-w-20 w-20 bg-blue-50 border-2 relative group'>
                                             <img 
-                                            src={image} alt={image}
+                                            src={Image} alt={Image}
                                                 className='h-full w-full object-scale-down cursor-pointer'
-                                            onClick={()=>setViewImage(image)}
+                                            onClick={()=>setViewImage(Image)}
                                             />
                                              <div onClick={()=>HandelDeleteImage(index)} className='absolute bottom-0 right-0 p-1 bg-red-400 hidden group-hover:block text-white rounded-full cursor-pointer hover:bg-blue-600 hover:text-white -500'>
                                                 <MdDelete  size={18}/>
@@ -266,7 +269,7 @@ const UploadProduct = () => {
                                     setData((prev)=>{
                                         return {
                                             ...prev,
-                                            subcategory:[...prev.subcategory,category]
+                                            sub_category:[...prev.sub_category,category]
                                         }
                                     })
                                     setSelectSubCategory("")
@@ -284,7 +287,7 @@ const UploadProduct = () => {
                                 <div className='flex flex-wrap gap-3'>
 
                                 {
-                                    data.subcategory.map((c,index)=>{
+                                    data.sub_category.map((c,index)=>{
                                         return (
                                             
                                             <div className='flex p-2 text-sm gap-2 items-center bg-green-300 mt-1 rounded-lg' key={c._id+index+"products"}>
