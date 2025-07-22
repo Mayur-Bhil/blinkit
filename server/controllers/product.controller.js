@@ -56,3 +56,42 @@ export const CreateProductController = async(req,res)=>{
         })
     }
 }
+
+
+export const getProductController = async(req,res)=>{
+    try {
+        let  {page,limit,search} = req.body;
+        if(!page){
+            page=1
+        }
+        if(!limit){
+            limit = 10
+        }
+        const query = search ? {
+            $text:{
+                $search : search
+               
+            }
+        }:{}
+        const skip = (page -1) * limit;
+        const [data,totalCount] = await Promise.all([
+            Product.find(query).sort({createdAt:-1}).skip(skip).limit(limit),
+            Product.countDocuments(query)
+        ])
+
+        return res.json({
+            message:"Product Data",
+            error:false,
+             success:true,
+             totalCount:totalCount,
+             totalpages:Math.ceil(totalCount/limit),
+             data:data
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error: true,
+            message: error.message || "Somting went Wrong" || error,
+            success: false
+        })
+    }
+}
