@@ -193,7 +193,7 @@ const HandelSubmitSubCategory = async (e) => {
                             py-2 font-semibold rounded-lg transition-colors
                         `}
                     >
-                        {loading ? <Loading/> : "Add Category"}
+                        {loading ? <Loading/> : "Update sub Category"}
                     </button>
                     <div className='grid gap-1'>
                         <label htmlFor="">Select Categoty</label>

@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import getUserDetails from './utils/getUserDatails'
 import { setUserDetails } from './store/userSclice'
 import { useDispatch } from 'react-redux'
-import { setAllCategory ,setAllSubCategory} from './store/ProductSclice'
+import { setAllCategory ,setAllSubCategory, setloadingCategory} from './store/ProductSclice'
 import Axios from './utils/useAxios'
 import summeryApis from './common/summuryApi'
 function App() {
@@ -23,7 +23,7 @@ function App() {
   }
     const fetchCategory = async () => {
       try {
-        
+        dispatch(setloadingCategory(true))
         const response = await Axios({
           ...summeryApis.getCategory,
         });
@@ -36,7 +36,7 @@ function App() {
       } catch (error) {
         console.error("Error fetching categories:", error);
       } finally {
-      
+        setloadingCategory(false)
       }
     };
 

@@ -62,6 +62,7 @@ const Usermenu = () => {
 
                     <Link className=' px-2 hover:bg-amber-300 rounded-xl' to={"/dashboard/address"}>Save address</Link>
                     <button onClick={handelLogout} className='bg-red-400 cursor-pointer  text-lg transition-all hover:scale-90 rounded-xl text-center'>Logout    </button>
+                     <Devider/>
               </div>
         </div>
     );

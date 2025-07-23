@@ -36,15 +36,16 @@ const ProductByAdmin = () => {
                 setproductData(ResponseData.data)
             }
         } catch (error) {
-        AxiosToastError(error)
+            AxiosToastError(error)
         }finally{
             setloadig(false)
         }
     }
 
-
+    
     useEffect(()=>{
         fetchProductData()
+        
     },[page])
 
     const HandleNext = ()=>{
@@ -82,8 +83,8 @@ const ProductByAdmin = () => {
         }
     },[search])   
     return (
-        <section>
-            <div className='p-2 h-full bg-white shadow-md flex items-center justify-between gap-4'>
+        <section className='    '>
+            <div className='p-2 h-full  bg-white shadow-md flex items-center justify-between gap-4'>
               
                     <h2 className='font-semibold'>Product</h2>
                     <div className='h-full min-w-24 max-w-56 w-full ml-auto bg-blue-50 flex items-center gap-3 px-3 py-2 border-2 focus-within:border-amber-300'>
@@ -102,7 +103,7 @@ const ProductByAdmin = () => {
                     <Loading/>
                 )
             }
-           <div className='p-4 bg-blue-50'>
+           <div className='p-4  bg-blue-50'>
                 <div className='min-h-[55vh]'>
                     <div className=' grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 '>
                 {
