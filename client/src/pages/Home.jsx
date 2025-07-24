@@ -23,7 +23,7 @@ const Home = () => {
                     new Array(20).fill(null).map((c,idx)=>{
                     return (
                      
-                            <div className='bg-white rounded p-4 min-h-40 grid gap-2 shadow animate-pulse'>
+                            <div key={idx} className='bg-white rounded p-4 min-h-40 grid gap-2 shadow animate-pulse'>
                               <div className='bg-blue-100 min-h-20 rounded'></div>
                               <div className='bg-blue-100 h-8 rounded'></div>
                               <div className='grid grid-cols-2 gap-4'>

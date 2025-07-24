@@ -222,7 +222,7 @@ const UploadProduct = () => {
                                 <input
                                     id='FileUpload'
                                     type="file"
-                                    className='hidden'
+                                    className='hidden '
                                     onChange={HandleUploadImage}
                                     accept='image/*'
                                 />

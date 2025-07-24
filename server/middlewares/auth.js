@@ -6,7 +6,7 @@ const auth =(req,res,next)=>{
         // console.log("token",token);
         if(!token){
             return res.status(401).json({
-                message:"Provide Token"
+                message:"Unauthorized"
             })
         }
         const decode = jwt.verify(token,process.env.SECRET_KEY_ACCESS_TOKEN);

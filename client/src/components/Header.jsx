@@ -80,7 +80,7 @@ const handleMobileClick = ()=>{
                                 }
                                 {
                                   isUserMenuOpen && <div className="absolute -right-3 top-13">
-                                    <div className="bg-[#faeeee00] p-2 min-w-52 min-h-20 border rounded-lg lg:shadow-xl">
+                                    <div className="bg-[#faeeee00]  min-w-52 min-h-20 border rounded-lg lg:shadow-xl">
                                           <Usermenu/>
                                     </div>
                                   </div> 
