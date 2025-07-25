@@ -95,3 +95,34 @@ export const getProductController = async(req,res)=>{
         })
     }
 }
+
+
+export const getProductByCategory = async(req,res)=>{
+    try {
+        const {id} = req.body;
+        if (!id) {
+            return res.status(400).json({
+                message:"Provide category",
+                error:true,
+                success:false
+            })
+        }
+
+        const product = await Product.find({
+            category:{$in:id}
+        }).limit(15)
+return res.json({
+    message:"Category product List ",
+    data:product,
+    error:false,
+    success:true
+})
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: true,
+            success:false,
+            message: error.message || error || "Something went wrong"
+        })
+    }
+}

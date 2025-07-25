@@ -22,8 +22,8 @@ function App() {
             
   }
     const fetchCategory = async () => {
+      dispatch(setloadingCategory(true))
       try {
-        dispatch(setloadingCategory(true))
         const response = await Axios({
           ...summeryApis.getCategory,
         });
@@ -36,7 +36,7 @@ function App() {
       } catch (error) {
         console.error("Error fetching categories:", error);
       } finally {
-        setloadingCategory(false)
+        dispatch(setloadingCategory(false))
       }
     };
 
@@ -68,7 +68,7 @@ const fetchSubCategory = async()=>{
   return (
     <>
     <Header/>
-    <main className='min-h-[80vh] py-[0.1px] bg-sky-100'>
+    <main className='min-h-[80vh] py-[0.1px]'>
         <Outlet/>
     </main>
     <Footer/>

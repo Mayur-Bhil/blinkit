@@ -2,9 +2,33 @@ import React from 'react'
 import banner from "../assets/banner.jpg"
 import banner_mobile from "../assets/banner-mobile.jpg"
 import { useSelector } from 'react-redux'
+import { validUrl } from '../utils/validUrlConvert'
+import {Link, useNavigate} from "react-router-dom"
 
 const Home = () => {
-  const loadingCategory = useSelector((store)=>store.product.loadingCategory)
+  const loadingCategory = useSelector((store)=>store.product.loadingCategory);
+  const categoryData = useSelector((store)=>store.product.allcategory);
+  const SubcategoryData = useSelector((store)=>store.product.allSubcategory);
+  const redirect = useNavigate();
+
+
+
+  const handleRedirectListpage = (id,cat)=>{
+      console.log(id,cat);
+      const subCategory = SubcategoryData.find(sub=>{
+          const filterData = sub.category.some(c =>{
+            return c._id == id
+          })
+          return filterData ? true :null
+          
+      })
+      const url = `/${validUrl(cat)}-${id}/{${validUrl(subCategory.name)}-${subCategory._id}}`
+      console.log("Url is",url);
+      redirect(url)
+      
+        console.log(subCategory);
+      
+  }
   return (
     <section className='bg-white'>
         <div className='container mx-auto rounded'>
@@ -17,10 +41,10 @@ const Home = () => {
                 className='w-full h-full lg:hidden'
                 alt="" />
             </div>
-            <div className='container px-4 mx-auto my-3 gap-3 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6'>
+            <div className='container px-4 mx-auto my-3 gap-3 grid grid-cols-4 md:grid-cols-8 lg:grid-cols-10'>
                 {
                   loadingCategory ? (
-                    new Array(20).fill(null).map((c,idx)=>{
+                    new Array(12).fill(null).map((c,idx)=>{
                     return (
                      
                             <div key={idx} className='bg-white rounded p-4 min-h-40 grid gap-2 shadow animate-pulse'>
@@ -33,18 +57,35 @@ const Home = () => {
                             </div>
                        
                     )
-                  })
+                     })
                   ):(
-                      <div>
-                          <div>
-                            <img  alt="" />
-                          </div>
-                      </div>
+
+                        categoryData.map((cat,index)=>{
+                          return <div key={index} onClick={()=>handleRedirectListpage(cat._id,cat.name)}>
+                                    <div>
+                                      <img src={cat.image} alt="" />
+                                    </div>
+                                </div> 
+                      })
+                    
                   )
                   
                 }
             </div>
         </div>
+
+        {/* Display category wise data cards etc */}
+        
+        <div> 
+                <div className='container mx-auto p-4 flex items-center justify-between'>
+                    <h3 className='font-semibold text-lg md:text-xl'>Dairy ,Bread & Eggs</h3>
+                    <Link className='text-green-500'  to={""}>See All</Link>
+                </div>
+                <div>
+                  
+                </div>
+        </div>
+
     </section>
   )
 }

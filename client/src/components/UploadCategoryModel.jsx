@@ -76,7 +76,7 @@ const UploadCategoryModel = ({close,fetchData}) => {
         <section className='fixed top-0 bottom-0 left-0 right-0 bg-neutral-800 opacity-80 flex items-center justify-center'>
                 <div className='bg-white max-w-4xl p-4 w-full rounded '>
                     <div className='flex items-center justify-between font-semibold'>
-                        <h1>Categoty</h1>
+                        <h1>Categoીy</h1>
                         <button onClick={close} className='w-fit cursor-pointer block ml-auto'> 
                         <IoClose size={20}/>
                     </button>
