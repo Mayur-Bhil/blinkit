@@ -4,6 +4,7 @@ import banner_mobile from "../assets/banner-mobile.jpg"
 import { useSelector } from 'react-redux'
 import { validUrl } from '../utils/validUrlConvert'
 import {Link, useNavigate} from "react-router-dom"
+import CategoryWiseProductDisplay from '../components/CategoryWiseProductDisplay'
 
 const Home = () => {
   const loadingCategory = useSelector((store)=>store.product.loadingCategory);
@@ -11,24 +12,25 @@ const Home = () => {
   const SubcategoryData = useSelector((store)=>store.product.allSubcategory);
   const redirect = useNavigate();
 
-
-
-  const handleRedirectListpage = (id,cat)=>{
-      console.log(id,cat);
-      const subCategory = SubcategoryData.find(sub=>{
-          const filterData = sub.category.some(c =>{
-            return c._id == id
-          })
-          return filterData ? true :null
-          
-      })
-      const url = `/${validUrl(cat)}-${id}/{${validUrl(subCategory.name)}-${subCategory._id}}`
-      console.log("Url is",url);
-      redirect(url)
-      
-        console.log(subCategory);
-      
-  }
+const handleRedirectListpage = (id, cat) => {
+    console.log(id, cat);
+    
+    const subCategory = SubcategoryData.find(sub => {
+        return sub.category.some(c => c._id === id); // Use strict equality
+    });
+    
+    // Add safety check for subCategory
+    if (!subCategory) {
+        console.error('Subcategory not found for id:', id);
+        return; // Exit early if no subcategory found
+    }
+    
+    const url = `/${validUrl(cat)}-${id}/${validUrl(subCategory.name)}-${subCategory._id}`;
+    console.log("Url is", url);
+    console.log(subCategory);
+    
+    redirect(url);
+};
   return (
     <section className='bg-white'>
         <div className='container mx-auto rounded'>
@@ -76,14 +78,13 @@ const Home = () => {
 
         {/* Display category wise data cards etc */}
         
-        <div> 
-                <div className='container mx-auto p-4 flex items-center justify-between'>
-                    <h3 className='font-semibold text-lg md:text-xl'>Dairy ,Bread & Eggs</h3>
-                    <Link className='text-green-500'  to={""}>See All</Link>
-                </div>
-                <div>
-                  
-                </div>
+        <div className=''> 
+              {
+                categoryData.map((c,index)=>{
+                  return <CategoryWiseProductDisplay key={c?._id+"CategoryWiseProducts"} id={c?._id} name={c?.name}/> 
+                })
+              }
+                
         </div>
 
     </section>

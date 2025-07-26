@@ -99,7 +99,7 @@ export const getProductController = async(req,res)=>{
 
 export const getProductByCategory = async(req,res)=>{
     try {
-        const {id} = req.body;
+        const { id } = req.body;
         if (!id) {
             return res.status(400).json({
                 message:"Provide category",
@@ -111,6 +111,7 @@ export const getProductByCategory = async(req,res)=>{
         const product = await Product.find({
             category:{$in:id}
         }).limit(15)
+        
 return res.json({
     message:"Category product List ",
     data:product,
