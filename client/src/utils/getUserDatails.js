@@ -1,4 +1,5 @@
 import summeryApis from "../common/summuryApi";
+import AxiosToastError from "./AxiosToastError";
 import Axios from "./useAxios";
 
 const getUserDetails = async()=>{
@@ -8,8 +9,7 @@ const getUserDetails = async()=>{
         })
         return response
     } catch (error) {
-        console.log(error);
-        throw error;
+        AxiosToastError(error)
     }
 }
 

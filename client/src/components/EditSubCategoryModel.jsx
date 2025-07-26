@@ -8,11 +8,13 @@ import toast from 'react-hot-toast';
 import Axios from '../utils/useAxios';
 import { useSelector } from 'react-redux';
 
-const UploadSubCategory = ({close,fetchData}) => {
+
+const EditSubCategoryModel = ({close,data,fetchData}) => {
     const [subCategoryData, setsubCategotyData] = useState({
-        name: "",
-        image: "",
-        category: []
+        _id: data._id,
+        name: data.name,
+        image: data.image,
+        category: data.category || []
     });
     const [loading, setLoading] = useState(false);
     const [imageLoading, setImageLoading] = useState(false);
@@ -33,16 +35,18 @@ const HandelSubmitSubCategory = async (e) => {
     
     try {
         setLoading(true);
-        
-        // ✅ Optional: Client-side validation
+      
         if (!subCategoryData.name || !subCategoryData.image || !subCategoryData.category || subCategoryData.category.length === 0) {
             toast.error("Please fill all required fields");
             return;
         }
 
         const response = await Axios({
-            ...summeryApis.createSubcategory,
-            data: subCategoryData
+            ...summeryApis.updateSubCategory,
+            data: {
+                ...subCategoryData,
+                category: subCategoryData.category.map(cat => cat._id), // send only IDs
+                }
         });
 
         const { data: responseData } = response;
@@ -60,7 +64,7 @@ const HandelSubmitSubCategory = async (e) => {
     }
 }
 
-    const HandleUploadSubCategory = async (e) => {
+    const HandleEditSubCategoryModel = async (e) => {
         try {
             setImageLoading(true);
             const file = e.target.files[0];
@@ -102,25 +106,23 @@ const HandelSubmitSubCategory = async (e) => {
             setImageLoading(false);
         }
     }
-    const handelSelectedCategory = (CategoryId)=>{
-        const index = subCategoryData.category.find(el => el._id === CategoryId);
-        subCategoryData.category.splice(index,1)
-        setsubCategotyData((prev)=>{
-                return {
-                    ...prev
-                }
-        })
-    }
+    const handelSelectedCategory = (CategoryId) => {
+    const newCategory = subCategoryData.category.filter(cat => cat._id !== CategoryId);
+    setsubCategotyData((prev) => ({
+        ...prev,
+        category: newCategory
+    }));
+};
 
     const allCategory = useSelector(store => store.product.allcategory);
 
-    console.log(subCategoryData);
+    console.log("all Category"+subCategoryData);
     
     return (
         <section className='fixed top-0 bottom-0 left-0 right-0 bg-neutral-800 opacity-95 flex items-center justify-center z-50'>
             <div className='bg-white max-w-4xl p-4 w-full rounded'>
                 <div className='flex items-center justify-between font-semibold'>
-                    <h1>sub Category</h1> 
+                    <h1>Edit sub Category</h1> 
                     <button onClick={close} className='w-fit cursor-pointer block ml-auto'> 
                         <IoClose size={20}/>
                     </button>
@@ -145,7 +147,7 @@ const HandelSubmitSubCategory = async (e) => {
                                 {
                                     subCategoryData.image ? (
                                         <img 
-                                            className='max-h-full max-w-full object-scale-down mt-10' 
+                                            className='max-h-full max-w-full object-scale-down m-1' 
                                             src={subCategoryData.image} 
                                             alt="sub-category"
                                             onLoad={() => console.log('Image loaded successfully')}
@@ -155,13 +157,13 @@ const HandelSubmitSubCategory = async (e) => {
                                             }}
                                         />
                                     ) : (
-                                        <div className='text-sm'>
+                                        <p className='text-sm'>
                                             {imageLoading ? <Loading/> : "No Photo"}
-                                        </div>
+                                        </p>
                                     )
                                 }
                             </div>
-                            <label htmlFor="uploadSubCategoryimage">
+                            <label htmlFor="EditSubCategoryModelimage">
                                 <div 
                                     className={`
                                         ${!subCategoryData.name ? "border-2" : "bg-amber-300"}
@@ -172,9 +174,9 @@ const HandelSubmitSubCategory = async (e) => {
                                 </div>
                                 <input 
                                     disabled={!subCategoryData.name || imageLoading} 
-                                    onChange={HandleUploadSubCategory} 
+                                    onChange={HandleEditSubCategoryModel} 
                                     type="file" 
-                                    id='uploadSubCategoryimage' 
+                                    id='EditSubCategoryModelimage' 
                                     className='hidden' 
                                     accept="image/*"
                                 />
@@ -191,7 +193,7 @@ const HandelSubmitSubCategory = async (e) => {
                             py-2 font-semibold rounded-lg transition-colors
                         `}
                     >
-                        {loading ? <Loading/> : "Add Category"}
+                        {loading ? <Loading/> : "Update sub Category"}
                     </button>
                     <div className='grid gap-1'>
                         <label htmlFor="">Select Categoty</label>
@@ -199,13 +201,13 @@ const HandelSubmitSubCategory = async (e) => {
                             {
                             subCategoryData.category.map((cat,index)=>{
                                 return <div key={index} className='flex'>
-                                    <p
+                                    <h1
                                     className='bg-white shadow-md px-1 m-1 border'
                                         key={cat._id+"selectedValue"}
                                     >
                                     {cat.name}
-                                    <span onClick={()=>handelSelectedCategory(cat._id)} className='p-4 font-bold cursor-pointer text-red-500'>X</span>
-                                    </p>
+                                    <span onClick={()=>handelSelectedCategory(cat._id)} className='p-4 font-bold cursor-pointer block text-red-500'>X</span>
+                                    </h1>
                                 </div>
                             })
                         }
@@ -225,7 +227,7 @@ const HandelSubmitSubCategory = async (e) => {
                                {
                                     allCategory.map((category)=>{
                                         return <option
-                                        key={category._id+"sun Category"}
+                                        key={category._id+"sub Category"}
                                         value={category?._id}>
                                                         {category?.name}
                                                 </option>
@@ -241,4 +243,4 @@ const HandelSubmitSubCategory = async (e) => {
     );
 };
 
-export default UploadSubCategory;
+export default EditSubCategoryModel;

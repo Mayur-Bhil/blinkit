@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import getUserDetails from './utils/getUserDatails'
 import { setUserDetails } from './store/userSclice'
 import { useDispatch } from 'react-redux'
-import { setAllCategory } from './store/ProductSclice'
+import { setAllCategory ,setAllSubCategory, setloadingCategory} from './store/ProductSclice'
 import Axios from './utils/useAxios'
 import summeryApis from './common/summuryApi'
 function App() {
@@ -22,8 +22,8 @@ function App() {
             
   }
     const fetchCategory = async () => {
+      dispatch(setloadingCategory(true))
       try {
-        
         const response = await Axios({
           ...summeryApis.getCategory,
         });
@@ -36,20 +36,39 @@ function App() {
       } catch (error) {
         console.error("Error fetching categories:", error);
       } finally {
-      
+        dispatch(setloadingCategory(false))
       }
     };
 
+const fetchSubCategory = async()=>{
+    try {
+        
+        const response = await Axios({
+          ...summeryApis.getsubCategory,
+        });
+        const { data: responseData } = response;
+  
+        if (responseData.success) {
+            dispatch(setAllSubCategory(responseData.data))
+        }
+       
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+      
+      }
+}
     
     useEffect(()=>{
       fetchUser()
       fetchCategory();
+      fetchSubCategory();
   },[])
 
   return (
     <>
     <Header/>
-    <main className='min-h-[80vh] py-[0.1px] bg-sky-100'>
+    <main className='min-h-[80vh] py-[0.1px]'>
         <Outlet/>
     </main>
     <Footer/>
