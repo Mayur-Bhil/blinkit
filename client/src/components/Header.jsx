@@ -95,7 +95,7 @@ const handleMobileClick = ()=>{
                     <button onClick={redireactToLoginpage}className="cursor-pointer font-semibold">
 
                       {
-                        user._id ? "logout" : "login"
+                        user._id ? "" : "login"
                       }
                     </button>
                     <button className="bg-green-500 flex items-center gap-2 px-2 py-3 rounded-lg ml-2 text-white hover:bg-green-800">

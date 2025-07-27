@@ -127,3 +127,53 @@ return res.json({
         })
     }
 }
+
+
+export const getProductByCategoryandSubcategory = async(req,res)=>{
+    try {
+       const {categoryId,subCategoryId ,page,limit} = req.body;
+       
+       if(!categoryId || !subCategoryId){
+            return res.status(400).json({
+                message: "Provide SubCategoryId and CategoryId",
+                error:true,
+                success:false
+            })
+       }
+
+       // Fix: Proper default value assignment
+       const pageNumber = page || 1;
+       const limitNumber = limit || 10;
+
+       const query = {
+         category : {$in : categoryId} ,
+         sub_category : {$in : subCategoryId}
+       }
+
+       const skip = (pageNumber - 1) * limitNumber
+
+      
+       const [data,dataCount] = await Promise.all([
+            Product.find(query).sort({createdAt:-1}).skip(skip).limit(limitNumber),
+            Product.countDocuments(query)
+       ])
+
+       return res.json({
+        message : "Product list",
+        data:data,
+        totalCount:dataCount,
+        page:pageNumber,
+        limit:limitNumber,
+        success:true,
+        error:false
+        })
+
+    } catch (error) {
+     
+        return res.status(500).json({
+            message: error.message || "Something went wrong",
+            error:true,
+            success:false
+        })
+    }
+}

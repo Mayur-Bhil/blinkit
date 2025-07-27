@@ -2,25 +2,25 @@ import React from 'react'
 
 const CardLoadig = () => {
   return (
-    <div className='border mx-auto p-2 grid gap-2 max-w-56 shadow-lg rounded animate-pulse'>
-       <div className='min-h-20 bg-zinc-100 rounded'>
+    <div className='border mx-auto p-3 grid gap-3 min-w-36 lg:max-w-52 shadow-lg rounded animate-pulse'>
+       <div className='min-h-14 lg:min-h-26 bg-zinc-100 rounded'>
             
        </div>
-        <div className='p-3  bg-zinc-100 rounded w-20'>
+        <div className=' p-2 lg:p-3  bg-zinc-100 rounded w-17 lg:w-20'>
             
        </div>
-       <div className='p-3  bg-zinc-100 rounded'>
+       <div className='p-2 lg:p-3  bg-zinc-100 rounded'>
             
        </div>
-       <div className='p-3 bg-zinc-100 rounded w-14'>
+       <div className='p-2 lg:p-3 bg-zinc-100 rounded w-16 lg:w-14'>
 
        </div>
 
        <div className='flex items-center justify-between gap-3'>
-            <div className='p-3  bg-zinc-100 rounded w-20'>
+            <div className='p-2 lg:p-3 bg-zinc-100 rounded lg:w-20 w-14'>
                     
             </div>
-            <div className='p-3  bg-zinc-100 rounded w-20'>
+            <div className='p-2 lg:p-3  bg-zinc-100 rounded lg:w-20 w-14'>
                 
             </div>
        </div>
