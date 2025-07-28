@@ -8,7 +8,7 @@ const CartProduct = ({data}) => {
      console.log("product url :",url);
      
   return (
-<Link to={url} className='border mx-auto p-2 grid lg:min-h-58 min-h-44 gap-0 lg:gap-1 lg:max-w-56 min-w-41 lg:shadow-lg rounded '>
+<Link to={url} className='border mx-auto p-2 grid lg:min-h-58 min-h-44 gap-0 lg:gap-1 lg:max-w-56 min-w-41 lg:shadow-lg bg-white   rounded '>
        <div className='min-h-20 max-h-32 rounded'>
             <img src={data.Image[0]} 
                 className='w-full h-full object-scale-down'
@@ -30,7 +30,7 @@ const CartProduct = ({data}) => {
             </div>
             <div className='p-1 lg:p-3 '>
                     <button
-                        className='bg-green-300 hover:bg-green-400 text-white px-4 py-1 rounded'
+                        className='bg-green-400 cursor-pointer hover:bg-green-600 text-white px-4 py-1 rounded'
                     >Add</button>
             </div>
        </div>
