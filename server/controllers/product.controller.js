@@ -1,4 +1,5 @@
-import Product from "../models/product.model.js"
+import Product from "../models/product.model.js";
+
 
 export const CreateProductController = async(req,res)=>{
     try {
@@ -99,7 +100,7 @@ export const getProductController = async(req,res)=>{
 
 export const getProductByCategory = async(req,res)=>{
     try {
-        const {id} = req.body;
+        const { id } = req.body;
         if (!id) {
             return res.status(400).json({
                 message:"Provide category",
@@ -111,6 +112,7 @@ export const getProductByCategory = async(req,res)=>{
         const product = await Product.find({
             category:{$in:id}
         }).limit(15)
+        
 return res.json({
     message:"Category product List ",
     data:product,
@@ -123,6 +125,79 @@ return res.json({
             error: true,
             success:false,
             message: error.message || error || "Something went wrong"
+        })
+    }
+}
+
+
+export const getProductByCategoryandSubcategory = async(req,res)=>{
+    try {
+       const {categoryId,subCategoryId ,page,limit} = req.body;
+       
+       if(!categoryId || !subCategoryId){
+            return res.status(400).json({
+                message: "Provide SubCategoryId and CategoryId",
+                error:true,
+                success:false
+            })
+       }
+
+       // Fix: Proper default value assignment
+       const pageNumber = page || 1;
+       const limitNumber = limit || 10;
+
+       const query = {
+         category : {$in : categoryId} ,
+         sub_category : {$in : subCategoryId}
+       }
+
+       const skip = (pageNumber - 1) * limitNumber
+
+      
+       const [data,dataCount] = await Promise.all([
+            Product.find(query).sort({createdAt:-1}).skip(skip).limit(limitNumber),
+            Product.countDocuments(query)
+       ])
+
+       return res.json({
+        message : "Product list",
+        data:data,
+        totalCount:dataCount,
+        page:pageNumber,
+        limit:limitNumber,
+        success:true,
+        error:false
+        })
+
+    } catch (error) {
+     
+        return res.status(500).json({
+            message: error.message || "Something went wrong",
+            error:true,
+            success:false
+        })
+    }
+}
+
+
+export const getProdctDetails = async(req,res)=>{
+    try {
+        const {productId} = req.body;
+
+
+        const ProductData = await Product.findOne({_id:productId});
+
+        return res.json({
+            message:"Product Details",
+            data:ProductData,
+            error:false,
+            success:true
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Something went wrong",
+            error:true,
+            success:false,
         })
     }
 }

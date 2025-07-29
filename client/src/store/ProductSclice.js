@@ -3,7 +3,7 @@ const innitialvalue = {
     allcategory:[],
     allSubcategory:[],
     product:[],
-    loadingCategory:false
+    loadingCategory:true
 }
 const productSclice = createSlice({
     name:"product",
