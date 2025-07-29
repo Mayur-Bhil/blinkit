@@ -44,28 +44,42 @@ console.log(data);
 
 
   return (
-      <section className='container mx-auto p-4 grid lg:grid-cols-3 bg-white'>
+      <section className='container mx-auto p-4 grid lg:grid-cols-3'>
           <div className='col-span-1'>
-                <div className='bg-zinc-50 lg:min-h-[70vh] lg:max-h-[70vh] rounded min-h-56 max-h-56 h-full w-full'>
+                <div className='bg-zinc-50 lg:min-h-[58vh] lg:max-h-[58vh] rounded min-h-56 max-h-56 h-full w-full'>
                     <img
                       src={data.Image[image]}
                       className='h-full w-full object-scale-down'
                     
                     />
                 </div>
-                <div>
+                <div className='flex justify-center items-center gap-3 p-2 cursor-pointer'>
                     {
                       data.Image.map((img,index)=>{
-                          return <div className={`bg-blue-300`}>
-                              dasdas
+                      
+                          return <div key={img+index+"Images"} className={`bg-amber-50 rounded-full w-10 h-10 ${index === image && "bg-amber-200" }`}>
+                                  
                               </div>
                       })
                     }
                 </div>
-          </div>
-          <div>
-
-          </div>
+                 <div className='grid'>
+                    <div className='flex gap-3 m-1 cursor-pointer w-full h-full  overflow-x-auto scrollbar-none '>
+                          {
+                            data.Image.map((img,index)=>{
+                            
+                                return <div key={img+index} className='min-h-20 min-w-20  flex items-center justify-center shadow-gray-500 shadow-2xl object-scale-down'>
+                                              <img className='' src={img}
+                                              alt='Mini-images-of-products'
+                                              onClick={()=>setImage(index)}
+                                              />
+                                        </div>
+                            })
+                          }
+                    </div>
+                  </div>
+              </div>  
+         
       </section>
   )
 }
