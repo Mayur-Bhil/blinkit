@@ -92,6 +92,10 @@ const summeryApis = {
      getProductByCategoryandSubcategory :{
         url:'/api/product/get-product-by-category-and-subcategory',
         method:"POST"
+    },
+    getProdctDetails:{
+        url:"/api/product/get-product-details",
+        method:"POST"
     }
 }
 

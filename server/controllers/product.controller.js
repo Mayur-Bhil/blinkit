@@ -1,4 +1,5 @@
-import Product from "../models/product.model.js"
+import Product from "../models/product.model.js";
+
 
 export const CreateProductController = async(req,res)=>{
     try {
@@ -174,6 +175,29 @@ export const getProductByCategoryandSubcategory = async(req,res)=>{
             message: error.message || "Something went wrong",
             error:true,
             success:false
+        })
+    }
+}
+
+
+export const getProdctDetails = async(req,res)=>{
+    try {
+        const {productId} = req.body;
+
+
+        const ProductData = await Product.findOne({_id:productId});
+
+        return res.json({
+            message:"Product Details",
+            data:ProductData,
+            error:false,
+            success:true
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Something went wrong",
+            error:true,
+            success:false,
         })
     }
 }

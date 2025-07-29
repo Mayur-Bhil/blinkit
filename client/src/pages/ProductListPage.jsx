@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Axios from "../utils/useAxios";
 import summeryApis from "../common/summuryApi";
 import AxiosToastError from "../utils/AxiosToastError";
 import Loading from "../components/Loading";
 import CartProduct from "../components/CartProduct";
 import { useSelector } from "react-redux";
+import { validUrl } from "../utils/validUrlConvert";
 
 const ProductListPage = () => {
   const params = useParams();
@@ -34,7 +36,7 @@ const ProductListPage = () => {
           categoryId,
           subCategoryId,
           page: page,
-          limit: 20,
+          limit: 8,
         },
       });
 
@@ -71,8 +73,11 @@ const ProductListPage = () => {
         {/* subCategory - Fixed height with scrolling */}
         <div className="bg-white h-full overflow-y-auto border-r border-gray-200 scrollbar-thin mayurScroll scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {displaysubCategory.map((s, index) => {
+                const link = `/${validUrl(s.category[0]?.name)}-${s?.category[0]?._id}/${validUrl(s?.name)}-${s?._id}`;
+            
             return (
-              <div
+              <Link
+                to={link}
                 key={index}
                 className={`p-3 flex flex-col lg:flex-row lg:items-center lg:justify-start border-b border-gray-100 hover:bg-gray-50 transition-colors ${
                   subCategoryId === s._id ? "bg-green-100 border-green-300" : ""
@@ -93,18 +98,18 @@ const ProductListPage = () => {
                     {s.name}
                   </p>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
 
         {/* Product - Also with proper scrolling */}
-        <div className="bg-white h-full overflow-y-auto">
+        <div className="bg-white h-full overflow-y-auto ">
           <div className="bg-white shadow-sm p-4 border-b border-gray-200 sticky top-0 z-10">
             <h3 className="font-semibold text-gray-900">{subCategoryName}</h3>
           </div>
           <div className="p-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-5">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-5 ">
               {data.map((product, index) => {
                 return (
                   <CartProduct
