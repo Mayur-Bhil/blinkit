@@ -68,8 +68,8 @@ const Login = () => {
     } catch (error) {
         console.log(error);
         AxiosToastError(error)
-    }      
-}
+        }      
+    }
     
   return (
     <section className="w-full select-none container flex justify-center mx-auto px-2 ">
