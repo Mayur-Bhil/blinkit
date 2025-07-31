@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import Loading from '../components/Loading';
 import ProductCartAdmin from '../components/ProductCartAdmin';
 import { IoSearchOutline } from "react-icons/io5";
+import EditProductAdmin from '../components/EditProductAdmin';
 
 const ProductByAdmin = () => {
     const [productData, setproductData] = useState([]);
@@ -131,6 +132,7 @@ const ProductByAdmin = () => {
                     <button>{page}/{Math.ceil(totalCount/12)}</button>
                     <button onClick={HandleNext} className='border border-amber-300 px-4 py-2 hover:bg-amber-200'>Next</button>
                 </div>
+                        
             </div>
         </section>
     );  
