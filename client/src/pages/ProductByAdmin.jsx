@@ -122,7 +122,7 @@ const ProductByAdmin = () => {
                     <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4'>
                         {productData.map((product, index)=>{
                             return (
-                                <ProductCartAdmin data={product} key={product.id || index}/>
+                                <ProductCartAdmin data={product} fetchProductData={fetchProductData} key={product.id || index}/>
                             )
                         })}
                     </div>

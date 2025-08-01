@@ -76,7 +76,7 @@ export const getProductController = async(req,res)=>{
         }:{}
         const skip = (page -1) * limit;
         const [data,totalCount] = await Promise.all([
-            Product.find(query).sort({createdAt:-1}).skip(skip).limit(limit),
+            Product.find(query).sort({createdAt:-1}).skip(skip).limit(limit).populate("category sub_category"),
             Product.countDocuments(query)
         ])
 
@@ -198,6 +198,38 @@ export const getProdctDetails = async(req,res)=>{
             message: "Something went wrong",
             error:true,
             success:false,
+        })
+    }
+}
+
+export const updateProductDetails = async(req,res)=>{
+    try {
+        const {_id} = req.body;
+        
+        if(!_id){
+            return res.status(400).json({
+                message : "Provide Product id",
+                error:true,
+                success:false
+            })
+        }
+        const updateProduct = await  Product.updateOne({_id:_id},{
+            ...req.body
+        })
+
+        return res.json({
+            message: "Update Product SuccessFully",
+            data:updateProduct,
+            error:false,
+            success:true    
+        })
+    } catch (error) {
+      
+        return res.status(500).json({
+         
+            message: "Something went wrong",
+            error:true,
+            success:false
         })
     }
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import EditProductAdmin from './EditProductAdmin';
 import { FaS } from 'react-icons/fa6';
 
-const ProductCardAdmin = ({ data }) => {
+const ProductCardAdmin = ({ data,fetchProductData }) => {
    const [iseditOPen,setEditOpen] = useState(false);
     return (
 
@@ -22,7 +22,7 @@ const ProductCardAdmin = ({ data }) => {
                    
                     {
                         iseditOPen && (
-                       <EditProductAdmin data={data} close={()=>setEditOpen(false)}/>
+                       <EditProductAdmin fetchProductData={fetchProductData} data={data} close={()=>setEditOpen(false)}/>
 
                         )
                     }                               

@@ -1,18 +1,3 @@
-import React from 'react'
-
-const EditProductAdmin = () => {
-  return (
-    <section className='fixed top-0 right-0 bottom-0 left-0 bg-black p-4 z-50 opacity-85'>
-            <div className='bg-white w-full p-4 max-w-2xl mx-auto '>
-
-            </div>
-    </section>
-  )
-}
-
-export default EditProductAdmin
-
-
 import React, { useState } from 'react';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import uploadImages from '../utils/uploadImages';
@@ -27,18 +12,19 @@ import Axios from '../utils/useAxios';
 import summeryApis from '../common/summuryApi';
 import successAlert from '../utils/successAlert';
 
-const UploadProduct = () => {
-    const [data, setData] = useState({
-        name: "",
-        Image: [],
-        category: [],
-        sub_category: [],
-        unit: "",
-        stock: "",
-        price: "",
-        discount: "",
-        desecription: "",
-        more_details: {},
+const EditProductAdmin = ({close,data:propsData,fetchProductData}) => {
+      const [data, setData] = useState({
+        _id :propsData._id,
+        name: propsData.name,
+        Image: propsData.Image,
+        category: propsData.category,
+        sub_category: propsData.sub_category,
+        unit: propsData.unit,
+        stock:propsData.stock,
+        price: propsData.price,
+        discount:propsData.discount,
+        desecription: propsData.desecription,
+        more_details: propsData.more_details || {},
     });
     const [SelectCategory, setSelectCategory] = useState("");
     const [selectSubCategory, setSelectSubCategory] = useState("");
@@ -167,7 +153,7 @@ const UploadProduct = () => {
         console.log("Data being sent:", data);
         try {
             const response = await Axios({
-                ...summeryApis.createNewProduct,
+                ...summeryApis.updateProductDetails,
                 data: data
             });
 
@@ -175,6 +161,8 @@ const UploadProduct = () => {
             if (ResponseData.success) {
                 successAlert(ResponseData.message);
                 // Reset form after successful submission
+                close()
+                fetchProductData()
                 setData({
                     name: "",
                     Image: [],
@@ -192,11 +180,15 @@ const UploadProduct = () => {
             AxiosToastError(error);
         }
     };
-
-    return (
-        <section>
+  return (
+    <section className='fixed top-0 right-0 bottom-0 left-0 bg-black p-4 z-50 opacity-90'>
+            <div className='bg-white w-full p-4 max-w-2xl mx-auto overflow-y-auto h-full max-h-[95vh] scrollbar-none'>
+        <section className=''>
             <div className='p-2 bg-white shadow-md flex items-center justify-between'>
                 <h2 className='font-semibold'>Upload product</h2>
+                <button className='cursor-pointer' onClick={close}>
+                    <IoClose size={20}/>
+                </button>
             </div>
             <div className='grid p-3'>
                 <form onSubmit={HandleSubmit}>
@@ -414,7 +406,7 @@ const UploadProduct = () => {
                         Add Fields
                     </div>
                     <button className='bg-amber-200 hover:bg-amber-300 py-2 font-semibold px-3 w-full rounded-lg mt-2'>
-                        Submit
+                            update product details
                     </button>
                 </form>
             </div>
@@ -431,8 +423,14 @@ const UploadProduct = () => {
                     submit={HandleAddField}
                 />
             )}
-        </section>
-    );
-};
+                </section>
+            </div>
+    </section>
+  )
+}
 
-export default UploadProduct;
+export default EditProductAdmin
+
+
+
+
