@@ -32,7 +32,7 @@ const handleRedirectListpage = (id, cat) => {
     redirect(url);
 };
   return (
-    <section className='bg-white'>
+    <section className='bg-white select-none'>
         <div className='container mx-auto rounded'>
             <div className={`w-full h-full min-h-48 ${!banner && "animate-pulse my-2" }`}>
                 <img src={banner}

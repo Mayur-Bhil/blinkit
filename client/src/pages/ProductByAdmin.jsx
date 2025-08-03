@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import Loading from '../components/Loading';
 import ProductCartAdmin from '../components/ProductCartAdmin';
 import { IoSearchOutline } from "react-icons/io5";
+import EditProductAdmin from '../components/EditProductAdmin';
 
 const ProductByAdmin = () => {
     const [productData, setproductData] = useState([]);
@@ -121,7 +122,7 @@ const ProductByAdmin = () => {
                     <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4'>
                         {productData.map((product, index)=>{
                             return (
-                                <ProductCartAdmin data={product} key={product.id || index}/>
+                                <ProductCartAdmin data={product} fetchProductData={fetchProductData} key={product.id || index}/>
                             )
                         })}
                     </div>
@@ -131,6 +132,7 @@ const ProductByAdmin = () => {
                     <button>{page}/{Math.ceil(totalCount/12)}</button>
                     <button onClick={HandleNext} className='border border-amber-300 px-4 py-2 hover:bg-amber-200'>Next</button>
                 </div>
+                        
             </div>
         </section>
     );  

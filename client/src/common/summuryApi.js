@@ -1,3 +1,4 @@
+
 export const BASE_URL = "http://localhost:8080"
 const summeryApis = {
     register:{
@@ -95,6 +96,16 @@ const summeryApis = {
     },
     getProdctDetails:{
         url:"/api/product/get-product-details",
+        method:"POST"
+    },
+    updateProductDetails:{
+        url:"/api/product/update-product-details",
+        method:"PUT"
+    },deleteProduct:{
+        url:"/api/product/delete-product",
+        method:"delete"
+    },searchProducts :{
+        url:"/api/product/search-product",
         method:"POST"
     }
 }

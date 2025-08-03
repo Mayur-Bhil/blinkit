@@ -3,7 +3,7 @@ import { IoMdClose } from "react-icons/io";
 import Axios from '../utils/useAxios';
 import summeryApis from '../common/summuryApi';
 
-const ConfirmBox = ({cancel,confirm,close}) => {
+const ConfirmBox = ({cancel,confirm,close,message}) => {
    
     return (
         <div className='fixed top-0 bottom-0 right-0 left-0 z-50 bg-neutral-800 opacity-85 p-4 flex justify-center items-center'>
@@ -19,7 +19,7 @@ const ConfirmBox = ({cancel,confirm,close}) => {
                             </button>
                     </div>
                     <div>
-                            <p className='my-4 '>Are You sure to permnently delete this Category?</p>
+                            <p className='my-4 '>{message}</p>
                             <div className='w-fit flex items-center  ml-auto gap-3'>
                                 <button 
                                     onClick={cancel}
