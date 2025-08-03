@@ -262,3 +262,56 @@ export const deleteProductDetails = async (req,res)=>{
         })
     }
 }
+
+
+export const searchProduct = async (req, res) => {
+    try {
+        let { search, page, limit } = req.body;
+        
+        if (!page) {
+            page = 1;
+        }
+        if (!limit) {
+            limit = 10;
+        }
+
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        // Build search query
+        const query = search ? {
+            $text: {
+                $search: search
+            }
+        } : {};
+
+        const skip = (page - 1) * limit;
+
+        const [data, dataCount] = await Promise.all([
+            Product.find(query)
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit)
+                .populate('category sub_category'),
+            Product.countDocuments(query)
+        ]);
+
+        return res.json({
+            message: "Product Data",
+            error: false,
+            success: true,
+            data: data,
+            totalCount: dataCount,
+            page: page, 
+            totalPage: Math.ceil(dataCount / limit)
+        });
+
+    } catch (error) {
+        console.error('Search Product Error:', error); // Add logging for debugging
+        return res.status(500).json({
+            message: error.message || "Something went wrong",
+            error: true,
+            success: false
+        });
+    }
+};

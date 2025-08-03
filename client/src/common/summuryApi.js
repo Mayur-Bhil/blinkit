@@ -104,6 +104,9 @@ const summeryApis = {
     },deleteProduct:{
         url:"/api/product/delete-product",
         method:"delete"
+    },searchProducts :{
+        url:"/api/product/search-product",
+        method:"POST"
     }
 }
 

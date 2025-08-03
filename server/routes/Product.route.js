@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { CreateProductController, deleteProductDetails, getProdctDetails, getProductByCategory, getProductByCategoryandSubcategory, getProductController, updateProductDetails } from "../controllers/product.controller.js";
+import { CreateProductController, deleteProductDetails, getProdctDetails, getProductByCategory, getProductByCategoryandSubcategory, getProductController, searchProduct, updateProductDetails } from "../controllers/product.controller.js";
 import auth from "../middlewares/auth.js";
 import { admin } from "../middlewares/Admin.js";
 
@@ -13,4 +13,5 @@ ProductRouter.post("/get-product-by-category-and-subcategory",getProductByCatego
 ProductRouter.post("/get-product-details",getProdctDetails);
 ProductRouter.put("/update-product-details",auth,admin,updateProductDetails);
 ProductRouter.delete("/delete-product",auth,admin,deleteProductDetails);
+ProductRouter.post("/search-product",searchProduct);
 export default ProductRouter;
