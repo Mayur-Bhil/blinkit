@@ -21,8 +21,17 @@ const CartProduct = ({data}) => {
        <div className='lg:p-2 p-1 text-sm lg:font-medium text-ellipsis line-clamp-2 rounded'>
             {data.name}
        </div>
-       <div className='w-fit lg:p-1 text-sm p-1'>
-            {data.unit  }
+       <div className='w-fit lg:p-1 text-sm p-1 flex gap-2'>
+            {data.unit}
+            <span className='flex gap-2'>
+               {Boolean(data.discount) && (
+                    <>
+
+                         <p className='text-green-300 text-sm'>{data.discount}% off</p>
+                         <p className='line-through text-sm'>{PriceInruppees(data.price)}</p>
+                    </>
+               )}
+            </span>
        </div>
 
        <div className='flex  justify-between lg:gap-3 gap-2'>
@@ -30,10 +39,13 @@ const CartProduct = ({data}) => {
                     
                   {PriceInruppees(priceWithDisCount(data.price,data.discount))}
             </div>
-            <div className='p-1 lg:p-2 '>
-                    <button
+            <div className='p-1 lg:p-2 flex items-center'>
+               {
+                    data.stock == 0 ? ( <p className='text-sm text-red-500'> out of stock</p>) :                    <button
                         className='bg-green-400 cursor-pointer hover:bg-green-600 text-white px-4 py-1 rounded'
                     >Add</button>
+               }
+
             </div>
        </div>
     </Link>

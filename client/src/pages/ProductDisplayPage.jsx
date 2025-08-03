@@ -99,7 +99,32 @@ import { priceWithDisCount } from '../utils/DisCountCunter';
                                   <button onClick={handleScrollRight} className='bg-white p-1 rounded-full z-10 cursor-pointer relative shadow-lg'><FaAngleRight /> </button>
                               </div>
                       </div>
+                               <div className='my-4 grid gap-3'>
+                                    <div>
+                                        <p className='font-semibold'>Description</p>
+                                        <p className='text-sm '>
+                                          {data.desecription}
+                                        </p>
+                                    </div>
+                                    <div>
+                                      <p className='font-semibold'>Unit</p>
+                                        <p className='text-sm '>
+                                          {data.unit}
+                                        </p>
+                                    </div>
+                                    {
+                                      data?.more_details && Object.keys(data?.more_details).map((elem,index)=>{
+                                        return <div key={index}>
+                                                <div key={index}>
+                                                    <p className='font-semibold'>{elem}</p>
+                                                    <p className='text-sm '>{data.more_details[elem]}</p>
+                                                 </div>
+                                              </div>
+                                      })
+                                    }
+                                </div>  
                   </div>
+                  
                   <div className='p-4'>
                     <p className='bg-green-300 rounded-xl w-fit p-2'>10 min</p>
                             <h2 className='text-lg font-semibold lg:text-3xl'>
@@ -161,7 +186,9 @@ import { priceWithDisCount } from '../utils/DisCountCunter';
                                         <p>Choose from 5000+ products across food personal care and household</p>
                                     </div>
                                   </div>
+                                    
                                 </div>
+                                
                             </div>
             
           </section>
