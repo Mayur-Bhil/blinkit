@@ -165,7 +165,13 @@ const SubCategoryPage = () => {
         }
 
         {
-            openDeleteCOnfirmBox && <ConfirmBox cancel={()=>setOpenDeleteConfirmBox(false)} confirm={handelDeleteSubCategory} close={()=>setOpenDeleteConfirmBox(false)}/>
+            openDeleteCOnfirmBox && <ConfirmBox
+            cancel={()=>setOpenDeleteConfirmBox(false)}
+             confirm={handelDeleteSubCategory}
+             close={()=>setOpenDeleteConfirmBox(false)}
+            message={"Are You sure to permnently delete this Sub-Category?"}
+             
+             />
         }
  </section>
       

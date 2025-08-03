@@ -101,6 +101,9 @@ const summeryApis = {
     updateProductDetails:{
         url:"/api/product/update-product-details",
         method:"PUT"
+    },deleteProduct:{
+        url:"/api/product/delete-product",
+        method:"delete"
     }
 }
 

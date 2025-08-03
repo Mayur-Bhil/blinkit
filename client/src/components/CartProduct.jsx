@@ -2,6 +2,7 @@ import React from 'react'
 import { PriceInruppees } from '../utils/DisplayPriceinRuppes'
 import { Link } from 'react-router-dom'
 import { validUrl } from '../utils/validUrlConvert'
+import { priceWithDisCount } from '../utils/DisCountCunter'
 
 const CartProduct = ({data}) => {
      const url = `/product/${validUrl(data.name)}-${data._id}`
@@ -26,9 +27,10 @@ const CartProduct = ({data}) => {
 
        <div className='flex  justify-between lg:gap-3 gap-2'>
             <div className='p-1 lg:p-3 '>
-                  {PriceInruppees(data.price)}
+                    
+                  {PriceInruppees(priceWithDisCount(data.price,data.discount))}
             </div>
-            <div className='p-1 lg:p-3 '>
+            <div className='p-1 lg:p-2 '>
                     <button
                         className='bg-green-400 cursor-pointer hover:bg-green-600 text-white px-4 py-1 rounded'
                     >Add</button>

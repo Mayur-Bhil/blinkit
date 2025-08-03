@@ -9,6 +9,7 @@
     import img1 from "../assets/minute_delivery.png"
     import img2 from "../assets/Best_Prices_Offers.png"
     import img3 from "../assets/Wide_Assortment.png"
+import { priceWithDisCount } from '../utils/DisCountCunter';
 
     const ProductDisplayPage = () => {
       const params = useParams();
@@ -108,18 +109,29 @@
                             <div><Devider/></div>
                             <div>
                                 <p>Price</p>
+                                <div className='flex items-center gap-2'>
+
                                 <div className='border border-green-500 px-4 py-2 rounded bg-green-100 w-fit'>
-                                  <p className='font-semibold text-lg lg:text-xl'>{PriceInruppees(data.price)}</p>
+                                  <p className='font-semibold text-lg lg:text-xl'>{PriceInruppees(priceWithDisCount(data.price,data.discount))}</p>
+                                </div>
+                                {
+                                  data.discount && (
+                                    <>
+                                    <p className='text-base font-bold text-green-600 m-2'>{data.discount}% off</p>
+                                    <p className='line-through'>{PriceInruppees(data.price)}</p>
+                                    </>
+                                  )
+                                }
                                 </div>
                             </div>
                             {
                               data.stock === 0  ? (
-                                  <p className='text-lg text-red-500'>stock : Out of stock</p>
+                                  <p className='text-lg text-red-500 lg:my-2'>stock : Out of stock</p>
                               ):(
                                 <p className='text-lg text-orange-400 py-2'>stock avilable : {data.stock} pices</p>
                               )
                             }
-                            <button className='my-4 px-4 py-2 bg-green-300 hover:bg-green-400 rounded'>Add</button>
+                            <button className='px-4 py-2 bg-green-300 cursor-pointer hover:bg-green-400 rounded'>Add</button>
                             <div><Devider/></div>
                             <h2 className='font-semibold'>
                               Why shop from Blinkit ?

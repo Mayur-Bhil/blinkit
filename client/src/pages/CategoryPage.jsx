@@ -150,10 +150,11 @@ useEffect(()=>{
           close={() => setOpenConfirmboxDelete(false)}
           cancel={() => setOpenConfirmboxDelete(false)}
           confirm={HandelDelete}
+          message={"Are You sure to permnently delete this Category?"}
         />
       )}
     </section>
   );
-};
+};  
 
 export default CategoryPage;
