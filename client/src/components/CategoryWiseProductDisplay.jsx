@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import AxiosToastError from '../utils/AxiosToastError';
 import Axios from '../utils/useAxios';
 import summeryApis from '../common/summuryApi';
-import CardLoadig from './CardLoadig';
 import CartProduct from './CartProduct';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
+import CardLoading from './CardLoading';
 
 const CategoryWiseProductDisplay = ({ id, name }) => {
     const [data, setData] = useState([]);
@@ -114,7 +114,7 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
                 {loading &&
                     LoadingCardNumber.map((_, index) => {
                         return (
-                            <CardLoadig key={"CategoryWiseProductDisplay" + index} />
+                            <CardLoading key={"CategoryWiseProductDisplay" + index} />
                         )
                     })
                 }

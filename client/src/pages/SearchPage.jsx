@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import CardLoadig from '../components/CardLoadig';
+import CardLoading from '../components/CardLoading';
 import AxiosToastError from '../utils/AxiosToastError';
 import Axios from '../utils/useAxios';
 import summeryApis from '../common/summuryApi';
@@ -26,7 +26,7 @@ const SearchPage = () => {
         const {data:responseData} = responce;
 
         if(responseData.success){
-            if(responseData.pahe == 1){
+            if(responseData.page == 1){
               setData(responseData.data)
             }else{
               setData((prev)=>{
@@ -82,7 +82,7 @@ const handleFetchMoreProducts = ()=>{
                         loading && (
                             loadingCardsArray.map((_,index)=>{
                                 return (
-                                    <CardLoadig key={"loadingCard"+index}/>
+                                    < CardLoading key={"loadingCard"+index}/>
                                   )
                                 })
                               )
