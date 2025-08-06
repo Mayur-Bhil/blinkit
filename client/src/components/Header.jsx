@@ -32,6 +32,8 @@ const handleMobileClick = ()=>{
     navigate("/user")
   }
 }
+console.log(user);
+
   return (
     <header
        className="h-24 z-12 select-none lg:h-20 lg:shadow-md top-0 flex justify-center sticky flex-col gap-1 bg-white lg:select-none ">
@@ -58,11 +60,11 @@ const handleMobileClick = ()=>{
           <div className="hidden lg:block">
             <Search />
           </div>
-          <div className="">
+          <div className="flex  items-center">
             {/* Mobile version */}
-            <button className="text-neutral-800 lg:hidden" onClick={handleMobileClick}>
-                  <FaCircleUser size={34}/>
-            </button>
+            <button className="text-neutral-800 lg:hidden " onClick={handleMobileClick}>
+                  { user.avatar ? <img src={user.avatar} className="h-14 w-14 rounded-full"/> :  <FaCircleUser size={34}/> } 
+</button>
             {/* DeskTop  vsersion */}
                 <div className="hidden lg:flex lg:items-center lg:gap-2">
                   {

@@ -17,3 +17,13 @@
 .mayurScroll::-webkit-scrollbar-thumb{
     @apply bg-amber-300 rounded-lg cursor-pointer
 }
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
