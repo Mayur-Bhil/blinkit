@@ -18,7 +18,13 @@ const Search = () => {
   const redirectedToSearchPage = () => {
     navigate("/search");
   };
-
+  const HandleOnChange = (e)=>{
+      const value = e.target.value;
+      const url = `/search?q=${value}`;
+      navigate(url)
+  }
+const params = useLocation();
+const searchText  = params.search.slice(3)
   return (
     <div className="search w-full flex items-center p-1 overflow-hidden min-w-[300px] lg:min-w-[420px] h-11 lg:h-12 rounded-lg text-neutral-500 border-2 focus-within:border-amber-300 group">
       <div>
@@ -69,7 +75,9 @@ const Search = () => {
               className="bg-transparent w-full h-full outline-none"
               autoFocus
               type="text"
+              defaultValue={searchText}
               placeholder="search for groceries"
+              onChange={HandleOnChange}
             />
           </div>
         )}

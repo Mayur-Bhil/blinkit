@@ -13,7 +13,7 @@ const auth =(req,res,next)=>{
         // console.log("decode",decode)
         if(!decode){
             return res.status(401).json({
-                message:"Unauthorized",
+                message:"You have not login",
                 error:true,
                 success:false
             })

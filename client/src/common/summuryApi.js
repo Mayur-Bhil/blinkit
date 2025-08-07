@@ -107,6 +107,10 @@ const summeryApis = {
     },searchProducts :{
         url:"/api/product/search-product",
         method:"POST"
+    },
+    addTocart:{
+        url:"/api/cart/create",
+        method:"POST"
     }
 }
 
