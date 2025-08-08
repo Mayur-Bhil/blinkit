@@ -29,7 +29,7 @@ const CartProduct = ({data}) => {
                const {data: responseData} = response;
 
                if(responseData.success){
-                    toast.success(responseData.message || 'Added to cart successfully') // Fixed: using message instead of success
+                    toast.success(responseData.message) // Fixed: using message instead of success
                }
           } catch (error) {
                AxiosToastError(error);

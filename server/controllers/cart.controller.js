@@ -1,3 +1,4 @@
+import { response } from "express";
 import cartProduct from "../models/cartProduct.model.js";
 import User from "../models/user.model.js"
 
@@ -14,6 +15,16 @@ export const addtoCartController = async(req,res)=>{
     })
 }
 
+const cheackItemCart = await cartProduct.findOne({
+    userId:userId,
+    productId:productId
+})
+
+if(cheackItemCart){
+    return res.status(400).json({
+        message:"Item Already In Cart"
+    })
+}
 const cartItem = new cartProduct({
     quantity:1,
     userId:userId,
@@ -46,4 +57,27 @@ return res.json({
      }   
 
 
+}
+
+
+export const getCartItem = async(req,res)=>{
+    try {
+        const userId = req.userId;
+
+
+        const cartItem = await cartProduct.find({
+            userId:userId
+        }).populate("productId")
+        return res.json({
+            data:cartItem,
+            success:true,
+            errorfalse
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message || error || "Something went wrong",
+            error:true,
+            success:false
+        })
+    }
 }

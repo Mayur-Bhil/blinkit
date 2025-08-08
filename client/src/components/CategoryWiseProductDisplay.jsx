@@ -75,7 +75,7 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
                 return `/${validUrl(name)}-${id}`;
             }
 
-            const url = `/${validUrl(name)}-${id}/${validUrl(subCategory.name)}-${subCategory._id}`;
+            const url = `/${validUrl(name)}-${id}/${validUrl(subCategory?.name)}-${subCategory?._id}`;
             console.log("Generated URL:", url);
             return url;
 
@@ -121,7 +121,7 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
                 {
                     data.map((product, index) => {
                         return (
-                            <CartProduct data={product} key={product._id + "CategoryWiseProductDisplay" + index} />
+                            <CartProduct data={product} key={product?._id + "CategoryWiseProductDisplay" + index} />
                         )
                     })
                 }
