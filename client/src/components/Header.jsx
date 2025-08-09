@@ -13,13 +13,20 @@ import Usermenu from "./Usermenu";
 const Header = () => {
 
   const [isMobile] = useMobile();
-  const [isUserMenuOpen,setUsermenuOpen] = useState(false)
+  const [isUserMenuOpen,setUsermenuOpen] = useState(false);
   const location = useLocation();
   const isSearchPage = location.pathname === "/search";
   const navigate = useNavigate();
-  const user = useSelector((store)=>store?.user)
+  const user = useSelector((store)=>store?.user);
+  const cartItems = useSelector((store) => store?.cart?.cart || []);
+  console.log("Cart Items:", cartItems); // Proper logging
+  console.log("Cart Items Length:", cartItems.length);
+  const [totalPrice,setTotalPrice] = useState(0);
+  const [totalQty,setTotalQty] = useState(0);
+  
+  
   const redireactToLoginpage = () =>{
-        navigate("/login")
+        navigate("/login")    
   }
 
   const token = localStorage.getItem("accessToken")
@@ -32,7 +39,6 @@ const handleMobileClick = ()=>{
     navigate("/user")
   }
 }
-console.log(user);
 
   return (
     <header
@@ -105,15 +111,19 @@ console.log(user);
                         <div className="animate-bounce">
                             <BsCart4 size={20} />
                         </div>
+                        
                         <div>
-                            <p>
-                                My cart
-                            </p>
-                            {/* <p>
-                                Total price
-                            </p> */}
+                          {
+                            cartItems.length > 0 ? (
+                              <div>
+                                <p>{cartItems.length} Items</p>  {/* Show count, not array */}
+                              </div>
+                            ) : (
+                              <p>My cart</p>
+                            )
+                          }
                         </div>
-                    </button>
+                            </button>
                 </div>
             </div>
         </div>

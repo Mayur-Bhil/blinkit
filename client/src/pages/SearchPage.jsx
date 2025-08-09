@@ -6,20 +6,23 @@ import summeryApis from '../common/summuryApi';
 import CategoryPage from './CategoryPage';
 import CartProduct from '../components/CartProduct';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useLocation } from 'react-router-dom';
+import nothing from "../assets/nothing here yet.webp" 
 const SearchPage = () => {
   const [data,setData] = useState([]);
   const [loading,setLoading] = useState(true);
-  const loadingCardsArray = new Array(10).fill(null);
+  const loadingCardsArray = new Array(12).fill(null);
   const [page,setPage] = useState(1); 
   const [totalPage,setTotalPage] = useState(1)
-
+  const params = useLocation();
+  const searchText = params?.search?.slice(3)
   const fetchData = async()=>{
       try {
         setLoading(true)
         const responce = await Axios({
           ...summeryApis.searchProducts,
           data:{
-            search :'',
+            search :searchText.toLowerCase(),
             page:page
           }
         })
@@ -32,7 +35,7 @@ const SearchPage = () => {
               setData((prev)=>{
                 return [
                     ...prev,
-                    ...responseData.data
+                    ...responseData.data.toLocaleLowerCase()
                 ]
               })
             }
@@ -49,7 +52,7 @@ const SearchPage = () => {
 
 useEffect(()=>{
   fetchData();
-},[page])
+},[page,searchText])
 
 const handleFetchMoreProducts = ()=>{
   if(totalPage > page){
@@ -58,7 +61,7 @@ const handleFetchMoreProducts = ()=>{
 }
 
   return (
-        <section className='bg-white'>
+        <section className='bg-white '>
              <div className='container mx-auto p-4'>
                 <p className='font-semibold p-2'>Search Results :{data.length}</p>
                  <InfiniteScroll
@@ -67,7 +70,7 @@ const handleFetchMoreProducts = ()=>{
                   next={handleFetchMoreProducts}
 
                   >
-                <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 lg:gap-4 gap-3' >
+                <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 lg:gap-3 gap-2' >
                    
                       {
                       data.map((p,index)=>{
@@ -77,7 +80,8 @@ const handleFetchMoreProducts = ()=>{
                       })
                     }
 
-                      {/* Loading Data shows Here */}
+                     
+                    {/* Loading Data shows Here */}
                       {
                         loading && (
                             loadingCardsArray.map((_,index)=>{
@@ -88,8 +92,19 @@ const handleFetchMoreProducts = ()=>{
                               )
                       } 
                 </div>
-          </InfiniteScroll>
+                 </InfiniteScroll>
+          
              </div>
+                      {
+                       // no data
+
+                       !data[0] && !loading && (
+                          <div className='flex flex-col w-full mx-auto items-center  justify-center' >
+                                  <img className='w-full h-full max-h-sm max-w-xs block' src={nothing} />
+                                  <p className='m-2 font-semibold'> No Data Found</p>
+                              </div>
+                       )
+                     } 
         </section>
   )
 }

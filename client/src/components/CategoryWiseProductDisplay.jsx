@@ -36,7 +36,7 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
 
             const { data: responseData } = response;
 
-            console.log(responseData);
+            // console.log(responseData);
 
             if (responseData.success) {
                 setData(responseData.data)
@@ -70,13 +70,11 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
             });
 
             if (!subCategory) {
-                console.warn('Subcategory not found for category id:', id);
                 // Fallback URL - you might want to adjust this based on your routing structure
                 return `/${validUrl(name)}-${id}`;
             }
 
-            const url = `/${validUrl(name)}-${id}/${validUrl(subCategory.name)}-${subCategory._id}`;
-            console.log("Generated URL:", url);
+            const url = `/${validUrl(name)}-${id}/${validUrl(subCategory?.name)}-${subCategory?._id}`;
             return url;
 
         } catch (error) {
@@ -121,7 +119,7 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
                 {
                     data.map((product, index) => {
                         return (
-                            <CartProduct data={product} key={product._id + "CategoryWiseProductDisplay" + index} />
+                            <CartProduct data={product} key={product?._id + "CategoryWiseProductDisplay" + index} />
                         )
                     })
                 }

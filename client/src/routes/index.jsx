@@ -19,6 +19,7 @@ import ProductByAdmin from "../pages/ProductByAdmin";
 import AdminPermission from "../layout/AdminPermission";
 import ProductListPage from "../pages/ProductListPage";
 import ProductDisplayPage from "../pages/ProductDisplayPage";
+import NotFound from "../pages/NotFound";
 
 const router = createBrowserRouter([
     {
@@ -100,6 +101,9 @@ const router = createBrowserRouter([
             },{
                 path:"product/:product",
                 element:<ProductDisplayPage/>
+            },{
+                path:"*",
+                element:<NotFound/>
             }
         ]
     }
