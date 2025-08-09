@@ -4,12 +4,13 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import toast,{ Toaster } from "react-hot-toast"
 import { useEffect } from 'react'
-import getUserDetails from './utils/getUserDatails'
-import { setUserDetails } from './store/userSclice'
+import getUserDetails from './utils/getUserDatails.js'
+import { setUserDetails } from './store/userSclice.js'
 import { useDispatch } from 'react-redux'
-import { setAllCategory ,setAllSubCategory, setloadingCategory} from './store/ProductSclice'
+import { setAllCategory ,setAllSubCategory, setloadingCategory} from './store/ProductSclice.js'
 import Axios from './utils/useAxios'
 import summeryApis from './common/summuryApi'
+import { addToCart } from './store/Cartslice.js'
 
 function App() {
    const dispatch = useDispatch();
@@ -56,42 +57,31 @@ function App() {
         console.error("Error fetching subcategories:", error);
       } finally {
              
-      }
+      } 
    }
 
-   const fetchCartItems = async ()=>{
-    try {
-      console.log("Fetching cart items...");
+   const fetchCartData = async() => { 
+     try {
+      console.log("maknking an PI call");
       
-      const response = await Axios({
-        ...summeryApis.getCartItem,
-      })
-      
-      console.log("Cart API Response:", response);
-      
-      const {data: responseData} = response;
-      
-      console.log("Cart Response Data:", responseData);
-      
-      if(responseData.success){
-        console.log("Cart items data:", responseData.data);
-        // You might want to dispatch cart items to Redux store here
-        // dispatch(setCartItems(responseData.data))
-      } else {
-        console.log("Cart API call unsuccessful:", responseData.message || "No message provided");
-      }
-      
-    } catch (error) {
-      console.error("Error fetching cart items:", error);
-      console.log("Full error details:", error.response || error);
-    }
+       const response = await Axios(summeryApis.getCartDetails)
+       console.log("Made the API clall");
+       const { data: responseData } = response;
+        console.log("The Data is",responseData );
+       if(responseData.success){
+         console.log("items From cart:", responseData.data);
+          dispatch(addToCart(responseData.data));
+       }
+     } catch (error) {
+       console.error("Cart fetch error:", error);
+     }
    }
-          
-   useEffect(()=>{
+
+  useEffect(()=>{
       fetchUser()
       fetchCategory();
       fetchSubCategory();
-      fetchCartItems();
+      fetchCartData();
          
    },[])
      

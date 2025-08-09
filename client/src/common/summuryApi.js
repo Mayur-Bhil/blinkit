@@ -112,7 +112,7 @@ const summeryApis = {
         url:"/api/cart/create",
         method:"POST"
     },
-    getCartItem:{
+    getCartDetails:{
         url:"/api/cart/get",
         method:"GET"
     }

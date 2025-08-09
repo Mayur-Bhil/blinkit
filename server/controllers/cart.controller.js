@@ -1,4 +1,3 @@
-import { response } from "express";
 import cartProduct from "../models/cartProduct.model.js";
 import User from "../models/user.model.js"
 
@@ -60,24 +59,23 @@ return res.json({
 }
 
 
-export const getCartItem = async(req,res)=>{
+export const getCartItemsController = async (req,res)=>{
     try {
         const userId = req.userId;
-
-
         const cartItem = await cartProduct.find({
             userId:userId
-        }).populate("productId")
+        }).populate("productId");
+
         return res.json({
             data:cartItem,
             success:true,
-            errorfalse
+            error:false
         })
     } catch (error) {
-        return res.status(500).json({
-            message: error.message || error || "Something went wrong",
-            error:true,
-            success:false
-        })
+            return res.status(400).json({
+                message :error || error.message || "somthing Went wrong",
+                error:true,
+                success:false
+            })
     }
 }

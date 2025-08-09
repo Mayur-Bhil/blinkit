@@ -1,9 +1,9 @@
 import{ Router } from "express";
 import auth from "../middlewares/auth.js";
-import { addtoCartController, getCartItem } from "../controllers/cart.controller.js";
+import { addtoCartController, getCartItemsController } from "../controllers/cart.controller.js";
 const cartRouter = Router();
 
 
 cartRouter.post("/create",auth,addtoCartController);
-cartRouter.get("/get",auth,getCartItem)
+cartRouter.get("/get",auth,getCartItemsController)
 export default cartRouter;

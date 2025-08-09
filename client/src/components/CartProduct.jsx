@@ -11,7 +11,6 @@ import toast from 'react-hot-toast';
 const CartProduct = ({data}) => {
      const url = `/product/${validUrl(data.name)}-${data._id}`;
      const [loading, setLoading] = useState(false);
-     console.log("product url :", url);
 
      const handleAddToCart = async(e) => {
           e.preventDefault();
