@@ -10,15 +10,19 @@ import { useDispatch } from 'react-redux'
 import { setAllCategory ,setAllSubCategory, setloadingCategory} from './store/ProductSclice.js'
 import Axios from './utils/useAxios'
 import summeryApis from './common/summuryApi'
-import { addToCart } from './store/Cartslice.js'
+import GobalContextProvider from './provider/global.provider.jsx'
 
 function App() {
    const dispatch = useDispatch();
        
    const fetchUser = async() =>{
-      const Userdata = await getUserDetails();
+      try {
+        const Userdata = await getUserDetails();
       // console.log("data",Userdata.data.data);
-      dispatch(setUserDetails(Userdata.data.data))
+        dispatch(setUserDetails(Userdata.data.data))
+      } catch (error) {
+        
+      }
                
    }
 
@@ -60,40 +64,25 @@ function App() {
       } 
    }
 
-   const fetchCartData = async() => { 
-     try {
-      console.log("maknking an PI call");
-      
-       const response = await Axios(summeryApis.getCartDetails)
-       console.log("Made the API clall");
-       const { data: responseData } = response;
-        console.log("The Data is",responseData );
-       if(responseData.success){
-         console.log("items From cart:", responseData.data);
-          dispatch(addToCart(responseData.data));
-       }
-     } catch (error) {
-       console.error("Cart fetch error:", error);
-     }
-   }
+ 
 
   useEffect(()=>{
       fetchUser()
       fetchCategory();
       fetchSubCategory();
-      fetchCartData();
+     
          
    },[])
      
    return (
-    <>
-    <Header/>
-    <main className='min-h-[80vh] py-[0.1px]'>
-        <Outlet/>
-    </main>
-    <Footer/>
-    <Toaster/>
-    </>
+    <GobalContextProvider>
+      <Header/>
+      <main className='min-h-[80vh] py-[0.1px]'>
+          <Outlet/>
+      </main>
+      <Footer/>
+      <Toaster/>
+    </GobalContextProvider>
    )
 }
 

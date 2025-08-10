@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { GoTriangleDown ,GoTriangleUp } from "react-icons/go";
 import Usermenu from "./Usermenu";
+import { useEffect } from "react";
+import { PriceInruppees } from "../utils/DisplayPriceinRuppes";
 
 const Header = () => {
 
@@ -39,6 +41,21 @@ const handleMobileClick = ()=>{
     navigate("/user")
   }
 }
+
+useEffect(()=>{
+  const totalQuantity = cartItems.reduce((prev,curr)=>{
+    return prev + curr.quantity
+  },0)
+  setTotalQty(totalQuantity)
+
+  const totalPrice = cartItems.reduce((prev,curr)=>{
+    return prev + (curr.productId.price * curr.quantity);
+  },0);
+  setTotalPrice(totalPrice);
+
+  
+
+},[cartItems])
 
   return (
     <header
@@ -116,7 +133,8 @@ const handleMobileClick = ()=>{
                           {
                             cartItems.length > 0 ? (
                               <div>
-                                <p>{cartItems.length} Items</p>  {/* Show count, not array */}
+                                <p>{totalQty} Items</p>
+                                <p>{PriceInruppees(totalPrice)}</p>
                               </div>
                             ) : (
                               <p>My cart</p>

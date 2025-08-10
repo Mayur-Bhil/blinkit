@@ -9,7 +9,7 @@
     import img1 from "../assets/minute_delivery.png"
     import img2 from "../assets/Best_Prices_Offers.png"
     import img3 from "../assets/Wide_Assortment.png"
-import { priceWithDisCount } from '../utils/DisCountCunter';
+    import { priceWithDisCount } from '../utils/DisCountCunter';
 
     const ProductDisplayPage = () => {
       const params = useParams();
@@ -156,7 +156,7 @@ import { priceWithDisCount } from '../utils/DisCountCunter';
                                 <p className='text-lg text-orange-400 py-2'>stock avilable : {data.stock} pices</p>
                               )
                             }
-                            <button className='px-4 py-2 bg-green-300 cursor-pointer hover:bg-green-400 rounded'>Add</button>
+                            x
                             <div><Devider/></div>
                             <h2 className='font-semibold'>
                               Why shop from Blinkit ?

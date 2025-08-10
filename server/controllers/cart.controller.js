@@ -79,3 +79,35 @@ export const getCartItemsController = async (req,res)=>{
             })
     }
 }
+
+
+export const updateCartItemQtyCOntroller = async (req,res)=>{
+    try {
+        const userId = req.userId;
+        const {_id,qty} = req.body;
+
+        if(!_id || !qty){
+            return res.status(400).json({
+                message:"Provide _id ,qty"
+            })
+        }
+        const updateCartItem = await cartProduct.updateOne({
+            _id:_id
+        },{
+            quantity:qty
+        })
+
+        return res.json({
+            message :"Items Added",
+            data:updateCartItem,
+            error:false,
+            success:true
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: error || error.message || "Something went wrong",
+            error:true,
+            success:false
+        })
+    }
+}
