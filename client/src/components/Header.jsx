@@ -11,7 +11,7 @@ import { GoTriangleDown ,GoTriangleUp } from "react-icons/go";
 import Usermenu from "./Usermenu";
 import { useEffect } from "react";
 import { PriceInruppees } from "../utils/DisplayPriceinRuppes";
-
+import { useGlobalContext } from "../provider/global.provider";
 const Header = () => {
 
   const [isMobile] = useMobile();
@@ -25,6 +25,8 @@ const Header = () => {
   console.log("Cart Items Length:", cartItems.length);
   const [totalPrice,setTotalPrice] = useState(0);
   const [totalQty,setTotalQty] = useState(0);
+  const {fetchCartData}  = useGlobalContext();
+
   
   
   const redireactToLoginpage = () =>{
@@ -33,14 +35,18 @@ const Header = () => {
 
   const token = localStorage.getItem("accessToken")
   
-const handleMobileClick = ()=>{
+const handleMobileClick = async()=>{
   if(!user._id || !token){
         navigate("/login")
+        
     return;
   }else{
-    navigate("/user")
+    navigate("/user");
+    
+    
   }
 }
+
 
 useEffect(()=>{
   const totalQuantity = cartItems.reduce((prev,curr)=>{
@@ -55,7 +61,19 @@ useEffect(()=>{
 
   
 
-},[cartItems])
+},[cartItems]);
+
+
+useEffect(() => {
+  if (user?._id && token) {
+    // User is logged in - fetch cart data
+    fetchCartData();
+  } else {
+    // User is logged out - reset totals immediately
+    setTotalQty(null);
+    setTotalPrice(null);
+  }
+}, [user?._id, token, fetchCartData]);
 
   return (
     <header

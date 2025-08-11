@@ -23,8 +23,8 @@ function App() {
       } catch (error) {
         
       }
-               
-   }
+
+   }  
 
    const fetchCategory = async () => {
       dispatch(setloadingCategory(true))
@@ -69,9 +69,7 @@ function App() {
   useEffect(()=>{
       fetchUser()
       fetchCategory();
-      fetchSubCategory();
-     
-         
+      fetchSubCategory();     
    },[])
      
    return (

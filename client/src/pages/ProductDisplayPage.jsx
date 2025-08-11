@@ -142,8 +142,8 @@
                                 {
                                   data.discount && (
                                     <>
-                                    <p className='text-base font-bold text-green-600 m-2'>{data.discount}% off</p>
-                                    <p className='line-through'>{PriceInruppees(data.price)}</p>
+                                      <p className='text-base font-bold text-green-600 m-2'>{data.discount}% off</p>
+                                      <p className='line-through'>{PriceInruppees(data.price)}</p>
                                     </>
                                   )
                                 }
@@ -156,7 +156,7 @@
                                 <p className='text-lg text-orange-400 py-2'>stock avilable : {data.stock} pices</p>
                               )
                             }
-                            x
+                          
                             <div><Devider/></div>
                             <h2 className='font-semibold'>
                               Why shop from Blinkit ?

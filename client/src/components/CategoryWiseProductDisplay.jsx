@@ -112,20 +112,20 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
             <div className='relative container mx-auto'>
                 {/* Scrollable container */}
                 <div className='flex items-center gap-4 p-4 md:gap-6 lg:gap-8 overflow-x-scroll scrollbar-none lg:overflow-hidden scroll-smooth transition-all' ref={containerRef}>
-                    {(loading || true) &&
+                    {loading &&
                         LoadingCardNumber.map((_, index) => {
                             return (
                                 <CardLoading key={"CategoryWiseProductDisplay" + index} />
                             )
                         })
                     }
-                    {/* {
+                    {
                         data.map((product, index) => {
                             return (
                                 <CartProduct data={product} key={product?._id + "CategoryWiseProductDisplay" + index} />
                             )
                         })
-                    } */}
+                    }
                 </div>
 
                 {/* Navigation buttons - positioned outside scrollable content */}

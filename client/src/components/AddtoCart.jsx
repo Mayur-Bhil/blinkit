@@ -42,7 +42,7 @@ const AddtoCart = ({data}) => {
      }
 
      useEffect(() => {
-    const checkCartItems = cartItems.some((item) => item.productId._id === data._id);
+    const checkCartItems = cartItems.some((item) =>item.productId._id === data._id);
     setUSeAvailableCart(checkCartItems); // Fix: Use checkCartItems, not hardcoded true
     
     if (checkCartItems) {
@@ -59,16 +59,24 @@ const AddtoCart = ({data}) => {
     
      }, [data, cartItems])
 
+     const increseQty = (e)=>{
+          e.preventDefault();
+          e.stopPropagation();
+     }
+     const decreseQty = (e)=>{
+          e.preventDefault();
+          e.stopPropagation();
+     }
      return (
     <div>
      {
           isAvailableCart ? (
                <div className='flex items-center justify-between bg-gray-100 rounded-full gap-4 '>
-                    <button>
+                    <button className='bg-green-600 hover-bg-green-700 text-white' onClick={decreseQty}>
                               <FaMinus size={12} />
                     </button>
                     <p>{qty}</p>
-                    <button><FaPlus  size={12}/></button>
+                    <button className='bg-green-600 hover-bg-green-700 text-white' onClick={increseQty}><FaPlus  size={12}/></button>
                </div>
           ):(
                <button
