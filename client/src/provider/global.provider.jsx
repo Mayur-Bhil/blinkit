@@ -1,12 +1,13 @@
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 export const GlobalContext = createContext(null);
 import summuryapi from "../common/summuryApi.js"
 import Axios from "../utils/useAxios.js"
 import { addToCart } from "../store/Cartslice.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AxiosToastError from "../utils/AxiosToastError.js";
 import toast from "react-hot-toast";
 import summeryApis from "../common/summuryApi.js";
+import { priceWithDisCount } from "../utils/DisCountCunter.js";
 
 export const useGlobalContext = () => useContext(GlobalContext);
 
@@ -14,6 +15,36 @@ export const useGlobalContext = () => useContext(GlobalContext);
 
 export const GobalContextProvider = ({children})=>{
     const dispatch = useDispatch();
+    const [totalPrice,setTotalPrice] = useState(0);
+    const [totalQty,setTotalQty] = useState(0);
+    const cartItems = useSelector((store) => store?.cart?.cart || []);
+    const token = localStorage.getItem("accessToken")
+
+    const user = useSelector((store)=>store?.user);
+  
+
+
+
+
+    useEffect(()=>{
+      const totalQuantity = cartItems.reduce((prev,curr)=>{
+        return prev + curr.quantity
+      },0)
+      setTotalQty(totalQuantity)
+    
+      const totalPrice = cartItems.reduce((prev,curr)=>{
+        const priceAfterDiscount  = Number(priceWithDisCount(curr?.productId?.price,curr?.productId?.discount));
+        return prev +  priceAfterDiscount * curr.quantity;
+      },0);
+      setTotalPrice(totalPrice);
+    
+      
+    
+    },[cartItems]);
+
+    
+   
+    
 
     const fetchCartData = async() => { 
         try {
@@ -33,6 +64,18 @@ export const GobalContextProvider = ({children})=>{
        console.error("Cart fetch error:", error);
      }
    }
+
+    useEffect(() => {
+    if (user?._id && token) {
+        // User is logged in - fetch cart data
+        fetchCartData();
+    } else {
+        // User is logged out - reset totals immediately
+        setTotalQty(null);
+        setTotalPrice(null);
+    }
+    }, [user?._id, token, fetchCartData]);
+
 
 
    const updateQuntity = async(id,qty)=>{
@@ -84,7 +127,8 @@ export const GobalContextProvider = ({children})=>{
         <GlobalContext.Provider value={{
             fetchCartData,
             updateQuntity,
-            deleteCartItems
+            deleteCartItems,
+            totalPrice,totalQty
             
             
             

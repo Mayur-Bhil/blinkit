@@ -10,11 +10,13 @@ import { useDispatch } from 'react-redux'
 import { setAllCategory ,setAllSubCategory, setloadingCategory} from './store/ProductSclice.js'
 import Axios from './utils/useAxios'
 import summeryApis from './common/summuryApi'
-import GobalContextProvider from './provider/global.provider.jsx'
+import GobalContextProvider  from './provider/global.provider.jsx'
+import { IoCartSharp } from "react-icons/io5";
+import CartMobileLink from './components/CartMobile.jsx'
 
 function App() {
    const dispatch = useDispatch();
-       
+
    const fetchUser = async() =>{
       try {
         const Userdata = await getUserDetails();
@@ -80,6 +82,7 @@ function App() {
       </main>
       <Footer/>
       <Toaster/>
+     <CartMobileLink/>
     </GobalContextProvider>
    )
 }
