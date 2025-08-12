@@ -9,7 +9,8 @@
     import img1 from "../assets/minute_delivery.png"
     import img2 from "../assets/Best_Prices_Offers.png"
     import img3 from "../assets/Wide_Assortment.png"
-import { priceWithDisCount } from '../utils/DisCountCunter';
+    import { priceWithDisCount } from '../utils/DisCountCunter';
+import AddtoCart from '../components/AddtoCart';
 
     const ProductDisplayPage = () => {
       const params = useParams();
@@ -62,7 +63,7 @@ import { priceWithDisCount } from '../utils/DisCountCunter';
 
       return (
           <section className='container mx-auto p-4 grid lg:grid-cols-2'>
-              <div className=''>
+              <div className='select-none'>
                     <div className='bg-zinc-50 lg:min-h-[58vh] lg:max-h-[58vh] rounded min-h-56 max-h-56 h-full w-full'>
                         <img
                           src={data.Image[image]}
@@ -142,8 +143,8 @@ import { priceWithDisCount } from '../utils/DisCountCunter';
                                 {
                                   data.discount && (
                                     <>
-                                    <p className='text-base font-bold text-green-600 m-2'>{data.discount}% off</p>
-                                    <p className='line-through'>{PriceInruppees(data.price)}</p>
+                                      <p className='text-base font-bold text-green-600 m-2'>{data.discount}% off</p>
+                                      <p className='line-through'>{PriceInruppees(data.price)}</p>
                                     </>
                                   )
                                 }
@@ -151,12 +152,19 @@ import { priceWithDisCount } from '../utils/DisCountCunter';
                             </div>
                             {
                               data.stock === 0  ? (
+                                 
+                                <>
                                   <p className='text-lg text-red-500 lg:my-2'>stock : Out of stock</p>
+                                  <p className='text-lg text-orange-400 py-2'>stock avilable : {data.stock} pices</p>
+                                </>
+
                               ):(
-                                <p className='text-lg text-orange-400 py-2'>stock avilable : {data.stock} pices</p>
+                                    <div className='my-4'>
+                                      <AddtoCart data={data}/>
+                                    </div>
                               )
                             }
-                            <button className='px-4 py-2 bg-green-300 cursor-pointer hover:bg-green-400 rounded'>Add</button>
+                          
                             <div><Devider/></div>
                             <h2 className='font-semibold'>
                               Why shop from Blinkit ?

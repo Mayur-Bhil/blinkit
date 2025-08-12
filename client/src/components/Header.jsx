@@ -9,7 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { GoTriangleDown ,GoTriangleUp } from "react-icons/go";
 import Usermenu from "./Usermenu";
-
+import { useEffect } from "react";
+import { PriceInruppees } from "../utils/DisplayPriceinRuppes";
+import { useGlobalContext } from "../provider/global.provider";
 const Header = () => {
 
   const [isMobile] = useMobile();
@@ -23,6 +25,8 @@ const Header = () => {
   console.log("Cart Items Length:", cartItems.length);
   const [totalPrice,setTotalPrice] = useState(0);
   const [totalQty,setTotalQty] = useState(0);
+  const {fetchCartData}  = useGlobalContext();
+
   
   
   const redireactToLoginpage = () =>{
@@ -31,14 +35,45 @@ const Header = () => {
 
   const token = localStorage.getItem("accessToken")
   
-const handleMobileClick = ()=>{
+const handleMobileClick = async()=>{
   if(!user._id || !token){
         navigate("/login")
+        
     return;
   }else{
-    navigate("/user")
+    navigate("/user");
+    
+    
   }
 }
+
+
+useEffect(()=>{
+  const totalQuantity = cartItems.reduce((prev,curr)=>{
+    return prev + curr.quantity
+  },0)
+  setTotalQty(totalQuantity)
+
+  const totalPrice = cartItems.reduce((prev,curr)=>{
+    return prev + (curr.productId.price * curr.quantity);
+  },0);
+  setTotalPrice(totalPrice);
+
+  
+
+},[cartItems]);
+
+
+useEffect(() => {
+  if (user?._id && token) {
+    // User is logged in - fetch cart data
+    fetchCartData();
+  } else {
+    // User is logged out - reset totals immediately
+    setTotalQty(null);
+    setTotalPrice(null);
+  }
+}, [user?._id, token, fetchCartData]);
 
   return (
     <header
@@ -116,7 +151,8 @@ const handleMobileClick = ()=>{
                           {
                             cartItems.length > 0 ? (
                               <div>
-                                <p>{cartItems.length} Items</p>  {/* Show count, not array */}
+                                <p>{totalQty} Items</p>
+                                <p>{PriceInruppees(totalPrice)}</p>
                               </div>
                             ) : (
                               <p>My cart</p>

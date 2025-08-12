@@ -3,41 +3,13 @@ import { PriceInruppees } from '../utils/DisplayPriceinRuppes'
 import { Link } from 'react-router-dom'
 import { validUrl } from '../utils/validUrlConvert'
 import { priceWithDisCount } from '../utils/DisCountCunter';
-import summeryApis from '../common/summuryApi';
-import AxiosToastError from '../utils/AxiosToastError';
-import Axios from '../utils/useAxios';
-import toast from 'react-hot-toast';
+
+
+import AddtoCart from './AddtoCart.jsx';
 
 const CartProduct = ({data}) => {
      const url = `/product/${validUrl(data.name)}-${data._id}`;
-     const [loading, setLoading] = useState(false);
-
-     const handleAddToCart = async(e) => {
-          e.preventDefault();
-          e.stopPropagation(); // Fixed typo: was stopPropagination
-          
-          setLoading(true); // Set loading to true at the start
-          
-          try {
-               const response = await Axios({
-                    ...summeryApis.addTocart,
-                    data: {
-                         productId: data?._id
-                    }
-               })
-               const {data: responseData} = response;
-
-               if(responseData.success){
-                    toast.success(responseData.message) // Fixed: using message instead of success
-               }
-          } catch (error) {
-               AxiosToastError(error);
-          } finally {
-               setLoading(false)
-          }
-     }
-
-     // Add null check for data
+     
      if (!data) {
           return null;
      }
@@ -80,19 +52,13 @@ const CartProduct = ({data}) => {
                               data.stock === 0 ? ( // Use strict equality
                                    <p className='text-sm text-red-500'>Out of stock</p> // Capitalized
                               ) : (
-                                   <button
-                                        className={`bg-green-400 cursor-pointer hover:bg-green-600 text-white px-4 py-1 rounded ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} // Add loading state styling
-                                        onClick={handleAddToCart}
-                                        disabled={loading} // Disable button when loading
-                                   >
-                                        {loading ? 'Adding...' : 'Add'} {/* Show loading text */}
-                                   </button>
+                                   <AddtoCart data={data}/>
                               )
                          }
-                    </div>
+                    </div>    
                </div>
           </div>
      )
-}
+};
 
 export default CartProduct

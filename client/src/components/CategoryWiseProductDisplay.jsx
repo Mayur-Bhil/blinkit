@@ -108,27 +108,38 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
                 </Link>
             </div>
             
-            <div className='flex items-center gap-4 p-4 md:gap-6 lg:gap-8 container mx-auto overflow-x-scroll scrollbar-none lg:overflow-hidden scroll-smooth transition-all relative' ref={containerRef}>
-                {loading &&
-                    LoadingCardNumber.map((_, index) => {
-                        return (
-                            <CardLoading key={"CategoryWiseProductDisplay" + index} />
-                        )
-                    })
-                }
-                {
-                    data.map((product, index) => {
-                        return (
-                            <CartProduct data={product} key={product?._id + "CategoryWiseProductDisplay" + index} />
-                        )
-                    })
-                }
+            {/* Wrapper for scroll container and navigation buttons */}
+            <div className='relative container mx-auto'>
+                {/* Scrollable container */}
+                <div className='flex items-center gap-4 p-4 md:gap-6 lg:gap-8 overflow-x-scroll scrollbar-none lg:overflow-hidden scroll-smooth transition-all' ref={containerRef}>
+                    {loading &&
+                        LoadingCardNumber.map((_, index) => {
+                            return (
+                                <CardLoading key={"CategoryWiseProductDisplay" + index} />
+                            )
+                        })
+                    }
+                    {
+                        data.map((product, index) => {
+                            return (
+                                <CartProduct data={product} key={product?._id + "CategoryWiseProductDisplay" + index} />
+                            )
+                        })
+                    }
+                </div>
 
-                <div className='w-full left-0 right-0 container mx-auto absolute hidden lg:flex px-2 justify-between select-none'>
-                    <button onClick={scrollLeft} className='z-10 relative bg-white shadow-lg p-2 cursor-pointer hover:bg-gray-100 rounded-full text-lg'>
+                {/* Navigation buttons - positioned outside scrollable content */}
+                <div className='absolute top-1/2 -translate-y-1/2 left-0 right-0 hidden lg:flex px-4 justify-between pointer-events-none select-none'>
+                    <button 
+                        onClick={scrollLeft} 
+                        className='z-10 bg-white shadow-lg p-2 cursor-pointer hover:bg-gray-100 rounded-full text-lg pointer-events-auto'
+                    >
                         <FaAngleLeft />
                     </button>
-                    <button onClick={ScrollRight} className='z-10 relative bg-white shadow-lg p-2 cursor-pointer hover:bg-gray-100 rounded-full text-lg'>
+                    <button 
+                        onClick={ScrollRight} 
+                        className='z-10 bg-white shadow-lg p-2 cursor-pointer hover:bg-gray-100 rounded-full text-lg pointer-events-auto'
+                    >
                         <FaAngleRight />
                     </button>
                 </div>

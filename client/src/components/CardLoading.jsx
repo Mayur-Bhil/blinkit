@@ -2,7 +2,7 @@ import React from 'react'
 
 const CardLoading = () => {
   return (
-    <div className='border mx-auto p-3 grid gap-3 min-w-36 lg:max-w-52 shadow-lg rounded animate-pulse'>
+    <div className='border  mx-auto p-3 grid gap-3 min-w-41 lg:max-w-52 lg:min-w-48 shadow-lg rounded animate-pulse'>
        <div className='min-h-14 lg:min-h-26 bg-zinc-100 rounded'>
             
        </div>
