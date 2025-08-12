@@ -12,6 +12,7 @@ import Usermenu from "./Usermenu";
 import { useEffect } from "react";
 import { PriceInruppees } from "../utils/DisplayPriceinRuppes";
 import { useGlobalContext } from "../provider/global.provider";
+import DisplayCartItems from "./DisplayCartItems";
 const Header = () => {
 
   const [isMobile] = useMobile();
@@ -21,11 +22,14 @@ const Header = () => {
   const navigate = useNavigate();
   const user = useSelector((store)=>store?.user);
   const cartItems = useSelector((store) => store?.cart?.cart || []);
-  console.log("Cart Items:", cartItems); // Proper logging
-  console.log("Cart Items Length:", cartItems.length);
-  const [totalPrice,setTotalPrice] = useState(0);
-  const [totalQty,setTotalQty] = useState(0);
+
+  // console.log("Cart Items:", cartItems); // Proper logging
+  // console.log("Cart Items Length:", cartItems.length);
+  // const [totalPrice,setTotalPrice] = useState(0);
+  // const [totalQty,setTotalQty] = useState(0);
   const {fetchCartData}  = useGlobalContext();
+  const {totalPrice,totalQty} = useGlobalContext();
+  const [openCartSection,setOpenCartSection] = useState(false);
 
   
   
@@ -48,32 +52,7 @@ const handleMobileClick = async()=>{
 }
 
 
-useEffect(()=>{
-  const totalQuantity = cartItems.reduce((prev,curr)=>{
-    return prev + curr.quantity
-  },0)
-  setTotalQty(totalQuantity)
 
-  const totalPrice = cartItems.reduce((prev,curr)=>{
-    return prev + (curr.productId.price * curr.quantity);
-  },0);
-  setTotalPrice(totalPrice);
-
-  
-
-},[cartItems]);
-
-
-useEffect(() => {
-  if (user?._id && token) {
-    // User is logged in - fetch cart data
-    fetchCartData();
-  } else {
-    // User is logged out - reset totals immediately
-    setTotalQty(null);
-    setTotalPrice(null);
-  }
-}, [user?._id, token, fetchCartData]);
 
   return (
     <header
@@ -141,7 +120,7 @@ useEffect(() => {
                         user._id ? "" : "login"
                       }
                     </button>
-                    <button className="bg-green-500 flex items-center gap-2 px-2 py-3 rounded-lg ml-2 text-white hover:bg-green-800">
+                    <button onClick={()=>setOpenCartSection(true)} className="bg-green-500 flex items-center gap-2 px-2 py-3 rounded-lg ml-2 text-white hover:bg-green-800">
                         {/* add to cart */}
                         <div className="animate-bounce">
                             <BsCart4 size={20} />
@@ -168,6 +147,12 @@ useEffect(() => {
       <div className="container mx-auto px-2 lg:hidden">
         <Search />
       </div>
+
+      {
+        openCartSection && (
+          <DisplayCartItems close={()=>setOpenCartSection(false)}/>
+        )
+      }
     </header>
   );
 };

@@ -100,7 +100,7 @@ import AddtoCart from '../components/AddtoCart';
                                   <button onClick={handleScrollRight} className='bg-white p-1 rounded-full z-10 cursor-pointer relative shadow-lg'><FaAngleRight /> </button>
                               </div>
                       </div>
-                               <div className='my-4 grid gap-3'>
+                               <div className='my-4 hidden lg:grid gap-3 '>
                                     <div>
                                         <p className='font-semibold'>Description</p>
                                         <p className='text-sm '>
@@ -196,6 +196,32 @@ import AddtoCart from '../components/AddtoCart';
                                   </div>
                                     
                                 </div>
+
+                                {/* Only for Mobile */}
+                                <div className='my-4 grid lg:hidden gap-3 '>
+                                    <div>
+                                        <p className='font-semibold'>Description</p>
+                                        <p className='text-sm '>
+                                          {data.desecription}
+                                        </p>
+                                    </div>
+                                    <div>
+                                      <p className='font-semibold'>Unit</p>
+                                        <p className='text-sm '>
+                                          {data.unit}
+                                        </p>
+                                    </div>
+                                    {
+                                      data?.more_details && Object.keys(data?.more_details).map((elem,index)=>{
+                                        return <div key={index}>
+                                                <div key={index}>
+                                                    <p className='font-semibold'>{elem}</p>
+                                                    <p className='text-sm '>{data.more_details[elem]}</p>
+                                                 </div>
+                                              </div>
+                                      })
+                                    }
+                                </div> 
                                 
                             </div>
             
