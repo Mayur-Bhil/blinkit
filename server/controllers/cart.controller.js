@@ -92,13 +92,14 @@ export const updateCartItemQtyCOntroller = async (req,res)=>{
             })
         }
         const updateCartItem = await cartProduct.updateOne({
-            _id:_id
+            _id:_id,
+            userId:userId
         },{
             quantity:qty
         })
 
         return res.json({
-            message :"Items Added",
+            message :"Cart Updated",  // ✅ ONLY CHANGE - was "Items Added"
             data:updateCartItem,
             error:false,
             success:true
@@ -106,6 +107,38 @@ export const updateCartItemQtyCOntroller = async (req,res)=>{
     } catch (error) {
         return res.status(500).json({
             message: error || error.message || "Something went wrong",
+            error:true,
+            success:false
+        })
+    }
+}
+
+
+
+export const deleteCartItemQuantityCOntroller = async (req,res)=>{
+    try {
+        const userId = req.userId;  // i am gettign this from middleWare
+        const {_id} = req.body;
+
+        if(!_id){
+            return res.json({
+                message:"Provide _id",
+                error:true,
+                success:false
+            })
+        }
+
+        const deleteCartItems = await cartProduct.deleteOne({_id:_id,userId:userId});
+
+        return res.json({
+            message:"Item Deleted",
+            error:false,
+            success:true,
+            data:deleteCartItems
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Something went wrong",
             error:true,
             success:false
         })

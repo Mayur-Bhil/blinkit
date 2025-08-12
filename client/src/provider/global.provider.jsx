@@ -6,6 +6,7 @@ import { addToCart } from "../store/Cartslice.js";
 import { useDispatch } from "react-redux";
 import AxiosToastError from "../utils/AxiosToastError.js";
 import toast from "react-hot-toast";
+import summeryApis from "../common/summuryApi.js";
 
 export const useGlobalContext = () => useContext(GlobalContext);
 
@@ -56,7 +57,24 @@ export const GobalContextProvider = ({children})=>{
    }
 
 
-   
+   const deleteCartItems = async(cardId)=>{ 
+        try {
+            const response = await Axios({
+                ...summeryApis.deleteCartItem,
+                data:{
+                    _id:cardId
+                }
+            })
+            const {data:responceData} = response;
+
+            if(responceData.success){
+                toast.success(responceData.message);
+                await fetchCartData();
+            }
+        } catch (error) {
+            AxiosToastError(error)
+        }
+   }
    
    useEffect(()=>{
         fetchCartData();
@@ -65,7 +83,8 @@ export const GobalContextProvider = ({children})=>{
     return (
         <GlobalContext.Provider value={{
             fetchCartData,
-            updateQuntity
+            updateQuntity,
+            deleteCartItems
             
             
             

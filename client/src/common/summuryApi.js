@@ -119,6 +119,10 @@ const summeryApis = {
     updateQunatity:{
         url:"/api/cart/update-qty",
         method:"PUT"
+    },
+    deleteCartItem:{
+        url:"/api/cart/delete-cart-item",
+        method:"DELETE"
     }
 }
 

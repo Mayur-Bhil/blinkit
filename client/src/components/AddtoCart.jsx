@@ -10,11 +10,12 @@ import { FaPlus } from "react-icons/fa6";
 
 const AddtoCart = ({data}) => {
         const [loading,setLoading] = useState(false); 
-        const { fetchCartData } = useGlobalContext();
+        const { fetchCartData ,updateQuntity,deleteCartItems} = useGlobalContext();
         const cartItems = useSelector((store) => store?.cart?.cart || []);
         console.log("Cart-Items",cartItems );
         const [isAvailableCart,setUSeAvailableCart] = useState(false);
         const [qty,setQty] = useState(0);
+        const [cartitemDetails,setCartItemDetails] = useState();
      const handleAddToCart = async(e) => {
           e.preventDefault();
           e.stopPropagation(); // Fixed typo: was stopPropagination
@@ -52,6 +53,7 @@ const AddtoCart = ({data}) => {
         // Fix: Set the quantity from the found product
         if (product && product.quantity !== undefined) {
             setQty(product.quantity);
+           setCartItemDetails(product)
         }
     } else {
         setQty(0); 
@@ -62,21 +64,30 @@ const AddtoCart = ({data}) => {
      const increseQty = (e)=>{
           e.preventDefault();
           e.stopPropagation();
+
+          updateQuntity(cartitemDetails?._id,qty+1);
      }
      const decreseQty = (e)=>{
           e.preventDefault();
           e.stopPropagation();
+          if(qty == 1){
+               deleteCartItems(cartitemDetails?._id)
+          }else{
+               updateQuntity(cartitemDetails?._id,qty-1);
+
+          }
+          
      }
      return (
-    <div>
+    <div className='w-full max-w-[150px]'>
      {
           isAvailableCart ? (
                <div className='flex items-center justify-between bg-gray-100 rounded-full gap-4 '>
-                    <button className='bg-green-600 hover-bg-green-700 text-white' onClick={decreseQty}>
+                    <button className='bg-green-600 hover-bg-green-700 text-white flex items-center justify-center flex-1 p-1 rounded-full font-semibold hover:scale-90 transition-all cursor-pointer' onClick={decreseQty}>
                               <FaMinus size={12} />
                     </button>
-                    <p>{qty}</p>
-                    <button className='bg-green-600 hover-bg-green-700 text-white' onClick={increseQty}><FaPlus  size={12}/></button>
+                    <p className='flex-1 text-center font-semibold w-full'>{qty}</p>
+                    <button className='bg-green-600 flex-1 hover-bg-green-700 flex items-center justify-center text-white p-1 rounded-full font-semibold hover:scale-90 transition-all cursor-pointer' onClick={increseQty}><FaPlus  size={12}/></button>
                </div>
           ):(
                <button
