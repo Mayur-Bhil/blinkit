@@ -12,7 +12,7 @@ const AddtoCart = ({data}) => {
         const [loading,setLoading] = useState(false); 
         const { fetchCartData ,updateQuntity,deleteCartItems} = useGlobalContext();
         const cartItems = useSelector((store) => store?.cart?.cart || []);
-        console.log("Cart-Items",cartItems );
+     //    console.log("Cart-Items",cartItems );
         const [isAvailableCart,setUSeAvailableCart] = useState(false);
         const [qty,setQty] = useState(0);
         const [cartitemDetails,setCartItemDetails] = useState();
@@ -33,7 +33,7 @@ const AddtoCart = ({data}) => {
 
                if(responseData.success){
                     toast.success(responseData.message)
-                    await fetchCartData();
+                     fetchCartData();
                }    
           } catch (error) {
                AxiosToastError(error);
@@ -48,7 +48,7 @@ const AddtoCart = ({data}) => {
     
     if (checkCartItems) {
         const product = cartItems.find(item => item.productId._id === data._id);
-        console.log("Product quantity", product);
+     //    console.log("Product quantity", product);
         
         // Fix: Set the quantity from the found product
         if (product && product.quantity !== undefined) {
