@@ -179,23 +179,33 @@ const DisplayCartItems = ({ close }) => {
             ) : (
               <div className='flex items-center justify-center h-full'>
                 <div className='text-center text-gray-500'>
-                  <div className='text-4xl mb-2'>🛒</div>
-                  <p className='font-medium'>Your cart is empty</p>
-                  <p className='text-sm mt-1'>Add some items to get started</p>
+                  <div className='text-4xl mb-4'>🛒</div>
+                  <p className='font-medium text-lg mb-2'>Your cart is empty</p>
+                  <p className='text-sm text-gray-400 mb-6'>Add some items to get started</p>
+                  <Link 
+                    className='inline-block px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded transition-colors duration-200' 
+                    to="/"
+                    onClick={close}
+                  >
+                    Back to Shopping
+                  </Link>
                 </div>
-              </div>
+          </div>
             )}
           </div>
         </div>
 
         {/* Checkout section - only show if there are items */}
         {memoizedCartItems.length > 0 && (
+         
           <div className='p-2'>
+             
             <div className='bg-green-600 text-white p-3 px-4 font-bold rounded flex justify-between items-center gap-4 hover:bg-green-700 transition-colors'>
               <div>
                 <p className='text-sm opacity-90'>Total</p>
                 <h3 className='text-lg'>{PriceInruppees(totalPrice || 0)}</h3>
               </div>
+             
               <button className='flex items-center gap-1 cursor-pointer bg-opacity-20 px-4 py-2 rounded hover:bg-opacity-30 transition-all'>
                 <span>Proceed</span>
                 <FaCaretRight />
