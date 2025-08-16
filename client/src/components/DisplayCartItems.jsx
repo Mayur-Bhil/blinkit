@@ -1,20 +1,30 @@
 import React, { useMemo, useCallback } from 'react'
 import { IoClose } from 'react-icons/io5'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useGlobalContext } from '../provider/global.provider'
 import { PriceInruppees } from '../utils/DisplayPriceinRuppes'
 import { FaCaretRight } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
 import AddtoCart from './AddtoCart' // Import the AddtoCart component
 import { priceWithDisCount } from '../utils/DisCountCunter' // Import discount utility
+import toast from 'react-hot-toast'
 
 const DisplayCartItems = ({ close }) => {
   // Get context values with destructuring to prevent unnecessary re-renders
   const { notDiscountprice, totalPrice, isLoading } = useGlobalContext();
-  
+  const user = useSelector(store =>store.user)
+console.log("USer",user );  
+const navigate = useNavigate();
   // Use shallow equality check for cartItems
   const cartItems = useSelector((store) => store?.cart?.cart || []);
-  
+  const redirectToCheckOut  = ()=>{
+        if(user?._id){
+            navigate("/checkout")
+            close()
+            return 
+        }
+        toast("Please Login")
+  }
   // Memoize the savings calculation
   const savings = useMemo(() => {
     if (!notDiscountprice || !totalPrice) return 0;
@@ -207,7 +217,7 @@ const DisplayCartItems = ({ close }) => {
               </div>
              
               <button className='flex items-center gap-1 cursor-pointer bg-opacity-20 px-4 py-2 rounded hover:bg-opacity-30 transition-all'>
-                <span>Proceed</span>
+                <span onClick={redirectToCheckOut}>Proceed</span>
                 <FaCaretRight />
               </button>
             </div>
