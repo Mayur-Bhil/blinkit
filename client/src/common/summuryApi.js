@@ -123,6 +123,14 @@ const summeryApis = {
     deleteCartItem:{
         url:"/api/cart/delete-cart-item",
         method:"DELETE"
+    },
+    createAddress:{
+        url:"/api/address/create",
+        method:"POST"
+    },
+    getAddress:{
+        url:"/api/address/get",
+        method:"GET"
     }
 }
 

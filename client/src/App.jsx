@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import './index.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -10,12 +10,17 @@ import { useDispatch } from 'react-redux'
 import { setAllCategory ,setAllSubCategory, setloadingCategory} from './store/ProductSclice.js'
 import Axios from './utils/useAxios'
 import summeryApis from './common/summuryApi'
-import GobalContextProvider  from './provider/global.provider.jsx'
+import {GobalContextProvider}  from './provider/global.provider.jsx'
 import { IoCartSharp } from "react-icons/io5";
 import CartMobileLink from './components/CartMobile.jsx'
 
 function App() {
    const dispatch = useDispatch();
+const location = useLocation();
+
+if(location === "/chekout"){
+
+}
 
    const fetchUser = async() =>{
       try {
@@ -82,7 +87,11 @@ function App() {
       </main>
       <Footer/>
       <Toaster/>
-     <CartMobileLink/>
+      {
+        location.pathname !== "/checkout" && (
+            <CartMobileLink/>
+        )
+      } 
     </GobalContextProvider>
    )
 }
