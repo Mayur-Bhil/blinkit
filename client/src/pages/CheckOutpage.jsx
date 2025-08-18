@@ -3,11 +3,13 @@ import { PriceInruppees } from '../utils/DisplayPriceinRuppes'
 import { useGlobalContext } from '../provider/global.provider';
 import { useSelector } from 'react-redux';
 import AddressAdd from '../components/AddressAdd';
+import Devider from "../components/Devider"
 
 const CheckOutpage = () => {
   const { notDiscountprice, totalPrice, isLoading } = useGlobalContext();
   const cartItems = useSelector((store) => store?.cart?.cart || []);
   const [OpenAddress,setOpenAddress] = useState(false);
+  const [selectedAddress,setSelectedAddress] = useState(0);
     const savings = useMemo(() => {
       if (!notDiscountprice || !totalPrice) return 0;
       return notDiscountprice - totalPrice;
@@ -16,7 +18,7 @@ const CheckOutpage = () => {
   const memoizedCartItems = useMemo(() => {
     return Array.isArray(cartItems) ? cartItems : [];
   }, [cartItems]);
-const address = useSelector((store)=>store.address.addressList);
+const address = useSelector((store)=>store?.address?.addressList);
 console.log("Address",address );
 
   return (
@@ -25,18 +27,34 @@ console.log("Address",address );
                   <div  className='w-full cursor-pointer lg:flex-3 py-4 px-2'>
                       {/* address Part */}
                     <h3 className='text-lg font-semibold'>Coose Your address  </h3>
-                    <div className='bg-white border-rounded p-2 grid gap-3'>
-                      {
-                        address.map((address,index)=>{
-                            return <div key={`${index}+"Address"`} className='border-1 p-2'>
-                                          <p>{address?.address_line}</p>
-                                          <p>{address?.city}</p>
-                                          <p>{address?.state}</p>
-                                          <p>{address?.country} - {address?.pincode}</p>
-                                          <p>{address?.mobile}</p>
-                                  </div>
-                        })
-                      }
+                      <div className='bg-white p-2 grid gap-3'>
+                        {
+                          address.map((address,index)=>{
+                              return ( 
+                                <label htmlFor={'address'+index}>
+
+                              <div>
+                              <div className='rounded p-3 flex gap-3 items-center border-1 hover:bg-zinc-50 cursor-pointer'>
+                                  <div>
+                                      <input type='radio'
+                                      onChange={(e)=>setSelectedAddress(e.target.value)
+                                      }
+                                      className='cursor-pointer' value={index} id={'address'+index} name='address' />
+                                    </div>
+                              <div id='address' key={`${index}+"Address"`} className=' p-2'>
+                                            <p>{address?.address_line}</p>
+                                            <p>{address?.city}</p>
+                                            <p>{address?.state}</p>
+                                            <p>{address?.country} - {address?.pincode}</p>
+                                            <p>{address?.mobile}</p>
+                                    </div>
+                              </div> 
+                              <Devider/>
+                              </div>
+                          </label>
+                              )
+                          }) 
+                        }
                       <div onClick={()=>setOpenAddress(true)} className='h-16 bg-blue-50 border-2 border-dashed flex items-center justify-center'>
                           Add address
                     </div>

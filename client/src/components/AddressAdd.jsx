@@ -53,7 +53,7 @@ const AddressAdd = ({close}) => {
             <div className='bg-white p-4 w-full max-w-lg mx-auto mt-8 rounded'>
                 <div className='flex justify-between items-center '>
                     <h2 className='font-bold'> Add address</h2>
-                    <IoClose onClick={close} className='cursor-pointer hover:bg-gray-200 rounded-full '  size={25}/>
+                    <IoClose onClick={close} className='cursor-pointer hover:text-amber-300'  size={25}/>
                 </div>
                 
                 <form className='mt-4 grid gap-4' onSubmit={handleSubmit(onSubmit)}>
