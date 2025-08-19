@@ -135,9 +135,14 @@ const summeryApis = {
     updateAddress:{
         url:"/api/address/update",
         method:"PUT"
-    },dissableAddress:{
+    },
+    dissableAddress:{
         url:"/api/address/dissable",
         method:"DELETE"
+    },
+    cashondeliery:{
+        url:"/api/order/cash-on-delivery",
+        method:"POST"
     }
 }
 
