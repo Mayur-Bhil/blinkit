@@ -87,3 +87,57 @@ export const getaddressController = async (req,res)=>{
         })
     }
 }
+
+
+
+export const updateAddressController = async(req,res)=>{
+    try {
+        const userId = req.userId;
+        const {_id,address_line,city,state,country,pincode,mobile} = req.body;
+        
+        const updateAddress = await Address.updateOne({ _id: _id,userId:userId},{
+            address_line,
+            city,
+            state,
+            country,
+            mobile,
+            pincode
+        })
+
+        return res.json({
+            message:"Updated Address Success Fully",
+            error:false,
+            success:true,
+            data:updateAddress
+        })
+    } catch (error) {
+        return res.status(500).json({
+            
+            message: error || error.message || "Something went wrong"
+        })
+    }
+}
+
+export const deleteAddressController = async(req,res)=>{
+    try {
+        const userId = req.userId;
+        const {_id} = req.body;
+
+
+        const dissAbleAddress  = await Address.updateOne({_id:_id,userId},{
+            status:false
+        })
+
+
+        return res.json({
+            message:"Address remove",
+            error:false,
+            success:true,
+            data:dissAbleAddress
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: error ||error.message || "Something went wrong"
+        })
+    }
+}
