@@ -156,7 +156,7 @@ export const GobalContextProvider = ({children}) => {
         } else if (!user?._id || !currentToken) {
             clearCartData();
         }
-    }, [user?._id]); // Remove fetchAddress and other functions from dependency array
+    }, [user?._id]);
 
     // Update quantity with better error handling
     const updateQuntity = useCallback(async(id, qty) => {

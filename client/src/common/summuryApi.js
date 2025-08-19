@@ -131,6 +131,13 @@ const summeryApis = {
     getAddress:{
         url:"/api/address/get",
         method:"GET"
+    },
+    updateAddress:{
+        url:"/api/address/update",
+        method:"PUT"
+    },dissableAddress:{
+        url:"/api/address/dissable",
+        method:"DELETE"
     }
 }
 

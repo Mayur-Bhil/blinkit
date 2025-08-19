@@ -18,9 +18,7 @@ function App() {
    const dispatch = useDispatch();
 const location = useLocation();
 
-if(location === "/chekout"){
 
-}
 
    const fetchUser = async() =>{
       try {
