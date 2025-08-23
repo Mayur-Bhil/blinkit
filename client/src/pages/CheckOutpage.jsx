@@ -3,18 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { PriceInruppees } from "../utils/DisplayPriceinRuppes";
 import { useGlobalContext } from "../provider/global.provider";
-import { clearCart } from "../store/Cartslice";
 import AddressAdd from "../components/AddressAdd";
 import Devider from "../components/Devider";
-import AxiosToastError from "../utils/AxiosToastError";
 import Axios from "../utils/useAxios";
 import summeryApis from "../common/summuryApi";
 import toast from "react-hot-toast";
+import {loadStripe} from "@stripe/stripe-js"
+import { priceWithDisCount } from "../utils/DisCountCunter";
+import { clearCart } from "../store/Cartslice";
 
 const CheckOutpage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { notDiscountprice, totalPrice, isLoading } = useGlobalContext();
+  const { notDiscountprice, totalPrice, isLoading ,clearCartData} = useGlobalContext();
   const cartItems = useSelector((store) => store?.cart?.cart || []);
   const address = useSelector((store) => store?.address?.addressList || []);
 
@@ -35,66 +36,152 @@ const CheckOutpage = () => {
     return (totalPrice || 0) + ((totalPrice || 0) >= 500 ? 0 : 40);
   }, [totalPrice]);
 
-  const HandleCashOndelivery = async () => {
+
+const HandleCashOndelivery = async () => {
+    let loadingToast;
     try {
-      if (isProcessing) return;
+        if (isProcessing) return;
 
-      if (!address?.length) {
-        toast.error("Please add a delivery address");
-        setOpenAddress(true);
-        return;
-      }
-
-      if (!address[selectedAddress]) {
-        toast.error("Please select a delivery address");
-        return;
-      }
-
-      if (!cartItems?.length) {
-        toast.error("Your cart is empty");
-        return;
-      }
-
-      setIsProcessing(true);
-      const loadingToast = toast.loading('Placing your order...');
-
-      const response = await Axios({
-        ...summeryApis.cashondeliery,
-        data: {
-          list_items: cartItems.map(item => ({
-            productId: item.productId._id || item.productId,
-            name: item.productId.name,
-            image: item.productId.image,
-            quantity: item.quantity,
-            price: item.productId.price
-          })),
-          addressId: address[selectedAddress]._id,
-          subTotalAmount: totalPrice,
-          totalAmount: finalAmount
+        // Validations
+        if (!address?.length) {
+            toast.error("Please add a delivery address");
+            setOpenAddress(true);
+            return;
         }
-      });
 
-      toast.dismiss(loadingToast);
-      const { data: responseData } = response;
+        if (!cartItems?.length) {
+            toast.error("Your cart is empty");
+            return;
+        }
 
-      if (responseData.success) {
-        dispatch(clearCart());
-        toast.success('🎉 Order placed successfully!');
-        
-        setTimeout(() => {
-          navigate('/dashboard/myorders');
-        }, 1500);
-      } else {
-        toast.error(responseData.message || "Failed to place order");
-      }
+        setIsProcessing(true);
+        loadingToast = toast.loading('Placing your order...');
+
+        const response = await Axios({
+            ...summeryApis.cashondeliery,
+            data: {
+                list_items: cartItems.map(item => ({
+                    productId: item.productId._id,
+                    name: item.productId.name,
+                    image: item.productId.image,
+                    quantity: item.quantity,
+                    price: Math.round(Number(item.productId.price))
+                })),
+                addressId: address[selectedAddress]._id,
+                subTotalAmount: totalPrice,
+                totalAmount: finalAmount
+            }
+        });
+
+        if (loadingToast) {
+            toast.dismiss(loadingToast);
+        }
+
+        if (response?.data?.success) {
+            // Clear cart from both Redux and global context
+            dispatch(clearCart())
+            await clearCartData(); // This will handle both Redux and backend
+            
+            // Show single success message and navigate
+            toast.success('Order placed successfully', {
+                id: 'order-success', // Use unique ID to prevent duplicates
+                duration: 3000
+            });
+            
+            navigate('/orders'); // Navigate to orders page instead of success
+        } else {
+            throw new Error(response?.data?.message || "Failed to place order");
+        }
     } catch (error) {
-      console.error("Order error:", error);
-      toast.error(error?.response?.data?.message || 'Something went wrong');
-      AxiosToastError(error);
+        console.error("Order error:", error);
+        if (loadingToast) {
+            toast.dismiss(loadingToast);
+        }
+        
+        // Show single error message
+        toast.error(error?.response?.data?.message || "Failed to place order", {
+            id: 'order-error' // Use unique ID to prevent duplicates
+        });
     } finally {
-      setIsProcessing(false);
+        setIsProcessing(false);
     }
-  };
+};
+
+const handleOnlinePayment = async () => {
+    let loadingToast;
+    try {
+        if (isProcessing) return;
+
+        // Validations
+        if (!address?.length) {
+            toast.error("Please add a delivery address");
+            setOpenAddress(true);
+            return;
+        }
+
+        if (!cartItems?.length) {
+            toast.error("Your cart is empty");
+            return;
+        }
+
+        setIsProcessing(true);
+        loadingToast = toast.loading('Processing payment...');
+
+        // Format items with proper price calculation
+        const formattedItems = cartItems.map(item => ({
+            productId: item.productId._id,
+            name: item.productId.name,
+            image: Array.isArray(item.productId.Image) 
+                ? item.productId.Image[0] 
+                : item.productId.image,
+            quantity: item.quantity,
+            price: Math.round(
+                priceWithDisCount(
+                    Number(item.productId.price), 
+                    Number(item.productId.discount || 0)
+                )
+            )
+        }));
+
+        const requestData = {
+            list_items: formattedItems,
+            addressId: address[selectedAddress]._id,
+            subTotalAmount: Math.round(totalPrice),
+            totalAmount: Math.round(finalAmount)
+        };
+
+        console.log('Payment Request:', requestData); // Debug log
+
+        const response = await Axios({
+            ...summeryApis.payment_url,
+            data: requestData
+        });
+
+        if (loadingToast) {
+            toast.dismiss(loadingToast);
+        }
+
+        if (response?.data?.url) {
+            window.location.href = response.data.url;
+        } else {
+            throw new Error("Invalid payment session");
+        }
+
+    } catch (error) {
+        console.error("Payment error details:", {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status
+        });
+
+        if (loadingToast) {
+            toast.dismiss(loadingToast);
+        }
+
+        toast.error(error.response?.data?.message || "Payment initialization failed");
+        setIsProcessing(false);
+    }
+};
 
   if (isLoading) {
     return (
@@ -203,6 +290,7 @@ const CheckOutpage = () => {
 
             <div className="w-full flex flex-col gap-4 items-center">
               <button
+              onClick={handleOnlinePayment}
                 disabled={isProcessing}
                 className={`w-full py-2 px-4 font-bold rounded text-green-500 cursor-pointer border-2 bg-white border-green-400 hover:bg-green-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed`}
               >

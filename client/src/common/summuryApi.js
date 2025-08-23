@@ -143,6 +143,14 @@ const summeryApis = {
     cashondeliery:{
         url:"/api/order/cash-on-delivery",
         method:"POST"
+    },
+    payment_url:{
+        url:"/api/order/checkout",
+        method:"POST"
+    },
+    clearCart: {
+        url: '/api/cart/clear', // Add the proper endpoint
+        method: 'POST'
     }
 }
 
