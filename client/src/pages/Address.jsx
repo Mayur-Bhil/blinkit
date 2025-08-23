@@ -68,7 +68,7 @@ const Address = () => {
                                             setOpenEdit(true)
                                             setEditData(address)
                                         }} 
-className='bg-green-300 p-1 rounded-full hover:text-shadow-white cursor-pointer hover:bg-green-400'>
+                                        className='bg-green-300 p-1 rounded-full hover:text-shadow-white cursor-pointer hover:bg-green-400'>
                                                 <MdEditDocument size={25} />
                                         </button>
                                         <button onClick={()=>{

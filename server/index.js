@@ -13,6 +13,7 @@ import subCategoryRouter from "./routes/subCategory.route.js"
 import ProductRouter from "./routes/Product.route.js"
 import cartRouter from "./routes/Cart.Route.js"
 import addressRouter from "./routes/Address.route.js"
+import orderRouter from "./routes/Order.route.js"
 const app =  express();
 
 app.use(cors({
@@ -41,6 +42,7 @@ app.use("/api/sub-category",subCategoryRouter);
 app.use("/api/product",ProductRouter);
 app.use("/api/cart",cartRouter);
 app.use("/api/address",addressRouter);
+app.use("/api/order",orderRouter);
 
 connectDB().then(()=>{
 

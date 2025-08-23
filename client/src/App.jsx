@@ -10,7 +10,8 @@ import { useDispatch } from 'react-redux'
 import { setAllCategory ,setAllSubCategory, setloadingCategory} from './store/ProductSclice.js'
 import Axios from './utils/useAxios'
 import summeryApis from './common/summuryApi'
-import {GobalContextProvider}  from './provider/global.provider.jsx'
+import  GlobalContextProvider  from './provider/global.provider';
+
 import { IoCartSharp } from "react-icons/io5";
 import CartMobileLink from './components/CartMobile.jsx'
 
@@ -78,7 +79,7 @@ const location = useLocation();
    },[])
      
    return (
-    <GobalContextProvider>
+    <GlobalContextProvider>
       <Header/>
       <main className='min-h-[80vh] py-[0.1px]'>
           <Outlet/>
@@ -90,7 +91,7 @@ const location = useLocation();
             <CartMobileLink/>
         )
       } 
-    </GobalContextProvider>
+    </GlobalContextProvider>
    )
 }
 

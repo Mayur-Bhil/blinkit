@@ -23,6 +23,10 @@ import NotFound from "../pages/NotFound";
 import Cart from "../pages/Cart";
 import CartMobileLink from "../components/CartMobile";
 import CheckOutpage from "../pages/CheckOutpage";
+import Success from "../components/Success";
+import Cancel from "../components/Cancel";
+
+
 
 const router = createBrowserRouter([
     {
@@ -113,7 +117,16 @@ const router = createBrowserRouter([
             {
                 path:"checkout",
                 element:<CheckOutpage/>
-            },{
+            },
+            {
+                path:"success",
+                element:<Success/>
+            },
+            {
+                path:"cancel",
+                element:<Cancel/>
+            },
+            {
                 path:"*",
                 element:<NotFound/>
             }

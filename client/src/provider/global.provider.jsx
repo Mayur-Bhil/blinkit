@@ -1,59 +1,76 @@
 import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 import summuryapi from "../common/summuryApi.js"
 import Axios from "../utils/useAxios.js"
-import { addToCart } from "../store/Cartslice.js";
+import { addToCart, clearCart } from "../store/Cartslice.js";
 import { useDispatch, useSelector } from "react-redux";
 import AxiosToastError from "../utils/AxiosToastError.js";
 import toast from "react-hot-toast";
-import summeryApis from "../common/summuryApi.js";
 import { priceWithDisCount } from "../utils/DisCountCunter.js";
 import { addAddress } from "../store/Address.slice.js";
 
-export const GlobalContext = createContext(null);
+// Create context with a meaningful default value
+const GlobalContext = createContext({
+    fetchCartData: () => {},
+    updateQuntity: () => {},
+    deleteCartItems: () => {},
+    handleLogout: () => {},
+    clearCartData: () => {},
+    getCartItemCount: () => 0,
+    fetchAddress: () => {},
+    totalPrice: 0,
+    totalQty: 0,
+    notDiscountprice: 0,
+    isLoading: false,
+    cartItemsCount: 0
+});
 
-export const useGlobalContext = () => useContext(GlobalContext);
+// Custom hook for using the context
+function useGlobalContext() {
+    const context = useContext(GlobalContext);
+    if (!context) {
+        throw new Error('useGlobalContext must be used within a GlobalContextProvider');
+    }
+    return context;
+}
 
-export const GobalContextProvider = ({children}) => {
+// Provider component
+function GlobalContextProvider({ children }) {
     const dispatch = useDispatch();
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalQty, setTotalQty] = useState(0);
     const [notDiscountprice, setnotDiscountPrice] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     
-    // Single source of truth for cart items
     const cartItems = useSelector((store) => store?.cart?.cart || []);
     const user = useSelector((store) => store?.user);
 
-    // Clear cart data function
     const clearCartData = useCallback(() => {
-        setTotalQty(0);
-        setTotalPrice(0);
-        setnotDiscountPrice(0);
-        dispatch(addToCart([]));
+        try {
+            setTotalQty(0);
+            setTotalPrice(0);
+            setnotDiscountPrice(0);
+            dispatch(clearCart());
+        } catch (error) {
+            console.error("Error clearing cart:", error);
+        }
     }, [dispatch]);
 
-    // Fetch address data - moved outside and made it a separate function
     const fetchAddress = useCallback(async() => {
         const currentToken = localStorage.getItem("accessToken");
-        if (!user?._id || !currentToken) {
-            return;
-        }
+        if (!user?._id || !currentToken) return;
 
         try {
             const response = await Axios({
-                ...summeryApis.getAddress
+                ...summuryapi.getAddress
             });
 
             const {data: responseData} = response;
-            if(responseData.success){
+            if(responseData.success) {
                 dispatch(addAddress(responseData.data));
             }
         } catch (error) {
             console.error("Address fetch error:", error);
-            // Only show error toast for non-auth errors
-            if (error.response?.status === 401 || error.response?.status === 403) {
-                // Don't show toast for auth errors
-            } else {
+            if (!(error.response?.status === 401 || error.response?.status === 403)) {
                 const errorMessage = error.response?.data?.message?.trim() || error.message?.trim();
                 if (errorMessage) {
                     AxiosToastError(error);
@@ -62,7 +79,6 @@ export const GobalContextProvider = ({children}) => {
         }
     }, [dispatch, user?._id]);
 
-    // Fetch cart data from API
     const fetchCartData = useCallback(async() => {
         const currentToken = localStorage.getItem("accessToken");
         if (!user?._id || !currentToken || isLoading) {
@@ -93,9 +109,8 @@ export const GobalContextProvider = ({children}) => {
         } finally {
             setIsLoading(false);
         }
-    }, [dispatch, user?._id, isLoading]); // Remove clearCartData from dependencies
+    }, [dispatch, user?._id, isLoading]); 
 
-    // Calculate totals whenever cart items change
     useEffect(() => {
         if (!Array.isArray(cartItems)) {
             setTotalQty(0);
@@ -256,7 +271,6 @@ export const GobalContextProvider = ({children}) => {
         ).length;
     }, [cartItems]);
 
-    // Memoize context value
     const contextValue = useMemo(() => ({
         fetchCartData,
         updateQuntity,
@@ -264,12 +278,12 @@ export const GobalContextProvider = ({children}) => {
         handleLogout,
         clearCartData,
         getCartItemCount,
-        fetchAddress, // Now properly defined
+        fetchAddress,
         totalPrice,
         totalQty,
         notDiscountprice,
         isLoading,
-        cartItemsCount: getCartItemCount() // Add this for consistency
+        cartItemsCount: getCartItemCount()
     }), [
         fetchCartData,
         updateQuntity, 
@@ -277,7 +291,7 @@ export const GobalContextProvider = ({children}) => {
         handleLogout,
         clearCartData,
         getCartItemCount,
-        fetchAddress, // Now properly included
+        fetchAddress,
         totalPrice,
         totalQty,
         notDiscountprice,
@@ -290,3 +304,7 @@ export const GobalContextProvider = ({children}) => {
         </GlobalContext.Provider>
     );
 }
+
+// Export what's needed
+export { useGlobalContext };
+export default GlobalContextProvider;
