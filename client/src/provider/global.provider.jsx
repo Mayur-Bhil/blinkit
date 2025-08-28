@@ -24,15 +24,6 @@ const GlobalContext = createContext({
     cartItemsCount: 0
 });
 
-// Custom hook for using the context
-function useGlobalContext() {
-    const context = useContext(GlobalContext);
-    if (!context) {
-        throw new Error('useGlobalContext must be used within a GlobalContextProvider');
-    }
-    return context;
-}
-
 // Provider component
 function GlobalContextProvider({ children }) {
     const dispatch = useDispatch();
@@ -81,7 +72,7 @@ function GlobalContextProvider({ children }) {
 
     const fetchCartData = useCallback(async() => {
         const currentToken = localStorage.getItem("accessToken");
-        if (!user?._id || !currentToken || isLoading) {
+        if (!user?._id || !currentToken) {
             return;
         }
         
@@ -105,11 +96,14 @@ function GlobalContextProvider({ children }) {
             console.error("Cart fetch error:", error);
             if (error.response?.status === 401 || error.response?.status === 403) {
                 clearCartData();
+            } else {
+                // Don't show error toast for cart fetch failures in background
+                console.error("Failed to fetch cart data:", error.message);
             }
         } finally {
             setIsLoading(false);
         }
-    }, [dispatch, user?._id, isLoading]); 
+    }, [dispatch, user?._id, clearCartData]); 
 
     useEffect(() => {
         if (!Array.isArray(cartItems)) {
@@ -171,7 +165,7 @@ function GlobalContextProvider({ children }) {
         } else if (!user?._id || !currentToken) {
             clearCartData();
         }
-    }, [user?._id]);
+    }, [user?._id, fetchCartData, fetchAddress, clearCartData]);
 
     // Update quantity with better error handling
     const updateQuntity = useCallback(async(id, qty) => {
@@ -187,7 +181,6 @@ function GlobalContextProvider({ children }) {
         }
         
         try {
-            setIsLoading(true);
             const response = await Axios({
                 ...summuryapi.updateQunatity,
                 data: {
@@ -203,16 +196,17 @@ function GlobalContextProvider({ children }) {
                 // Refresh cart data immediately
                 await fetchCartData();
                 return true;
+            } else {
+                toast.error(responseData.message || "Failed to update cart");
+                return false;
             }
-            return false;
         } catch (error) {
+            console.error("Update quantity error:", error);
             AxiosToastError(error);
             if (error.response?.status === 401 || error.response?.status === 403) {
                 clearCartData();
             }
             return false;
-        } finally {
-            setIsLoading(false);
         }
     }, [user?._id, fetchCartData, clearCartData]);
 
@@ -225,31 +219,31 @@ function GlobalContextProvider({ children }) {
         }
         
         try {
-            setIsLoading(true);
             const response = await Axios({
-                ...summeryApis.deleteCartItem,
+                ...summuryapi.deleteCartItem,
                 data: {
                     _id: cardId
                 }
             });
             
-            const {data: responceData} = response;
+            const {data: responseData} = response;
 
-            if (responceData.success) {
-                toast.success(responceData.message);
+            if (responseData.success) {
+                toast.success(responseData.message);
                 // Refresh cart data immediately
                 await fetchCartData();
                 return true;
+            } else {
+                toast.error(responseData.message || "Failed to delete item");
+                return false;
             }
-            return false;
         } catch (error) {
+            console.error("Delete cart item error:", error);
             AxiosToastError(error);
             if (error.response?.status === 401 || error.response?.status === 403) {
                 clearCartData();
             }
             return false;
-        } finally {
-            setIsLoading(false);
         }
     }, [user?._id, fetchCartData, clearCartData]);
 
@@ -305,6 +299,15 @@ function GlobalContextProvider({ children }) {
     );
 }
 
-// Export what's needed
-export { useGlobalContext };
+// Custom hook for using the context - moved inside the same file
+const useGlobalContext = () => {
+    const context = useContext(GlobalContext);
+    if (!context) {
+        throw new Error('useGlobalContext must be used within a GlobalContextProvider');
+    }
+    return context;
+};
+
+// Single default export with named export for the hook
 export default GlobalContextProvider;
+export { useGlobalContext };

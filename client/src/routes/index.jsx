@@ -25,6 +25,7 @@ import CartMobileLink from "../components/CartMobile";
 import CheckOutpage from "../pages/CheckOutpage";
 import Success from "../components/Success";
 import Cancel from "../components/Cancel";
+import AdminDashboard from "../components/Dashboard"
 
 
 
@@ -126,6 +127,14 @@ const router = createBrowserRouter([
                 path:"cancel",
                 element:<Cancel/>
             },
+            {
+        path: "/admin/dashboard",
+        element: (
+            <AdminPermission>
+                <AdminDashboard />
+            </AdminPermission>
+        )
+},
             {
                 path:"*",
                 element:<NotFound/>
