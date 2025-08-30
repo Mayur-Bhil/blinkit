@@ -283,3 +283,311 @@ export const clearCartController = async (req, res) => {
         });
     }
 };
+
+export const getUserOrdersController = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        if (!userId) {
+            return res.status(400).json({
+                message: "User ID is required",
+                success: false
+            });
+        }
+
+        // Get orders with pagination
+        const orders = await Order.find({ userId })
+            .populate('delivery_address')
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        // Get total count for pagination
+        const totalOrders = await Order.countDocuments({ userId });
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        return res.status(200).json({
+            message: "Orders fetched successfully",
+            success: true,
+            data: orders,
+            pagination: {
+                currentPage: page,
+                totalPages,
+                totalOrders,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1
+            }
+        });
+
+    } catch (error) {
+        console.error("Get orders error:", error);
+        return res.status(500).json({
+            message: "Failed to fetch orders",
+            success: false
+        });
+    }
+};
+
+// Get single order details
+export const getOrderDetailsController = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { orderId } = req.params;
+
+        if (!orderId) {
+            return res.status(400).json({
+                message: "Order ID is required",
+                success: false
+            });
+        }
+
+        const order = await Order.findOne({ 
+            orderId: orderId, 
+            userId: userId 
+        }).populate('delivery_address');
+
+        if (!order) {
+            return res.status(404).json({
+                message: "Order not found",
+                success: false
+            });
+        }
+
+        return res.status(200).json({
+            message: "Order details fetched successfully",
+            success: true,
+            data: order
+        });
+
+    } catch (error) {
+        console.error("Get order details error:", error);
+        return res.status(500).json({
+            message: "Failed to fetch order details",
+            success: false
+        });
+    }
+};
+
+export const cancelOrderController = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const userId = req.userId;
+        const { orderId } = req.params;
+
+        if (!orderId) {
+            return res.status(400).json({
+                success: false,
+                message: "Order ID is required"
+            });
+        }
+
+        // Find order in a transaction session
+        const order = await Order.findOne({ orderId, userId }, null, { session });
+
+        if (!order) {
+            await session.abortTransaction();
+            return res.status(404).json({
+                success: false,
+                message: "Order not found"
+            });
+        }
+
+        // Only allow cancellation for certain statuses
+        const cancellableStatuses = ["PLACED", "CONFIRMED"];
+        if (!cancellableStatuses.includes(order.order_status)) {
+            await session.abortTransaction();
+            return res.status(400).json({
+                success: false,
+                message: `Order cannot be cancelled when status is ${order.order_status}`
+            });
+        }
+
+        // Update order fields safely
+        order.order_status = "CANCELLED";
+        order.payment_status =
+            order.payment_method === "ONLINE" ? "REFUNDED" : "CANCELLED";
+
+        await order.save({ session });
+
+        await session.commitTransaction();
+
+        return res.status(200).json({
+            success: true,
+            message: "Order cancelled successfully",
+            data: order
+        });
+
+    } catch (error) {
+        await session.abortTransaction();
+        console.error("Cancel order error:", error);
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Failed to cancel order"
+        });
+    } finally {
+        session.endSession();
+    }
+};
+
+
+// Track order status
+export const trackOrderController = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { orderId } = req.params;
+
+        if (!orderId) {
+            return res.status(400).json({
+                message: "Order ID is required",
+                success: false
+            });
+        }
+
+        const order = await Order.findOne({ 
+            orderId: orderId, 
+            userId: userId 
+        }).select('orderId order_status payment_status createdAt updatedAt');
+
+        if (!order) {
+            return res.status(404).json({
+                message: "Order not found",
+                success: false
+            });
+        }
+
+        // Create tracking timeline
+        const trackingSteps = [
+            { status: "PLACED", label: "Order Placed", completed: true },
+            { status: "CONFIRMED", label: "Order Confirmed", completed: order.order_status !== "PLACED" },
+            { status: "SHIPPED", label: "Shipped", completed: ["SHIPPED", "DELIVERED"].includes(order.order_status) },
+            { status: "DELIVERED", label: "Delivered", completed: order.order_status === "DELIVERED" }
+        ];
+
+        return res.status(200).json({
+            message: "Order tracking fetched successfully",
+            success: true,
+            data: {
+                orderId: order.orderId,
+                currentStatus: order.order_status,
+                paymentStatus: order.payment_status,
+                trackingSteps,
+                lastUpdated: order.updatedAt
+            }
+        });
+
+    } catch (error) {
+        console.error("Track order error:", error);
+        return res.status(500).json({
+            message: "Failed to track order",
+            success: false
+        });
+    }
+};
+
+// Add this function to your existing order.controller.js
+
+export const getUserProfileWithOrdersController = async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        const user = await User.findById(userId)
+            .select('-password')
+            .populate('address_details')
+            .lean();
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+                success: false
+            });
+        }
+
+        // Get recent orders (last 5)
+        const recentOrders = await Order.find({ userId })
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .select('orderId order_status payment_status totalAmount createdAt')
+            .lean();
+
+        // Add order_history to user object
+        user.order_history = recentOrders;
+
+        return res.status(200).json({
+            message: "User profile fetched successfully",
+            success: true,
+            data: user
+        });
+
+    } catch (error) {
+        console.error("Get user profile error:", error);
+        return res.status(500).json({
+            message: "Failed to fetch user profile",
+            success: false
+        });
+    }
+};
+
+// Enhanced webhook handler for Stripe payment completion
+export const stripeWebhookController = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const sig = req.headers['stripe-signature'];
+        let event;
+
+        try {
+            event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+        } catch (err) {
+            console.error('Webhook signature verification failed:', err.message);
+            return res.status(400).json({ error: 'Invalid signature' });
+        }
+
+        if (event.type === 'checkout.session.completed') {
+            const session_data = event.data.object;
+            const { userId, orderId, addressId } = session_data.metadata;
+
+            // Update order status
+            const updatedOrder = await Order.findOneAndUpdate(
+                { orderId, userId },
+                { 
+                    $set: { 
+                        payment_status: "COMPLETED",
+                        order_status: "CONFIRMED",
+                        paymentId: session_data.id
+                    }
+                },
+                { session, new: true }
+            );
+
+            if (updatedOrder) {
+                // Clear user's cart
+                await Promise.all([
+                    User.findByIdAndUpdate(
+                        userId,
+                        { $set: { shopping_cart: [] } },
+                        { session }
+                    ),
+                    cartProduct.deleteMany({ userId }, { session })
+                ]);
+            }
+
+            await session.commitTransaction();
+        }
+
+        res.status(200).json({ received: true });
+
+    } catch (error) {
+        await session.abortTransaction();
+        console.error('Webhook error:', error);
+        res.status(500).json({ error: 'Webhook handler failed' });
+    } finally {
+        session.endSession();
+    }
+};
