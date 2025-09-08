@@ -109,36 +109,40 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
             </div>
             
             {/* Wrapper for scroll container and navigation buttons */}
-            <div className='relative container mx-auto'>
+            <div className='relative container mx-auto px-2 md:px-4'>
                 {/* Scrollable container */}
-                <div className='flex items-center gap-4 p-4 md:gap-6 lg:gap-8 overflow-x-scroll scrollbar-none lg:overflow-hidden scroll-smooth transition-all' ref={containerRef}>
+                <div className='flex items-start gap-4 py-4 overflow-x-scroll scrollbar-none lg:overflow-hidden scroll-smooth' ref={containerRef}>
                     {loading &&
                         LoadingCardNumber.map((_, index) => {
                             return (
-                                <CardLoading key={"CategoryWiseProductDisplay" + index} />
+                                <div key={"CategoryWiseProductDisplay" + index} className='min-w-48 w-48 h-80 flex-shrink-0'>
+                                    <CardLoading />
+                                </div>
                             )
                         })
                     }
                     {
                         data.map((product, index) => {
                             return (
-                                <CartProduct data={product} key={product?._id + "CategoryWiseProductDisplay" + index} />
+                                <div key={product?._id + "CategoryWiseProductDisplay" + index} className='min-w-48 w-48 h-80 flex-shrink-0'>
+                                    <CartProduct data={product} />
+                                </div>
                             )
                         })
                     }
                 </div>
 
                 {/* Navigation buttons - positioned outside scrollable content */}
-                <div className='absolute top-1/2 -translate-y-1/2 left-0 right-0 hidden lg:flex px-4 justify-between pointer-events-none select-none'>
+                <div className='absolute top-1/2 -translate-y-1/2 left-0 right-0 hidden lg:flex justify-between pointer-events-none select-none'>
                     <button 
                         onClick={scrollLeft} 
-                        className='z-10 bg-white shadow-lg p-2 cursor-pointer hover:bg-gray-100 rounded-full text-lg pointer-events-auto'
+                        className='z-10 bg-white shadow-lg p-2 cursor-pointer hover:bg-gray-100 rounded-full text-lg pointer-events-auto ml-2'
                     >
                         <FaAngleLeft />
                     </button>
                     <button 
                         onClick={ScrollRight} 
-                        className='z-10 bg-white shadow-lg p-2 cursor-pointer hover:bg-gray-100 rounded-full text-lg pointer-events-auto'
+                        className='z-10 bg-white shadow-lg p-2 cursor-pointer hover:bg-gray-100 rounded-full text-lg pointer-events-auto mr-2'
                     >
                         <FaAngleRight />
                     </button>

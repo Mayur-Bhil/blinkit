@@ -43,7 +43,7 @@ const Usermenu = () => {
                     )}
                     </div>
                 <img 
-                    className='h-14 w-18 rounded-full ml-2 object-cover' 
+                    className='h-14 w-14 rounded-full ml-2 object-cover border-2 border-white/50' 
                     src={user.avatar || "user's Image"} 
                     alt={user.name} 
                 />

@@ -151,6 +151,34 @@ const summeryApis = {
     clearCart: {
         url: '/api/cart/clear', // Add the proper endpoint
         method: 'POST'
+    },
+    getUserOrders: {
+        url: "/api/orders/user",
+        method: "get"
+    },
+    
+    // Get specific order details
+    getOrderDetails: {
+        url: "/api/orders/:orderId",
+        method: "get"
+    },
+    
+    // Track order status
+    trackOrder: {
+        url: "/api/orders/track/:orderId", 
+        method: "get"
+    },
+    
+    // Cancel order
+    cancelOrder: {
+        url: "/api/orders/cancel/:orderId",
+        method: "put"
+    },
+    
+    // Update order status (for payment completion)
+    updateOrderStatus: {
+        url: "/api/orders/update/:orderId",
+        method: "put"
     }
 }
 

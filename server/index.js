@@ -45,6 +45,7 @@ app.use("/api/cart",cartRouter);
 app.use("/api/address",addressRouter);
 app.use("/api/order",orderRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/orders", orderRouter);
 
 connectDB().then(()=>{
 
